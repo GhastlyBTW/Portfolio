@@ -170,22 +170,52 @@ function initLoader() {
   }, 1700);
 }
 
-// ==================== CLOCK ====================
+// ==================== SCROLL MOTIF ====================
 
-function initClock() {
-  const clockEl = document.getElementById('clock');
-  if (!clockEl) return;
+function initScrollMotif() {
+  const motif = document.getElementById('scroll-motif');
+  if (!motif) return;
 
-  function update() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const s = String(now.getSeconds()).padStart(2, '0');
-    clockEl.textContent = `${h}:${m}:${s}`;
+  let rotation = 0;
+  let targetRotation = 0;
+
+  window.addEventListener('wheel', (e) => {
+    targetRotation += e.deltaY * 0.3;
+  }, { passive: true });
+
+  function animate() {
+    rotation += (targetRotation - rotation) * 0.08;
+    motif.style.transform = `rotate(${rotation}deg)`;
+    requestAnimationFrame(animate);
   }
 
-  update();
-  setInterval(update, 1000);
+  requestAnimationFrame(animate);
+}
+
+// ==================== GREETING ====================
+
+const greetings = [
+  'Good day!',
+  'Hello there.',
+  'Welcome in.',
+  'Nice to see you.',
+  'Look around.',
+  'Stay a while.',
+  'Glad you\'re here.',
+  'Loading screen means "creativity" in Korean.',
+];
+
+let greetingIndex = 0;
+
+function cycleGreeting() {
+  const el = document.getElementById('greeting');
+  if (!el) return;
+  el.style.opacity = '0';
+  setTimeout(() => {
+    greetingIndex = (greetingIndex + 1) % greetings.length;
+    el.textContent = greetings[greetingIndex];
+    el.style.opacity = '1';
+  }, 300);
 }
 
 // ==================== NAVIGATION ====================
@@ -205,14 +235,18 @@ function showIndex(fromPop) {
   jumpTo(0);
   smoothScrollTo(0);
   clearActiveProject();
+  showWorkNav();
   if (!fromPop) pushRoute('/');
+  cycleGreeting();
 }
 
 function showCV(fromPop) {
   showView('cv-view');
   jumpTo(0);
   clearActiveProject();
+  showWorkNav();
   if (!fromPop) pushRoute('/cv');
+  cycleGreeting();
 }
 
 function showDetail(index, fromPop) {
@@ -269,10 +303,23 @@ function showDetail(index, fromPop) {
     }
   }
 
+  const navProjects = projects.filter((_, i) => i !== PHOTO_PROJECT_INDEX);
+  const navIndex = navProjects.indexOf(project);
+  const prev = navProjects[(navIndex - 1 + navProjects.length) % navProjects.length];
+  const next = navProjects[(navIndex + 1) % navProjects.length];
+
+  document.getElementById('prev-project-text').textContent = prev.name;
+  document.getElementById('next-project-text').textContent = next.name;
+  document.getElementById('prev-project').onclick = (e) => { e.preventDefault(); showDetail(projects.indexOf(prev)); };
+  document.getElementById('next-project').onclick = (e) => { e.preventDefault(); showDetail(projects.indexOf(next)); };
+
   showView('detail-view');
   jumpTo(0);
+  showWorkNav();
   setActiveProject(index);
+  document.getElementById('project-list').classList.add('has-scroll-active');
   if (!fromPop) pushRoute('/' + toSlug(project.name));
+  cycleGreeting();
 }
 
 // ==================== PHOTOGRAPHY ====================
@@ -295,8 +342,11 @@ function showPhotography(fromPop) {
   renderCollections();
   showView('photo-view');
   jumpTo(0);
-  setActiveProject(PHOTO_PROJECT_INDEX);
+  showPhotoNav();
+  clearActiveCollection();
+  observeCollections();
   if (!fromPop) pushRoute('/photography');
+  cycleGreeting();
 }
 
 function showGallery(collectionIndex, fromPop) {
@@ -313,7 +363,6 @@ function showGallery(collectionIndex, fromPop) {
       const img = document.createElement('img');
       img.src = src;
       img.alt = collection.name;
-      img.loading = 'lazy';
       grid.appendChild(img);
     });
   } else {
@@ -323,10 +372,21 @@ function showGallery(collectionIndex, fromPop) {
     grid.appendChild(msg);
   }
 
+  const prevIdx = (collectionIndex - 1 + photoCollections.length) % photoCollections.length;
+  const nextIdx = (collectionIndex + 1) % photoCollections.length;
+
+  document.getElementById('prev-collection-text').textContent = photoCollections[prevIdx].name;
+  document.getElementById('next-collection-text').textContent = photoCollections[nextIdx].name;
+  document.getElementById('prev-collection').onclick = (e) => { e.preventDefault(); showGallery(prevIdx); };
+  document.getElementById('next-collection').onclick = (e) => { e.preventDefault(); showGallery(nextIdx); };
+
   showView('photo-gallery-view');
   jumpTo(0);
-  setActiveProject(PHOTO_PROJECT_INDEX);
+  showPhotoNav();
+  setActiveCollection(collectionIndex);
+  document.getElementById('collection-list').classList.add('has-scroll-active');
   if (!fromPop) pushRoute('/photography/' + toSlug(collection.name));
+  cycleGreeting();
 }
 
 function renderCollections() {
@@ -391,6 +451,7 @@ function setActiveProject(index) {
 function clearActiveProject() {
   const links = document.querySelectorAll('#project-list a');
   links.forEach((link) => link.classList.remove('active'));
+  document.getElementById('project-list').classList.remove('has-scroll-active');
 }
 
 function initNavigation() {
@@ -472,6 +533,93 @@ function initNavigation() {
   });
 }
 
+// ==================== SIDEBAR NAV TOGGLE ====================
+
+function showWorkNav() {
+  document.getElementById('work-nav').style.display = '';
+  document.getElementById('photo-nav').style.display = 'none';
+}
+
+function showPhotoNav() {
+  document.getElementById('work-nav').style.display = 'none';
+  document.getElementById('photo-nav').style.display = '';
+}
+
+function initCollectionList() {
+  const list = document.getElementById('collection-list');
+  photoCollections.forEach((collection, i) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#';
+    a.dataset.collection = i;
+    a.innerHTML = `${collection.name} <span class="nav-arrow"></span>`;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      showGallery(i);
+    });
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+}
+
+function setActiveCollection(index) {
+  const links = document.querySelectorAll('#collection-list a');
+  links.forEach((link) => link.classList.remove('active'));
+  const active = document.querySelector(`#collection-list a[data-collection="${index}"]`);
+  if (active) active.classList.add('active');
+}
+
+function clearActiveCollection() {
+  const links = document.querySelectorAll('#collection-list a');
+  links.forEach((link) => link.classList.remove('active'));
+  document.getElementById('collection-list').classList.remove('has-scroll-active');
+}
+
+// ==================== SCROLL HIGHLIGHT ====================
+
+let scrollObserver = null;
+let collectionObserver = null;
+
+function initScrollHighlight() {
+  const projectList = document.getElementById('project-list');
+  const cards = document.querySelectorAll('#index-view .project-card[data-index]');
+  if (!cards.length) return;
+
+  scrollObserver = new IntersectionObserver((entries) => {
+    if (!isIndexVisible()) return;
+
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const index = entry.target.dataset.index;
+        projectList.classList.add('has-scroll-active');
+        setActiveProject(index);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  cards.forEach((card) => scrollObserver.observe(card));
+}
+
+function observeCollections() {
+  if (collectionObserver) collectionObserver.disconnect();
+
+  const collectionList = document.getElementById('collection-list');
+  const cards = document.querySelectorAll('#photo-collections .project-card');
+  if (!cards.length) return;
+
+  collectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const index = Array.from(entry.target.parentNode.children).indexOf(entry.target);
+        collectionList.classList.add('has-scroll-active');
+        setActiveCollection(index);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  cards.forEach((card) => collectionObserver.observe(card));
+}
+
 // ==================== ROUTING ====================
 
 function handleRoute() {
@@ -502,12 +650,34 @@ function handleRoute() {
 
 window.addEventListener('popstate', handleRoute);
 
+// ==================== RANDOM PHOTO THUMBNAIL ====================
+
+function initRandomPhotoThumb() {
+  const allImages = photoCollections.flatMap((c) => c.images);
+  if (!allImages.length) return;
+
+  const src = allImages[Math.floor(Math.random() * allImages.length)];
+
+  const card = document.querySelector(`.project-card[data-index="${PHOTO_PROJECT_INDEX}"]`);
+  if (!card) return;
+  const placeholder = card.querySelector('.placeholder-img');
+  if (!placeholder) return;
+
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = 'Photography: Personal';
+  placeholder.replaceWith(img);
+}
+
 // ==================== INIT ====================
 
 document.addEventListener('DOMContentLoaded', () => {
+  initRandomPhotoThumb();
   initLoader();
-  initClock();
+  initScrollMotif();
   initSmoothScroll();
   initNavigation();
+  initCollectionList();
+  initScrollHighlight();
   handleRoute();
 });

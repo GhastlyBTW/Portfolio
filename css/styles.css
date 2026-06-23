@@ -153,7 +153,7 @@ ul {
 }
 
 .contact-nav {
-  margin-top: 28px;
+  margin-bottom: 15px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -174,7 +174,8 @@ ul {
 }
 
 .work-nav {
-  margin-top: 40px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .work-label {
@@ -198,11 +199,16 @@ ul {
 }
 
 .project-list a:hover {
-  opacity: 0.6;
+  opacity: 1;
 }
 
 .project-list a.active {
   font-weight: 700;
+  opacity: 1;
+}
+
+.project-list.has-scroll-active a:not(.active) {
+  opacity: 0.35;
 }
 
 /* Small circular arrow icon */
@@ -210,22 +216,20 @@ ul {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 15px;
-  height: 15px;
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   flex-shrink: 0;
-  position: relative;
 }
 
 .nav-arrow::after {
-  content: '';
-  width: 0;
-  height: 0;
-  border-left: 4px solid var(--bg);
-  border-top: 3px solid transparent;
-  border-bottom: 3px solid transparent;
+  content: '›';
+  font-size: 20px;
+  line-height: 1;
+  margin-top: -1px;
   margin-left: 1px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ==================== MAIN CONTENT ==================== */
@@ -248,11 +252,20 @@ ul {
   margin-bottom: 16px;
 }
 
-.clock {
+.scroll-motif {
+  display: inline-block;
+  will-change: transform;
+  vertical-align: middle;
+  margin-left: 4px;
+  margin-top: -4px;
+}
+
+.greeting {
   font-size: 14px;
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
   letter-spacing: 0.02em;
+  transition: opacity 0.3s ease;
 }
 
 /* ==================== PROJECT CARDS ==================== */
@@ -441,6 +454,37 @@ ul {
   aspect-ratio: 16 / 10;
   background: linear-gradient(135deg, #0a1628, #1a2a4a);
   border-radius: 2px;
+}
+
+/* ==================== PROJECT NAV ==================== */
+
+.project-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 80px;
+  padding: 40px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.project-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.project-nav-link:hover {
+  color: var(--text);
+}
+
+.project-nav-arrow {
+  font-size: 16px;
+}
+
+.project-nav-text {
+  font-style: italic;
 }
 
 /* ==================== CV VIEW ==================== */
