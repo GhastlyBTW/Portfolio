@@ -1,6 +1,18 @@
 const PLACEHOLDER_COUNT = 6;
 const PHOTO_PROJECT_INDEX = 4;
 
+function toSlug(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function findProjectBySlug(slug) {
+  return projects.findIndex((p) => toSlug(p.name) === slug);
+}
+
+function findCollectionBySlug(slug) {
+  return photoCollections.findIndex((c) => toSlug(c.name) === slug);
+}
+
 const projects = [
   {
     name: 'Detention Watch Network',
@@ -182,22 +194,30 @@ function isIndexVisible() {
   return document.getElementById('index-view').style.display !== 'none';
 }
 
-function showIndex() {
+function pushRoute(path) {
+  if (window.location.pathname !== path) {
+    history.pushState(null, '', path);
+  }
+}
+
+function showIndex(fromPop) {
   showView('index-view');
   jumpTo(0);
   smoothScrollTo(0);
   clearActiveProject();
+  if (!fromPop) pushRoute('/');
 }
 
-function showCV() {
+function showCV(fromPop) {
   showView('cv-view');
   jumpTo(0);
   clearActiveProject();
+  if (!fromPop) pushRoute('/cv');
 }
 
-function showDetail(index) {
+function showDetail(index, fromPop) {
   if (index === PHOTO_PROJECT_INDEX) {
-    showPhotography();
+    showPhotography(fromPop);
     return;
   }
 
@@ -252,6 +272,7 @@ function showDetail(index) {
   showView('detail-view');
   jumpTo(0);
   setActiveProject(index);
+  if (!fromPop) pushRoute('/' + toSlug(project.name));
 }
 
 // ==================== PHOTOGRAPHY ====================
@@ -266,7 +287,7 @@ function getCollectionCategory(collection) {
   return 'Other';
 }
 
-function showPhotography() {
+function showPhotography(fromPop) {
   activeFilter = 'all';
   document.querySelectorAll('.photo-filter').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.filter === 'all');
@@ -275,9 +296,10 @@ function showPhotography() {
   showView('photo-view');
   jumpTo(0);
   setActiveProject(PHOTO_PROJECT_INDEX);
+  if (!fromPop) pushRoute('/photography');
 }
 
-function showGallery(collectionIndex) {
+function showGallery(collectionIndex, fromPop) {
   const collection = photoCollections[collectionIndex];
   if (!collection) return;
 
@@ -304,6 +326,7 @@ function showGallery(collectionIndex) {
   showView('photo-gallery-view');
   jumpTo(0);
   setActiveProject(PHOTO_PROJECT_INDEX);
+  if (!fromPop) pushRoute('/photography/' + toSlug(collection.name));
 }
 
 function renderCollections() {
@@ -449,6 +472,36 @@ function initNavigation() {
   });
 }
 
+// ==================== ROUTING ====================
+
+function handleRoute() {
+  const redirect = sessionStorage.getItem('redirect');
+  if (redirect) {
+    sessionStorage.removeItem('redirect');
+    history.replaceState(null, '', redirect);
+  }
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  const segments = path.split('/').filter(Boolean);
+
+  if (segments.length === 0) {
+    showIndex(true);
+  } else if (segments[0] === 'cv') {
+    showCV(true);
+  } else if (segments[0] === 'photography' && segments[1]) {
+    const ci = findCollectionBySlug(segments[1]);
+    if (ci !== -1) showGallery(ci, true);
+    else showIndex(true);
+  } else if (segments[0] === 'photography') {
+    showPhotography(true);
+  } else {
+    const pi = findProjectBySlug(segments[0]);
+    if (pi !== -1) showDetail(pi, true);
+    else showIndex(true);
+  }
+}
+
+window.addEventListener('popstate', handleRoute);
+
 // ==================== INIT ====================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -456,4 +509,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initClock();
   initSmoothScroll();
   initNavigation();
+  handleRoute();
 });
