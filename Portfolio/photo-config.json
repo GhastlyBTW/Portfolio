@@ -1,0 +1,34 @@
+{
+  "Film/Roll 1": {
+    "name": "Monaco",
+    "subtitle": "35mm · Canon Sureshot 115u · Kodak Portra 400"
+  },
+  "Film/Roll 2": {
+    "name": "Venice",
+    "subtitle": "35mm · Canon Sureshot 115u · Kodak Portra 400"
+  },
+  "Film/Roll 3": {
+    "name": "First Weeks in Rome",
+    "subtitle": "35mm · Canon Sureshot 115u · Kodak Portra 400"
+  },
+  "Digital/Dominican Republic": {
+    "name": "Dominican Republic",
+    "subtitle": "Digital · Sony A7C · Street Photography"
+  },
+  "Digital/Museum Research": {
+    "name": "Museum Research",
+    "subtitle": "Digital · Sony A7C · Street Photography"
+  },
+  "Digital/Revzilla": {
+    "name": "Revzilla",
+    "subtitle": "Digital · Sony A7C · Car Photography"
+  },
+  "Digital/Javen 350Z": {
+    "name": "Javen 350Z",
+    "subtitle": "Digital · Sony A7C · Car Photography"
+  },
+  "Digital/Peeduh": {
+    "name": "Peeduh",
+    "subtitle": "Digital · Sony A7C · Car Photography"
+  }
+}
