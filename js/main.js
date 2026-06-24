@@ -21,6 +21,9 @@ const projects = [
     description: 'Each piece of media tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing.',
     detailDescription: 'Each piece of media tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media content, and a dedicated landing page — all designed to confront viewers with the human cost of detention and drive them toward action.',
     thumbnail: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg',
+    brief: '',
+    strategy: '',
+    credits: '',
     gallery: [
       'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkLanding Page.jpg',
       'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkWebsite Landing Page Mockuo.jpg',
@@ -41,6 +44,9 @@ const projects = [
     description: 'Collaboration campaign with Liquid Death and Dove to bring edible Dove, and Liquid Death scented, Hygiene products to market to disrupt and disturb viewers.',
     detailDescription: 'Collaboration campaign with Liquid Death and Dove to bring edible Dove, and Liquid Death scented, Hygiene products to market to disrupt and disturb viewers. The packaging and advertising lean into absurdity, blending the visual language of both brands into something that feels simultaneously premium and unhinged.',
     thumbnail: 'assets/Thumbnails/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
+    brief: '',
+    strategy: '',
+    credits: '',
     gallery: [],
   },
   {
@@ -50,6 +56,9 @@ const projects = [
     description: 'Everyone knows that First dates comes with nerves. A small boost of comfort can shift the whole night–Scent delivers that edge.',
     detailDescription: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night – scent delivers that edge. This campaign positions Emporio Armani fragrance as the quiet confidence behind a memorable evening, told through intimate moments and atmospheric visuals.',
     thumbnail: 'assets/Thumbnails/Branden Chi Emporio Armani Table.jpg',
+    brief: '',
+    strategy: '',
+    credits: '',
     gallery: [],
   },
   {
@@ -59,6 +68,9 @@ const projects = [
     description: 'In a world where travel lives and dies in camera rolls, moments disappear as fast as they’re captured. Polaroid pushes back by making memories physical again.',
     detailDescription: 'In a world where travel lives and dies in camera rolls, moments disappear as fast as they’re captured. Polaroid pushes back by making memories physical again. This campaign celebrates the act of slowing down — turning fleeting snapshots into tangible keepsakes that outlast the trip itself.',
     thumbnail: 'assets/Thumbnails/Branden Chi Polaroid Eiffel Tower.jpg',
+    brief: '',
+    strategy: '',
+    credits: '',
     gallery: [],
   },
   {
@@ -145,7 +157,7 @@ function initSmoothScroll() {
 
 // ==================== VIEW MANAGEMENT ====================
 
-const ALL_VIEWS = ['index-view', 'detail-view', 'cv-view', 'photo-view', 'photo-gallery-view'];
+const ALL_VIEWS = ['index-view', 'detail-view', 'cv-view', 'photo-view', 'photo-gallery-view', 'about-view'];
 
 function showView(id) {
   ALL_VIEWS.forEach((viewId) => {
@@ -158,7 +170,9 @@ function showView(id) {
 function initLoader() {
   const loader = document.getElementById('loader');
   const logo = document.querySelector('.loader-logo');
-  const portfolio = document.getElementById('portfolio');
+  const content = document.getElementById('content');
+  const bgLogo = document.getElementById('bg-logo');
+  const siteName = document.querySelector('.site-name');
 
   setTimeout(() => {
     logo.classList.add('zoom-out');
@@ -166,8 +180,26 @@ function initLoader() {
 
   setTimeout(() => {
     loader.classList.add('done');
-    portfolio.classList.add('visible');
+    bgLogo.classList.add('visible');
   }, 1700);
+
+  const sidebarItems = document.querySelectorAll('.sidebar-item');
+  const staggerStart = 2000;
+  const staggerGap = 80;
+
+  setTimeout(() => {
+    siteName.classList.add('slide-in');
+  }, staggerStart);
+
+  sidebarItems.forEach((item, i) => {
+    setTimeout(() => {
+      item.classList.add('slide-in');
+    }, staggerStart + (i + 1) * staggerGap);
+  });
+
+  setTimeout(() => {
+    content.classList.add('visible');
+  }, staggerStart + 300);
 }
 
 // ==================== SCROLL MOTIF ====================
@@ -205,7 +237,7 @@ const greetings = [
   'Loading screen means "creativity" in Korean.',
 ];
 
-let greetingIndex = 0;
+let greetingIndex = Math.floor(Math.random() * greetings.length);
 
 function cycleGreeting() {
   const el = document.getElementById('greeting');
@@ -231,6 +263,7 @@ function pushRoute(path) {
 }
 
 function showIndex(fromPop) {
+  exitAbout();
   showView('index-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -241,6 +274,7 @@ function showIndex(fromPop) {
 }
 
 function showCV(fromPop) {
+  exitAbout();
   showView('cv-view');
   jumpTo(0);
   clearActiveProject();
@@ -250,6 +284,7 @@ function showCV(fromPop) {
 }
 
 function showDetail(index, fromPop) {
+  exitAbout();
   if (index === PHOTO_PROJECT_INDEX) {
     showPhotography(fromPop);
     return;
@@ -259,7 +294,6 @@ function showDetail(index, fromPop) {
   if (!project) return;
 
   document.getElementById('detail-title').textContent = project.name;
-  document.getElementById('detail-text').textContent = project.detailDescription || project.description;
 
   const metaRow = document.getElementById('detail-meta');
   metaRow.querySelector('.detail-year').textContent = project.year;
@@ -303,6 +337,11 @@ function showDetail(index, fromPop) {
     }
   }
 
+  document.getElementById('accordion-brief').textContent = project.brief || 'Coming soon.';
+  document.getElementById('accordion-strategy').textContent = project.strategy || 'Coming soon.';
+  document.getElementById('accordion-credits').textContent = project.credits || 'Coming soon.';
+  document.querySelectorAll('.accordion').forEach((a) => a.classList.remove('open'));
+
   const navProjects = projects.filter((_, i) => i !== PHOTO_PROJECT_INDEX);
   const navIndex = navProjects.indexOf(project);
   const prev = navProjects[(navIndex - 1 + navProjects.length) % navProjects.length];
@@ -322,6 +361,26 @@ function showDetail(index, fromPop) {
   cycleGreeting();
 }
 
+// ==================== ABOUT ====================
+
+function showAbout(fromPop) {
+  showView('about-view');
+  jumpTo(0);
+  clearActiveProject();
+  document.querySelector('.sidebar').classList.add('minimal');
+  document.body.classList.add('about-active');
+  if (!fromPop) pushRoute('/about');
+  cycleGreeting();
+
+  const aboutScroll = document.getElementById('about-scroll');
+  aboutScroll.scrollLeft = 0;
+}
+
+function exitAbout() {
+  document.querySelector('.sidebar').classList.remove('minimal');
+  document.body.classList.remove('about-active');
+}
+
 // ==================== PHOTOGRAPHY ====================
 
 let activeFilter = 'all';
@@ -335,6 +394,7 @@ function getCollectionCategory(collection) {
 }
 
 function showPhotography(fromPop) {
+  exitAbout();
   activeFilter = 'all';
   document.querySelectorAll('.photo-filter').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.filter === 'all');
@@ -350,6 +410,7 @@ function showPhotography(fromPop) {
 }
 
 function showGallery(collectionIndex, fromPop) {
+  exitAbout();
   const collection = photoCollections[collectionIndex];
   if (!collection) return;
 
@@ -513,6 +574,17 @@ function initNavigation() {
     showIndex();
   });
 
+  document.getElementById('about-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showAbout();
+  });
+
+  document.getElementById('about-index-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showIndex();
+  });
+
+
   document.getElementById('photo-index-link').addEventListener('click', (e) => {
     e.preventDefault();
     showIndex();
@@ -521,6 +593,12 @@ function initNavigation() {
   document.getElementById('gallery-back-link').addEventListener('click', (e) => {
     e.preventDefault();
     showPhotography();
+  });
+
+  document.querySelectorAll('.accordion-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.classList.toggle('open');
+    });
   });
 
   document.querySelectorAll('.photo-filter').forEach((btn) => {
@@ -635,6 +713,8 @@ function handleRoute() {
     showIndex(true);
   } else if (segments[0] === 'cv') {
     showCV(true);
+  } else if (segments[0] === 'about') {
+    showAbout(true);
   } else if (segments[0] === 'photography' && segments[1]) {
     const ci = findCollectionBySlug(segments[1]);
     if (ci !== -1) showGallery(ci, true);
@@ -649,6 +729,81 @@ function handleRoute() {
 }
 
 window.addEventListener('popstate', handleRoute);
+
+// ==================== MUSIC ====================
+
+const albums = [
+  { title: 'Perfect Pair', artist: 'beabadoobee', cover: 'assets/about/albums/Beatopia.jpeg', audio: 'assets/about/mp3/beabadoobee - the perfect pair (Official Audio).mp3' },
+  { title: 'Cologne', artist: 'beabadoobee', cover: 'assets/about/albums/Our Extended Play.jpeg', audio: 'assets/about/mp3/beabadoobee - Cologne (Lyrics).mp3' },
+  { title: 'Risk', artist: 'Deftones', cover: 'assets/about/albums/Diamond Eyes.jpg', audio: 'assets/about/mp3/Deftones –  Risk (Official Visualizer).mp3' },
+  { title: 'Cafe Con Ron', artist: 'Bad Bunny', cover: 'assets/about/albums/Debi TIrar Mas Fotos.png', audio: 'assets/about/mp3/CAFé CON RON.mp3' },
+  { title: 'Asphyxiation', artist: 'Cafuné', cover: 'assets/about/albums/e-Asphyxiation.jpg', audio: 'assets/about/mp3/Cafuné - e-Asphyxiation (Official Video).mp3' },
+  { title: 'Orbiter', artist: 'Noah Kahan', cover: 'assets/about/albums/The Great Divide.jpeg', audio: 'assets/about/mp3/Noah Kahan - Orbiter (Lyrics).mp3' },
+  { title: 'Olivia', artist: 'The Back Seat Lovers', cover: 'assets/about/albums/When we were Friends.jpg', audio: 'assets/about/mp3/Olivia.mp3' },
+  { title: 'Cinema', artist: 'The Marías', cover: 'assets/about/albums/Cinema.jpeg', audio: 'assets/about/mp3/The Marías - Heavy (Official Audio) (1).mp3' },
+  { title: 'Blue Flame', artist: 'LE SSERAFIM', cover: 'assets/about/albums/Le_Sserafim_-_Unforgiven.png', audio: 'assets/about/mp3/Blue Flame (2023 Ver.).mp3' },
+  { title: 'Concrete', artist: 'Malcolm Todd', cover: 'assets/about/albums/Malcolm Todd.png', audio: 'assets/about/mp3/Malcolm Todd - Concrete-[AudioTrimmer.com].mp3' },
+];
+
+let currentAudio = null;
+
+function initMusic() {
+  const grid = document.getElementById('album-grid');
+  const npTitle = document.getElementById('np-title');
+  const npArtist = document.getElementById('np-artist');
+  const nowPlaying = document.getElementById('now-playing');
+
+  albums.forEach((album, i) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'album-wrapper';
+
+    const item = document.createElement('div');
+    item.className = 'album-item';
+
+    if (album.cover) {
+      const img = document.createElement('img');
+      img.src = album.cover;
+      img.alt = `${album.title} — ${album.artist}`;
+      item.appendChild(img);
+    } else {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'album-placeholder';
+      item.appendChild(placeholder);
+    }
+
+    let audio = null;
+    if (album.audio) {
+      audio = new Audio(album.audio);
+      audio.volume = 0.5;
+    }
+
+    wrapper.addEventListener('mouseenter', () => {
+      if (currentAudio && currentAudio !== audio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      if (audio) {
+        audio.play();
+        currentAudio = audio;
+      }
+      npTitle.textContent = album.title;
+      npArtist.textContent = album.artist;
+      nowPlaying.classList.add('active');
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      nowPlaying.classList.remove('active');
+      currentAudio = null;
+    });
+
+    wrapper.appendChild(item);
+    grid.appendChild(wrapper);
+  });
+}
 
 // ==================== RANDOM PHOTO THUMBNAIL ====================
 
@@ -673,6 +828,7 @@ function initRandomPhotoThumb() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initRandomPhotoThumb();
+  initMusic();
   initLoader();
   initScrollMotif();
   initSmoothScroll();
