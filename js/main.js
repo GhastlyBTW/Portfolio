@@ -1,5 +1,5 @@
 const PLACEHOLDER_COUNT = 6;
-const PHOTO_PROJECT_INDEX = 4;
+const PHOTO_PROJECT_INDEX = 5;
 
 function toSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -18,11 +18,11 @@ const projects = [
     name: 'Detention Watch Network',
     category: 'Art Direction | Copy Writing',
     year: '2025',
-    description: 'Each piece of media tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing.',
-    detailDescription: 'Each piece of media tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media content, and a dedicated landing page — all designed to confront viewers with the human cost of detention and drive them toward action.',
+    description: 'A social awareness campaign examining the documented concerns surrounding U.S. Immigration and Customs Enforcement. Each piece tells a story through the eyes of a victim of ICE — invoking empathy to show the reality of what these people are facing.',
+    detailDescription: 'A social awareness campaign focused on U.S. Immigration and Customs Enforcement and the documented concerns surrounding its practices. Each post tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media content, and a dedicated landing page — all designed to confront viewers with the human cost of detention and drive them toward action.',
     thumbnail: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg',
-    brief: '',
-    strategy: '',
+    brief: 'The U.S. Immigration and Customs Enforcement agency has documented concerns surrounding its practices. This project aims to examine those issues and highlight where critics argue reforms may be necessary — driven by seeing the impact ICE actions have had on people personally.',
+    strategy: 'Each post tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media posts, and a dedicated landing page.',
     credits: '',
     gallery: [
       'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkLanding Page.jpg',
@@ -41,37 +41,73 @@ const projects = [
     name: 'Liquid Dove',
     category: 'Art Direction | Copy Writing | Packaging',
     year: '2025',
-    description: 'Collaboration campaign with Liquid Death and Dove to bring edible Dove, and Liquid Death scented, Hygiene products to market to disrupt and disturb viewers.',
-    detailDescription: 'Collaboration campaign with Liquid Death and Dove to bring edible Dove, and Liquid Death scented, Hygiene products to market to disrupt and disturb viewers. The packaging and advertising lean into absurdity, blending the visual language of both brands into something that feels simultaneously premium and unhinged.',
+    description: 'What happens when the calm meets the storm? The Liquid Death and Dove collaboration bridges two distinctly different audiences that value the same thing — through edible Dove products inspired by Liquid Death\'s bold flavors and fearless energy.',
+    detailDescription: 'What happens when the calm meets the storm? Chaos meets care. The Liquid Death and Dove collaboration shows what happens when two brands with shared values — natural ingredients and a healthier planet — collide from opposite ends of the spectrum. Edible Dove products inspired by Liquid Death\'s bold flavors and fearless energy bridge the gap between two distinctly different audiences that value the same thing.',
     thumbnail: 'assets/Thumbnails/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
-    brief: '',
-    strategy: '',
-    credits: '',
-    gallery: [],
+    brief: 'How can we make Dove cooler while making Liquid Death more approachable? Despite their unconventional approach, Liquid Death\'s core values already align with Dove\'s commitment to both natural ingredients and a healthier planet. This collab has the opportunity to bridge the gap between two distinctly different audiences that value the same thing.',
+    strategy: 'Combine the bold and daring branding of Liquid Death with the trusted and comforting approach of Dove. Chaos meets care through edible Dove products inspired by Liquid Death\'s bold flavors and fearless energy.',
+    credits: 'Branden Chi, Matthew Payne, Daniyah Stancil',
+    gallery: [
+      'assets/Liquid Dove/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
+      'assets/Liquid Dove/Branden Chi Liquid Dove bottle.png',
+      'assets/Liquid Dove/Branden Chi Liquid Dove BOX.png',
+      'assets/Liquid Dove/Branden Chi Liquid Dove Raigbait_3.jpg',
+      'assets/Liquid Dove/Branden Chi Liquid Dove Ragebait_2.jpg',
+      'assets/Liquid Dove/Branden Chi Liquid Dove News headline.jpg',
+    ],
   },
   {
     name: 'Emporio Armani',
     category: 'Art Direction | Copy Writing',
     year: '2025',
-    description: 'Everyone knows that First dates comes with nerves. A small boost of comfort can shift the whole night–Scent delivers that edge.',
-    detailDescription: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night – scent delivers that edge. This campaign positions Emporio Armani fragrance as the quiet confidence behind a memorable evening, told through intimate moments and atmospheric visuals.',
+    description: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. Have an unforgettable night with Emporio Armani.',
+    detailDescription: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Smelling good lifts your confidence and lingers in someone else\'s memory. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. This campaign for Emporio Armani\'s fragrance line turns that insight into an experience — teasing with social polls, launching through custom cocktail napkins at top NYC date-night restaurants, and sustaining through partnerships with apps like OpenTable to deliver date tips with every booking.',
     thumbnail: 'assets/Thumbnails/Branden Chi Emporio Armani Table.jpg',
-    brief: '',
-    strategy: '',
+    brief: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Smelling good lifts your confidence and lingers in someone else\'s memory. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten.',
+    strategy: 'Tease with online polls asking how important smelling good is on a first date, inviting everyone to weigh in before the campaign drops. Launch by partnering with top date-night restaurants across New York City to slip Emporio Armani date tips onto custom cocktail napkins — guests who collect every tip can scan the final one to unlock a complimentary fragrance voucher. Sustain by partnering with apps like OpenTable to deliver date tips with every booking confirmation and table-ready alert.',
     credits: '',
-    gallery: [],
+    gallery: [
+      'assets/Emporio/Branden Chi Emporio Armani Napkins Red Table.jpg',
+      'assets/Emporio/Branden Chi Emporio Armani Martini Glass.jpg',
+      'assets/Emporio/Branden Chi Emporio Armani Napkin.jpg',
+      'assets/Emporio/Branden Chi Emporio Armani Open Table Phone.png',
+      'assets/Emporio/Branden Chi Emporio Armani Instagram Poll.png',
+      'assets/Emporio/Branden Chi Emporio Armani Open Table Confirmation code.jpg',
+    ],
+  },
+  {
+    name: 'Lemaire',
+    category: 'Art Direction',
+    year: '2025',
+    description: 'Lemaire is rooted in sustainability — creating long-lasting pieces meant to be repaired, reworn, and recycled. This social awareness campaign confronts the 92 million tons of textile waste produced globally every year, using striking urban visuals to make the scale of the crisis impossible to ignore.',
+    detailDescription: 'Every year, 92 million tons of textile waste is produced globally — as heavy as 300 Empire State Buildings, an entire city skyline. Lemaire, a brand rooted in sustainability and creating long-lasting pieces meant to be repaired, reworn, and recycled, confronts that reality head-on. Through fact-based billboards in urban environments, a surrealist commercial, and guerilla installations wrapping landmark skyscrapers in discarded clothing, the campaign transforms the invisible weight of fast fashion into something monumental and unmissable.',
+    thumbnail: 'assets/Thumbnails/Branden Chi Lemaire Street Billboard Mockup.jpg',
+    brief: 'Every year around 92 million tons of textile waste is produced globally. That is as heavy as roughly 300 Empire State Buildings — an entire city skyline. Lemaire is a brand rooted in sustainability and creating long-lasting pieces of clothing, meant to be repaired, reworn, and recycled.',
+    strategy: 'Turn a skyscraper into a tower of textile waste to visually quantify how badly fast fashion has affected our world. Prime the market with fact-based visual billboards in urban environments, launch a surrealism commercial where a character navigates a world of fast fashion waste, and dress landmark skyscrapers in cities around the world with discarded clothing to symbolize the sheer volume created every year.',
+    credits: '',
+    gallery: [
+      'assets/Lemaire/Branden Chi Lemaire Street Billboard Mockup.jpg',
+      'assets/Lemaire/Branden Chi Lemaire NYC Billboard Mockup.jpg',
+      'assets/Lemaire/Branden Chi Lemaire Clothing Waste Skyscraper.jpg',
+      'assets/Lemaire/Branden Chi Lemaire Model Clothing Waste.jpg',
+      'assets/Lemaire/Branden Chi Lemaire Crowd City Street.jpg',
+    ],
   },
   {
     name: 'Polaroid',
     category: 'Art Direction | Copy Writing',
     year: '2025',
-    description: 'In a world where travel lives and dies in camera rolls, moments disappear as fast as they’re captured. Polaroid pushes back by making memories physical again.',
-    detailDescription: 'In a world where travel lives and dies in camera rolls, moments disappear as fast as they’re captured. Polaroid pushes back by making memories physical again. This campaign celebrates the act of slowing down — turning fleeting snapshots into tangible keepsakes that outlast the trip itself.',
+    description: 'With the rise of digital, film cameras have become irrelevant — but Polaroids are physical, personal, and immediate. This guerrilla campaign frames iconic landmarks around the world in the iconic Polaroid frame, turning tourist spots into living instant photos.',
+    detailDescription: 'This campaign follows an unseen traveler framing iconic landmarks around the world inside Polaroid\'s instantly recognizable borders. Each image is paired with a short handwritten caption, echoing how people naturally annotate instant prints and turning every photo into a postcard from the journey. The series forms a loose travel narrative, grounded in Polaroid\'s core truth: instant photos are physical, personal, and immediate. A subtle handwritten "Polaroid 2025" mark appears on the back of each frame, keeping the work cohesive while preserving its organic, human feel. By framing the world through Polaroid, the campaign positions the brand not as a relic of nostalgia, but as a way to keep real moments with you, anywhere you go.',
     thumbnail: 'assets/Thumbnails/Branden Chi Polaroid Eiffel Tower.jpg',
-    brief: '',
-    strategy: '',
+    brief: 'Polaroid has been known for their iconic instant nostalgic photos. With the rise of digital, film cameras have become irrelevant in the marketplace today. Polaroids are physical, personal, and immediate — Polaroid keeps the moment with you.',
+    strategy: 'Frame iconic tourist spots around the world with the iconic Polaroid photo frame as a guerrilla installation. Each frame carries a short handwritten caption, mimicking how people naturally jot notes on instant prints, doubling as postcard-style messages from the journey. The frames tell a loose travel narrative and showcase Polaroid\'s role in documenting real moments, anywhere in the world.',
     credits: '',
-    gallery: [],
+    gallery: [
+      'assets/Polaroid/Eiffel_tower.jpg',
+      'assets/Polaroid/Manhatten_bridge.jpg',
+      'assets/Polaroid/Pyramid.jpg',
+    ],
   },
   {
     name: 'Photography: Personal',
@@ -904,25 +940,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollHighlight();
   initHamburger();
 
-  const lockScreen = document.getElementById('lock-screen');
-  const lockInput = document.getElementById('lock-input');
-  const lockError = document.getElementById('lock-error');
-
-  if (sessionStorage.getItem('unlocked')) {
-    lockScreen.classList.add('unlocked');
-    handleRoute();
-  } else {
-    lockInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        if (lockInput.value === '273262AB') {
-          sessionStorage.setItem('unlocked', '1');
-          lockScreen.classList.add('unlocked');
-          handleRoute();
-        } else {
-          lockError.textContent = 'Incorrect password';
-          lockInput.value = '';
-        }
-      }
-    });
-  }
+  handleRoute();
 });
