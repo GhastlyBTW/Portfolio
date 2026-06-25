@@ -822,11 +822,27 @@ function initMusic() {
       item.appendChild(placeholder);
     }
 
+    const overlay = document.createElement('div');
+    overlay.className = 'album-overlay';
+    overlay.innerHTML = `<span class="album-overlay-title">${album.title}</span><span class="album-overlay-artist">${album.artist}</span>`;
+    item.appendChild(overlay);
+
     let audio = null;
     if (album.audio) {
       audio = new Audio(album.audio);
       audio.volume = 0.5;
     }
+
+    wrapper.addEventListener('click', () => {
+      if (window.innerWidth > 768) return;
+      const wasActive = item.classList.contains('tapped');
+      document.querySelectorAll('.album-item.tapped').forEach((el) => el.classList.remove('tapped'));
+      if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+      if (!wasActive) {
+        item.classList.add('tapped');
+        if (audio) { audio.play(); currentAudio = audio; }
+      }
+    });
 
     wrapper.addEventListener('mouseenter', () => {
       if (currentAudio && currentAudio !== audio) {
