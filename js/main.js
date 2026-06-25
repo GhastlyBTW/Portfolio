@@ -698,6 +698,57 @@ function observeCollections() {
   cards.forEach((card) => collectionObserver.observe(card));
 }
 
+// ==================== HAMBURGER ====================
+
+function initHamburger() {
+  const hamburger = document.getElementById('hamburger');
+  const menu = document.getElementById('mobile-menu');
+
+  function closeMenu() {
+    hamburger.classList.remove('open');
+    menu.classList.remove('open');
+  }
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    menu.classList.toggle('open');
+  });
+
+  document.getElementById('mobile-cv-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    closeMenu();
+    showCV();
+  });
+
+  document.getElementById('mobile-about-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    closeMenu();
+    showAbout();
+  });
+
+  menu.querySelectorAll('a[href^="http"], a[href^="mailto"]').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  const aboutBack = document.getElementById('about-back-link');
+  if (aboutBack) {
+    aboutBack.addEventListener('click', (e) => {
+      e.preventDefault();
+      showIndex();
+    });
+  }
+
+  const mobileMotif = document.getElementById('mobile-scroll-motif');
+  if (mobileMotif) {
+    window.addEventListener('wheel', (e) => {
+      if (!mobileMotif.offsetParent) return;
+      const current = parseFloat(mobileMotif.style.getPropertyValue('--r') || 0);
+      mobileMotif.style.setProperty('--r', current + e.deltaY * 0.3);
+      mobileMotif.style.transform = `rotate(${current + e.deltaY * 0.3}deg)`;
+    }, { passive: true });
+  }
+}
+
 // ==================== ROUTING ====================
 
 function handleRoute() {
@@ -835,5 +886,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   initCollectionList();
   initScrollHighlight();
-  handleRoute();
+  initHamburger();
+
+  const lockScreen = document.getElementById('lock-screen');
+  const lockInput = document.getElementById('lock-input');
+  const lockError = document.getElementById('lock-error');
+
+  if (sessionStorage.getItem('unlocked')) {
+    lockScreen.classList.add('unlocked');
+    handleRoute();
+  } else {
+    lockInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        if (lockInput.value === '273262AB') {
+          sessionStorage.setItem('unlocked', '1');
+          lockScreen.classList.add('unlocked');
+          handleRoute();
+        } else {
+          lockError.textContent = 'Incorrect password';
+          lockInput.value = '';
+        }
+      }
+    });
+  }
 });
