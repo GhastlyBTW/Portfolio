@@ -1231,8 +1231,4 @@ body.about-active .content {
   .masonry-grid {
     columns: 1;
   }
-
-  .bg-logo {
-    display: none;
-  }
 }
