@@ -58,7 +58,7 @@ const projects = [
     ],
   },
   {
-    name: 'Emporio Armani',
+    name: 'Emporio Armani - Unforgettable Night',
     category: 'Art Direction | Copy Writing',
     year: '2025',
     description: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. Have an unforgettable night with Emporio Armani.',
@@ -96,12 +96,12 @@ const projects = [
     ],
   },
   {
-    name: 'Polaroid',
+    name: 'Polaroid - Frame the Moment',
     category: 'Art Direction | Copy Writing',
     year: '2025',
     description: 'With the rise of digital, film cameras have become irrelevant — but Polaroids are physical, personal, and immediate. This guerrilla campaign frames iconic landmarks around the world in the iconic Polaroid frame, turning tourist spots into living instant photos.',
     detailDescription: 'This campaign follows an unseen traveler framing iconic landmarks around the world inside Polaroid\'s instantly recognizable borders. Each image is paired with a short handwritten caption, echoing how people naturally annotate instant prints and turning every photo into a postcard from the journey. The series forms a loose travel narrative, grounded in Polaroid\'s core truth: instant photos are physical, personal, and immediate. A subtle handwritten "Polaroid 2025" mark appears on the back of each frame, keeping the work cohesive while preserving its organic, human feel. By framing the world through Polaroid, the campaign positions the brand not as a relic of nostalgia, but as a way to keep real moments with you, anywhere you go.',
-    thumbnail: 'assets/Thumbnails/Branden Chi Polaroid Eiffel Tower.jpg',
+    thumbnail: 'assets/Polaroid/Polaroid at the beach.jpg',
     brief: 'Polaroid has been known for their iconic instant nostalgic photos. With the rise of digital, film cameras have become irrelevant in the marketplace today. Polaroids are physical, personal, and immediate — Polaroid keeps the moment with you.',
     strategy: 'Frame iconic tourist spots around the world with the iconic Polaroid photo frame as a guerrilla installation. Each frame carries a short handwritten caption, mimicking how people naturally jot notes on instant prints, doubling as postcard-style messages from the journey. The frames tell a loose travel narrative and showcase Polaroid\'s role in documenting real moments, anywhere in the world.',
     credits: '',
