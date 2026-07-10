@@ -107,8 +107,8 @@ const projects = [
     credits: '',
     gallery: [
       'assets/Polaroid/Eiffel_tower.jpg',
-      'assets/Polaroid/Manhatten_bridge.jpg',
-      'assets/Polaroid/Pyramid.jpg',
+      'assets/Polaroid/Branden Chi Polaroid Basketball court.jpg',
+      'assets/Polaroid/Polaroid at the beach.jpg',
     ],
   },
   {
