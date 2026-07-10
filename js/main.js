@@ -343,11 +343,9 @@ function showDetail(index, fromPop) {
 
   if (project.thumbnail) {
     const setThumb = (el) => {
-      el.src = project.thumbnail;
+      const heroSrc = project.thumbnailFallback || project.thumbnail;
+      el.src = heroSrc;
       el.alt = project.name;
-      if (project.thumbnailFallback) {
-        el.onerror = () => { el.onerror = null; el.src = project.thumbnailFallback; };
-      }
     };
     if (heroImg) {
       setThumb(heroImg);
