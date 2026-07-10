@@ -20,7 +20,8 @@ const projects = [
     year: '2025',
     description: 'A social awareness campaign examining the documented concerns surrounding U.S. Immigration and Customs Enforcement. Each piece tells a story through the eyes of a victim of ICE — invoking empathy to show the reality of what these people are facing.',
     detailDescription: 'A social awareness campaign focused on U.S. Immigration and Customs Enforcement and the documented concerns surrounding its practices. Each post tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media content, and a dedicated landing page — all designed to confront viewers with the human cost of detention and drive them toward action.',
-    thumbnail: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg',
+    thumbnail: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Posting.gif',
+    thumbnailFallback: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg',
     brief: 'The U.S. Immigration and Customs Enforcement agency has documented concerns surrounding its practices. This project aims to examine those issues and highlight where critics argue reforms may be necessary — driven by seeing the impact ICE actions have had on people personally.',
     strategy: 'Each post tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media posts, and a dedicated landing page.',
     credits: '',
@@ -62,7 +63,8 @@ const projects = [
     year: '2025',
     description: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. Have an unforgettable night with Emporio Armani.',
     detailDescription: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Smelling good lifts your confidence and lingers in someone else\'s memory. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. This campaign for Emporio Armani\'s fragrance line turns that insight into an experience — teasing with social polls, launching through custom cocktail napkins at top NYC date-night restaurants, and sustaining through partnerships with apps like OpenTable to deliver date tips with every booking.',
-    thumbnail: 'assets/Thumbnails/Branden Chi Emporio Armani Table.jpg',
+    thumbnail: 'assets/Thumbnails/Branden Chi Emporio Armani.gif',
+    thumbnailFallback: 'assets/Thumbnails/Branden Chi Emporio Armani Table.jpg',
     brief: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Smelling good lifts your confidence and lingers in someone else\'s memory. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten.',
     strategy: 'Tease with online polls asking how important smelling good is on a first date, inviting everyone to weigh in before the campaign drops. Launch by partnering with top date-night restaurants across New York City to slip Emporio Armani date tips onto custom cocktail napkins — guests who collect every tip can scan the final one to unlock a complimentary fragrance voucher. Sustain by partnering with apps like OpenTable to deliver date tips with every booking confirmation and table-ready alert.',
     credits: '',
@@ -340,13 +342,18 @@ function showDetail(index, fromPop) {
   const heroImg = hero.querySelector('img');
 
   if (project.thumbnail) {
+    const setThumb = (el) => {
+      el.src = project.thumbnail;
+      el.alt = project.name;
+      if (project.thumbnailFallback) {
+        el.onerror = () => { el.onerror = null; el.src = project.thumbnailFallback; };
+      }
+    };
     if (heroImg) {
-      heroImg.src = project.thumbnail;
-      heroImg.alt = project.name;
+      setThumb(heroImg);
     } else {
       const img = document.createElement('img');
-      img.src = project.thumbnail;
-      img.alt = project.name;
+      setThumb(img);
       hero.appendChild(img);
     }
     if (heroPlaceholder) heroPlaceholder.style.display = 'none';
