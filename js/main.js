@@ -1,5 +1,27 @@
 const PLACEHOLDER_COUNT = 6;
 const PHOTO_PROJECT_INDEX = 5;
+const SITE_BASE = 'https://brandenchi.com';
+const DEFAULT_OG_IMAGE = SITE_BASE + '/assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg';
+
+function updateMeta({ title, description, canonical, image }) {
+  document.title = title;
+  const fullUrl = SITE_BASE + (canonical || '/');
+  const fullImage = image
+    ? (image.startsWith('http') ? image : SITE_BASE + '/' + image)
+    : DEFAULT_OG_IMAGE;
+  const sel = (s) => document.querySelector(s);
+  const set = (s, v) => { const el = sel(s); if (el) el.content = v; };
+  const setHref = (s, v) => { const el = sel(s); if (el) el.href = v; };
+  set('meta[name="description"]', description);
+  setHref('link[rel="canonical"]', fullUrl);
+  set('meta[property="og:title"]', title);
+  set('meta[property="og:description"]', description);
+  set('meta[property="og:url"]', fullUrl);
+  set('meta[property="og:image"]', fullImage);
+  set('meta[name="twitter:title"]', title);
+  set('meta[name="twitter:description"]', description);
+  set('meta[name="twitter:image"]', fullImage);
+}
 
 function toSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -37,6 +59,18 @@ const projects = [
       'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkLittle Kid Social Post.png',
       'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkWoman Social Post.jpg',
     ],
+    galleryAlts: [
+      'Detention Watch Network campaign website landing page design',
+      'Detention Watch Network campaign website mockup displayed on a desktop screen',
+      'Wild posting street advertisement for the Detention Watch Network ICE awareness campaign',
+      'Poster of an elderly man detained by ICE — Detention Watch Network campaign',
+      'Poster of a woman detained by ICE — Detention Watch Network campaign',
+      'Poster of a young man detained by ICE — Detention Watch Network campaign',
+      'Detention Watch Network social media post displayed on a phone mockup',
+      'Social media post about an elderly man detained by ICE — Detention Watch Network',
+      'Social media post about a child separated from family by ICE — Detention Watch Network',
+      'Social media post about a woman detained by ICE — Detention Watch Network',
+    ],
   },
   {
     name: 'Liquid Dove',
@@ -55,6 +89,14 @@ const projects = [
       'assets/Liquid Dove/Branden Chi Liquid Dove Raigbait_3.jpg',
       'assets/Liquid Dove/Branden Chi Liquid Dove Ragebait_2.jpg',
       'assets/Liquid Dove/Branden Chi Liquid Dove News headline.jpg',
+    ],
+    galleryAlts: [
+      'Billboard rage bait advertisement mockup for the Liquid Dove collaboration campaign',
+      'Liquid Dove co-branded water bottle packaging design',
+      'Liquid Dove co-branded product box packaging design',
+      'Rage bait advertisement variation for the Liquid Dove campaign',
+      'Rage bait advertisement alternative for the Liquid Dove campaign',
+      'Fake news headline used as a campaign touchpoint for Liquid Dove',
     ],
   },
   {
@@ -76,6 +118,14 @@ const projects = [
       'assets/Emporio/Branden Chi Emporio Armani Instagram Poll.png',
       'assets/Emporio/Branden Chi Emporio Armani Open Table Confirmation code.jpg',
     ],
+    galleryAlts: [
+      'Custom Emporio Armani cocktail napkins displayed on a red restaurant table — Unforgettable Night campaign',
+      'Martini glass with a branded Emporio Armani cocktail napkin at a date-night restaurant',
+      'Close-up of an Emporio Armani cocktail napkin with handwritten first-date fragrance tips',
+      'OpenTable app on iPhone showing an Emporio Armani date tip notification',
+      'Instagram poll asking followers how important scent is on a first date — Emporio Armani campaign',
+      'OpenTable booking confirmation email featuring an Emporio Armani complimentary fragrance voucher',
+    ],
   },
   {
     name: 'Lemaire',
@@ -94,6 +144,13 @@ const projects = [
       'assets/Lemaire/Branden Chi Lemaire Model Clothing Waste.jpg',
       'assets/Lemaire/Branden Chi Lemaire Crowd City Street.jpg',
     ],
+    galleryAlts: [
+      'Street-level billboard mockup for Lemaire textile waste sustainability campaign',
+      'New York City billboard mockup for Lemaire fast fashion awareness campaign',
+      'Concept of a skyscraper wrapped in discarded clothing — Lemaire guerrilla installation',
+      'Model standing among piles of textile waste — Lemaire campaign visual',
+      'City street crowd surrounded by textile waste — Lemaire campaign visual',
+    ],
   },
   {
     name: 'Polaroid - Frame the Moment',
@@ -109,6 +166,11 @@ const projects = [
       'assets/Polaroid/Eiffel_tower.jpg',
       'assets/Polaroid/Branden Chi Polaroid Basketball court.jpg',
       'assets/Polaroid/Polaroid at the beach.jpg',
+    ],
+    galleryAlts: [
+      'Eiffel Tower viewed through a Polaroid frame with a handwritten caption — Polaroid Frame the Moment campaign',
+      'Basketball court viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
+      'Beach scene viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
     ],
   },
   {
@@ -301,6 +363,11 @@ function pushRoute(path) {
 }
 
 function showIndex(fromPop) {
+  updateMeta({
+    title: 'Branden Chi — Art Director, New York City',
+    description: 'Portfolio of Branden Chi, a Korean American Art Director based in New York City, creating work in art direction, copy writing, and photography.',
+    canonical: '/',
+  });
   exitAbout();
   showView('index-view');
   jumpTo(0);
@@ -312,6 +379,11 @@ function showIndex(fromPop) {
 }
 
 function showCV(fromPop) {
+  updateMeta({
+    title: 'CV — Branden Chi',
+    description: 'Curriculum vitae for Branden Chi — Art Director based in New York City with experience in art direction, copy writing, packaging design, and photography.',
+    canonical: '/cv',
+  });
   exitAbout();
   showView('cv-view');
   jumpTo(0);
@@ -330,6 +402,13 @@ function showDetail(index, fromPop) {
 
   const project = projects[index];
   if (!project) return;
+
+  updateMeta({
+    title: project.name + ' — Branden Chi',
+    description: project.description,
+    canonical: '/' + toSlug(project.name),
+    image: project.thumbnailFallback || project.thumbnail,
+  });
 
   document.getElementById('detail-title').textContent = project.name;
 
@@ -363,10 +442,10 @@ function showDetail(index, fromPop) {
   const gallery = document.getElementById('detail-gallery');
   gallery.innerHTML = '';
   if (project.gallery && project.gallery.length) {
-    project.gallery.forEach((src) => {
+    project.gallery.forEach((src, i) => {
       const img = document.createElement('img');
       img.src = src;
-      img.alt = project.name;
+      img.alt = (project.galleryAlts && project.galleryAlts[i]) || project.name;
       img.loading = 'lazy';
       gallery.appendChild(img);
     });
@@ -405,6 +484,12 @@ function showDetail(index, fromPop) {
 // ==================== ABOUT ====================
 
 function showAbout(fromPop) {
+  updateMeta({
+    title: 'About — Branden Chi',
+    description: 'Branden Chi is a Korean American Art Director from Delaware, now based in New York City, creating work that makes people stop and think.',
+    canonical: '/about',
+    image: 'assets/about/Branden Chi - About.jpg',
+  });
   showView('about-view');
   jumpTo(0);
   clearActiveProject();
@@ -435,6 +520,12 @@ function getCollectionCategory(collection) {
 }
 
 function showPhotography(fromPop) {
+  updateMeta({
+    title: 'Photography — Branden Chi',
+    description: 'Personal photography by Branden Chi spanning digital car photography, street photography, and 35mm film — shot on Sony A7C and Canon Sureshot.',
+    canonical: '/photography',
+    image: photoCollections[0] ? photoCollections[0].thumbnail : null,
+  });
   exitAbout();
   activeFilter = 'all';
   document.querySelectorAll('.photo-filter').forEach((btn) => {
@@ -455,6 +546,13 @@ function showGallery(collectionIndex, fromPop) {
   const collection = photoCollections[collectionIndex];
   if (!collection) return;
 
+  updateMeta({
+    title: collection.name + ' — Branden Chi Photography',
+    description: 'Photography collection by Branden Chi: ' + collection.subtitle + '.',
+    canonical: '/photography/' + toSlug(collection.name),
+    image: collection.thumbnail,
+  });
+
   document.getElementById('gallery-title').textContent = collection.name;
 
   const grid = document.getElementById('masonry-grid');
@@ -464,7 +562,8 @@ function showGallery(collectionIndex, fromPop) {
     collection.images.forEach((src) => {
       const img = document.createElement('img');
       img.src = src;
-      img.alt = collection.name;
+      img.alt = collection.name + ' — photography by Branden Chi';
+      img.loading = 'lazy';
       grid.appendChild(img);
     });
   } else {
@@ -506,7 +605,7 @@ function renderCollections() {
     if (collection.thumbnail) {
       const img = document.createElement('img');
       img.src = collection.thumbnail;
-      img.alt = collection.name;
+      img.alt = collection.name + ' — ' + collection.subtitle;
       thumbDiv.appendChild(img);
     } else {
       const placeholder = document.createElement('div');
