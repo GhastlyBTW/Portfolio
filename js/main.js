@@ -677,8 +677,8 @@ function updateStackPositions(instant) {
 
   const firstBoard = document.querySelector('#lightbox-stack .lightbox-board');
   const CARD_H = firstBoard ? firstBoard.getBoundingClientRect().height : window.innerHeight * 0.76;
-  const PEEK = CARD_H * 0.20; // 20% of card height peeks above and below
-  const CARD_STEP = (window.innerHeight + CARD_H) / 2 - PEEK;
+  // All cards originate from center; offset by 20% of card height so only 20% peeks out
+  const CARD_STEP = CARD_H * 0.20;
   const activeIdx = Math.round(_stackPos);
 
   boards.forEach((board, i) => {
@@ -852,7 +852,7 @@ function renderCollections() {
   // Enable pointer-events on front-facing cards once all animations settle
   const maxDelay = 200 + (total - 1) * 120 + 1100;
   setTimeout(() => {
-    updateCarouselPointerEvents(pivots, finalAngles, -30 + _carouselScrollOffset);
+    updateCarouselPointerEvents(pivots, finalAngles, _carouselScrollOffset);
   }, maxDelay);
 
   container.appendChild(stage);
@@ -862,11 +862,11 @@ function renderCollections() {
 function initCarouselParallax(stage, scene, pivots, finalAngles) {
   if (_parallaxCleanup) { _parallaxCleanup(); _parallaxCleanup = null; }
 
-  const bY = -30;
-  const bX = -18;
+  const bY = 0;
+  const bX = 0;
   let tX = 0, tY = 0, cX = 0, cY = 0, running = false;
 
-  scene.style.transform = `rotateY(${bY}deg) rotateX(${bX}deg)`;
+  scene.style.transform = `rotateY(0deg) rotateX(0deg)`;
 
   function getSceneY() { return bY + _carouselScrollOffset + cX; }
 
