@@ -500,11 +500,33 @@ function showAbout(fromPop) {
 
   const aboutScroll = document.getElementById('about-scroll');
   aboutScroll.scrollLeft = 0;
+
+  showAboutScrollIndicator();
+}
+
+function showAboutScrollIndicator() {
+  const indicator = document.getElementById('about-scroll-indicator');
+  if (!indicator) return;
+  indicator.classList.remove('hidden');
+  setTimeout(() => indicator.classList.add('visible'), 1200);
+
+  const hide = () => {
+    indicator.classList.remove('visible');
+    indicator.classList.add('hidden');
+    window.removeEventListener('scroll', hide);
+  };
+  window.addEventListener('scroll', hide, { passive: true });
 }
 
 function exitAbout() {
   document.querySelector('.sidebar').classList.remove('minimal');
   document.body.classList.remove('about-active');
+
+  const indicator = document.getElementById('about-scroll-indicator');
+  if (indicator) {
+    indicator.classList.remove('visible');
+    indicator.classList.add('hidden');
+  }
 }
 
 // ==================== PHOTOGRAPHY ====================

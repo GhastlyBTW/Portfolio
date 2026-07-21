@@ -871,6 +871,62 @@ body.about-active .content {
   border-radius: 4px;
 }
 
+/* ==================== ABOUT SCROLL INDICATOR ==================== */
+
+.about-scroll-indicator {
+  position: fixed;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.about-scroll-indicator.visible {
+  opacity: 1;
+}
+
+.about-scroll-indicator.hidden {
+  opacity: 0;
+}
+
+.scroll-indicator-line {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-indicator-line::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  animation: scrollDrop 1.6s ease-in-out infinite;
+}
+
+@keyframes scrollDrop {
+  0%   { top: -100%; }
+  100% { top: 100%; }
+}
+
+.scroll-indicator-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
 /* ==================== MUSIC SECTION ==================== */
 
 .music-panel {
@@ -881,7 +937,7 @@ body.about-active .content {
 .music-label {
   font-size: 14px;
   color: var(--text-muted);
-  margin-bottom: 40px;
+  margin-bottom: 16px;
   letter-spacing: 0.05em;
 }
 
