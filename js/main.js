@@ -508,14 +508,17 @@ function showAboutScrollIndicator() {
   const indicator = document.getElementById('about-scroll-indicator');
   if (!indicator) return;
   indicator.classList.remove('hidden');
-  setTimeout(() => indicator.classList.add('visible'), 1200);
 
-  const hide = () => {
-    indicator.classList.remove('visible');
-    indicator.classList.add('hidden');
-    window.removeEventListener('scroll', hide);
-  };
-  window.addEventListener('scroll', hide, { passive: true });
+  setTimeout(() => {
+    indicator.classList.add('visible');
+
+    const hide = () => {
+      indicator.classList.remove('visible');
+      indicator.classList.add('hidden');
+      window.removeEventListener('scroll', hide);
+    };
+    window.addEventListener('scroll', hide, { passive: true });
+  }, 1200);
 }
 
 function exitAbout() {
