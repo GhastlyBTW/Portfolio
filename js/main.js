@@ -671,6 +671,7 @@ let _stackScrollTotal = 0;
 let _lbWheelFn = null;
 let _lbKeyFn = null;
 let _boardPool = []; // [{element, imgIdx}] — all images rendered as a horizontal strip
+let _cachedCardW = 0; // cached board width for CARD_STEP; reset on open/resize
 let _stackRafPending = false; // prevents >1 rAF per frame in wheel handler
 
 function openLightbox(collectionIdx) {
@@ -681,6 +682,7 @@ function openLightbox(collectionIdx) {
   _lbCurr = 0;
   _stackPos = 0;
   _stackScrollTotal = 0;
+  _cachedCardW = 0;
 
   updateMeta({
     title: collection.name + ' — Branden Chi Photography',
@@ -770,7 +772,10 @@ function updateStackPositions(instant) {
   const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
 
-  const CARD_STEP = window.innerWidth * 0.70;
+  if (!_cachedCardW) {
+    _cachedCardW = _boardPool[0].element.getBoundingClientRect().width || window.innerWidth * 0.60;
+  }
+  const CARD_STEP = _cachedCardW * 0.20;
 
   _boardPool.forEach(({ element, imgIdx }) => {
     let relPos = imgIdx - _stackPos;
@@ -1414,6 +1419,8 @@ function initRandomPhotoThumb() {
 }
 
 // ==================== INIT ====================
+
+window.addEventListener('resize', () => { _cachedCardW = 0; }, { passive: true });
 
 document.addEventListener('DOMContentLoaded', () => {
   initRandomPhotoThumb();
