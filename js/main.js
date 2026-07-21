@@ -1,5 +1,10 @@
 const PLACEHOLDER_COUNT = 6;
 const PHOTO_PROJECT_INDEX = 5;
+const LOREM_IPSUM = [
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+  'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+].join(' ');
 const SITE_BASE = 'https://brandenchi.com';
 const DEFAULT_OG_IMAGE = SITE_BASE + '/assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg';
 
@@ -71,6 +76,16 @@ const projects = [
       'Social media post about a child separated from family by ICE — Detention Watch Network',
       'Social media post about a woman detained by ICE — Detention Watch Network',
     ],
+    galleryBlocks: [
+      { type: 'img', idx: 0 },
+      { type: 'img', idx: 1 },
+      { type: 'text' },
+      { type: 'img', idx: 2 },
+      { type: 'row', indices: [3, 4, 5] },
+      { type: 'text' },
+      { type: 'img', idx: 6 },
+      { type: 'row', indices: [7, 8, 9] },
+    ],
   },
   {
     name: 'Liquid Dove',
@@ -97,6 +112,16 @@ const projects = [
       'Rage bait advertisement variation for the Liquid Dove campaign',
       'Rage bait advertisement alternative for the Liquid Dove campaign',
       'Fake news headline used as a campaign touchpoint for Liquid Dove',
+    ],
+    galleryBlocks: [
+      { type: 'img', idx: 0 },
+      { type: 'img', idx: 1 },
+      { type: 'text' },
+      { type: 'img', idx: 2 },
+      { type: 'img', idx: 3 },
+      { type: 'text' },
+      { type: 'img', idx: 4 },
+      { type: 'img', idx: 5 },
     ],
   },
   {
@@ -126,6 +151,16 @@ const projects = [
       'Instagram poll asking followers how important scent is on a first date — Emporio Armani campaign',
       'OpenTable booking confirmation email featuring an Emporio Armani complimentary fragrance voucher',
     ],
+    galleryBlocks: [
+      { type: 'img', idx: 0 },
+      { type: 'img', idx: 1 },
+      { type: 'text' },
+      { type: 'img', idx: 2 },
+      { type: 'img', idx: 3 },
+      { type: 'text' },
+      { type: 'img', idx: 4 },
+      { type: 'img', idx: 5 },
+    ],
   },
   {
     name: 'Lemaire',
@@ -151,6 +186,15 @@ const projects = [
       'Model standing among piles of textile waste — Lemaire campaign visual',
       'City street crowd surrounded by textile waste — Lemaire campaign visual',
     ],
+    galleryBlocks: [
+      { type: 'img', idx: 0 },
+      { type: 'img', idx: 1 },
+      { type: 'text' },
+      { type: 'img', idx: 2 },
+      { type: 'img', idx: 3 },
+      { type: 'text' },
+      { type: 'img', idx: 4 },
+    ],
   },
   {
     name: 'Polaroid - Frame the Moment',
@@ -171,6 +215,12 @@ const projects = [
       'Eiffel Tower viewed through a Polaroid frame with a handwritten caption — Polaroid Frame the Moment campaign',
       'Basketball court viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
       'Beach scene viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
+    ],
+    galleryBlocks: [
+      { type: 'img', idx: 0 },
+      { type: 'text' },
+      { type: 'img', idx: 1 },
+      { type: 'img', idx: 2 },
     ],
   },
   {
@@ -444,8 +494,40 @@ function showDetail(index, fromPop) {
 
   const gallery = document.getElementById('detail-gallery');
   gallery.innerHTML = '';
-  if (project.gallery && project.gallery.length) {
-    project.gallery.forEach((src, i) => {
+  const images = project.gallery || [];
+
+  if (project.galleryBlocks) {
+    project.galleryBlocks.forEach((block) => {
+      if (block.type === 'img') {
+        const src = images[block.idx];
+        if (!src) return;
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = (project.galleryAlts && project.galleryAlts[block.idx]) || project.name;
+        img.loading = 'lazy';
+        gallery.appendChild(img);
+      } else if (block.type === 'row') {
+        const row = document.createElement('div');
+        row.className = 'gallery-img-row';
+        block.indices.forEach((idx) => {
+          const src = images[idx];
+          if (!src) return;
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = (project.galleryAlts && project.galleryAlts[idx]) || project.name;
+          img.loading = 'lazy';
+          row.appendChild(img);
+        });
+        gallery.appendChild(row);
+      } else if (block.type === 'text') {
+        const p = document.createElement('p');
+        p.className = 'gallery-text-block';
+        p.textContent = LOREM_IPSUM;
+        gallery.appendChild(p);
+      }
+    });
+  } else if (images.length) {
+    images.forEach((src, i) => {
       const img = document.createElement('img');
       img.src = src;
       img.alt = (project.galleryAlts && project.galleryAlts[i]) || project.name;

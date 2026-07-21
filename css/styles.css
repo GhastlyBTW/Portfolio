@@ -528,12 +528,35 @@ ul {
   width: 100%;
   display: block;
   border-radius: 2px;
+  max-height: 100vh;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .gallery-placeholder {
   aspect-ratio: 16 / 10;
   background: linear-gradient(135deg, #0a1628, #1a2a4a);
   border-radius: 2px;
+}
+
+.gallery-text-block {
+  width: 33%;
+  margin: 56px auto;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+.gallery-img-row {
+  display: flex;
+  gap: 8px;
+}
+
+.gallery-img-row img {
+  flex: 1;
+  width: 0;
+  min-width: 0;
 }
 
 /* ==================== ACCORDIONS ==================== */
@@ -1486,6 +1509,18 @@ body.about-active .content {
   }
 
   .detail-meta-row {
+    width: 100%;
+  }
+
+  .gallery-text-block {
+    width: 75%;
+  }
+
+  .gallery-img-row {
+    flex-direction: column;
+  }
+
+  .gallery-img-row img {
     width: 100%;
   }
 
