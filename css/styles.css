@@ -942,6 +942,8 @@ body.photo-active .photo-bottom-nav {
 .lightbox-stack {
   position: absolute;
   inset: 0;
+  perspective: 700px;
+  perspective-origin: 50% 50%;
 }
 
 .lightbox-board {
@@ -956,6 +958,7 @@ body.photo-active .photo-bottom-nav {
   justify-content: center;
   box-sizing: border-box;
   will-change: transform;
+  filter: drop-shadow(0 16px 48px rgba(0, 0, 0, 0.65));
 }
 
 .lightbox-board img {

@@ -677,19 +677,21 @@ function updateStackPositions(instant) {
 
   const firstBoard = document.querySelector('#lightbox-stack .lightbox-board');
   const CARD_H = firstBoard ? firstBoard.getBoundingClientRect().height : window.innerHeight * 0.76;
-  const PEEK = CARD_H * 0.13; // 13% of actual card height visible on each side
+  const PEEK = CARD_H * 0.20; // 20% of card height peeks above and below
   const CARD_STEP = (window.innerHeight + CARD_H) / 2 - PEEK;
   const activeIdx = Math.round(_stackPos);
 
   boards.forEach((board, i) => {
     const relPos = i - _stackPos;
+    const absRel = Math.abs(relPos);
     const y = relPos * CARD_STEP;
+    // Push non-active cards back in Z for depth — capped at 2 steps back
+    const tz = -Math.min(Math.round(absRel), 2) * 28;
+
     if (instant) board.style.transition = 'none';
-    board.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px))`;
+    board.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px)) translateZ(${tz}px)`;
     board.style.zIndex = N * 10 - Math.abs(i - activeIdx) * 5;
-    if (instant) {
-      board.offsetHeight; // force reflow to apply instant position
-    }
+    if (instant) board.offsetHeight;
     if (instant) board.style.transition = '';
   });
 }
