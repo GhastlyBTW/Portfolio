@@ -580,9 +580,12 @@ function showGallery(collectionIndex, fromPop) {
 
 // ==================== LIGHTBOX ====================
 
+const SCROLL_PER_CARD = 500;
+
 let _lbIdx = -1;
 let _lbCurr = 0;
-let _lbScrollAcc = 0;
+let _stackPos = 0;
+let _stackScrollTotal = 0;
 let _lbWheelFn = null;
 let _lbKeyFn = null;
 
@@ -592,7 +595,8 @@ function openLightbox(collectionIdx) {
 
   _lbIdx = collectionIdx;
   _lbCurr = 0;
-  _lbScrollAcc = 0;
+  _stackPos = 0;
+  _stackScrollTotal = 0;
 
   updateMeta({
     title: collection.name + ' — Branden Chi Photography',
@@ -605,22 +609,22 @@ function openLightbox(collectionIdx) {
   const frame = document.getElementById('lightbox-frame');
   frame.innerHTML = '';
 
-  const stage = document.createElement('div');
-  stage.className = 'lightbox-stage';
-  stage.id = 'lightbox-stage';
+  const stack = document.createElement('div');
+  stack.className = 'lightbox-stack';
+  stack.id = 'lightbox-stack';
 
   const images = collection.images.length ? collection.images : [];
   images.forEach((src, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'lightbox-slide';
-    slide.dataset.index = i;
+    const board = document.createElement('div');
+    board.className = 'lightbox-board';
+    board.dataset.index = i;
     const img = document.createElement('img');
     img.src = src;
     img.alt = collection.name + ' — ' + (i + 1);
-    img.loading = i < 3 ? 'eager' : 'lazy';
+    img.loading = i < 2 ? 'eager' : 'lazy';
     img.draggable = false;
-    slide.appendChild(img);
-    stage.appendChild(slide);
+    board.appendChild(img);
+    stack.appendChild(board);
   });
 
   const counter = document.createElement('div');
@@ -632,18 +636,12 @@ function openLightbox(collectionIdx) {
   nameTag.className = 'lightbox-name';
   nameTag.textContent = collection.name;
 
-  frame.appendChild(stage);
+  frame.appendChild(stack);
   frame.appendChild(counter);
   frame.appendChild(nameTag);
 
-  // Set initial positions without transition (instant)
-  const slides = stage.querySelectorAll('.lightbox-slide');
-  slides.forEach((s) => { s.style.transition = 'none'; });
-  updateLightboxPositions();
-  // Re-enable transitions after next paint
-  requestAnimationFrame(() => {
-    slides.forEach((s) => { s.style.transition = ''; });
-  });
+  // Position boards immediately without animation
+  updateStackPositions(true);
 
   lightbox.removeAttribute('aria-hidden');
   lightbox.classList.add('open');
@@ -651,9 +649,14 @@ function openLightbox(collectionIdx) {
 
   _lbWheelFn = (e) => {
     e.preventDefault();
-    _lbScrollAcc += e.deltaY;
-    if (_lbScrollAcc > 55) { _lbScrollAcc = 0; advanceLightbox(1); }
-    else if (_lbScrollAcc < -55) { _lbScrollAcc = 0; advanceLightbox(-1); }
+    const N = photoCollections[_lbIdx].images.length;
+    _stackScrollTotal += e.deltaY;
+    _stackScrollTotal = Math.max(0, Math.min((N - 1) * SCROLL_PER_CARD, _stackScrollTotal));
+    _stackPos = _stackScrollTotal / SCROLL_PER_CARD;
+    _lbCurr = Math.round(_stackPos);
+    updateStackPositions(false);
+    const counter = document.getElementById('lightbox-counter');
+    if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
   };
   lightbox.addEventListener('wheel', _lbWheelFn, { passive: false });
 
@@ -667,33 +670,26 @@ function openLightbox(collectionIdx) {
   pushRoute('/photography/' + toSlug(collection.name));
 }
 
-function updateLightboxPositions() {
-  const slides = document.querySelectorAll('#lightbox-stage .lightbox-slide');
-  const N = slides.length;
+function updateStackPositions(instant) {
+  const boards = document.querySelectorAll('#lightbox-stack .lightbox-board');
+  const N = boards.length;
   if (!N) return;
 
-  slides.forEach((slide, i) => {
-    let offset = i - _lbCurr;
-    if (offset > N / 2) offset -= N;
-    if (offset < -N / 2) offset += N;
+  const CARD_H = window.innerHeight * 0.76;
+  const PEEK = 48;
+  const CARD_STEP = (window.innerHeight + CARD_H) / 2 - PEEK;
+  const activeIdx = Math.round(_stackPos);
 
-    const abs = Math.abs(offset);
-    const dir = offset >= 0 ? 1 : -1;
-    let ty, tz, scale, opacity, zIndex;
-
-    if (abs === 0) {
-      ty = 0; tz = 0; scale = 1; opacity = 1; zIndex = 10;
-    } else if (abs === 1) {
-      ty = dir * 82; tz = -80; scale = 0.78; opacity = 0.55; zIndex = 5;
-    } else if (abs === 2) {
-      ty = dir * 150; tz = -160; scale = 0.62; opacity = 0.2; zIndex = 2;
-    } else {
-      ty = dir * 200; tz = -240; scale = 0.5; opacity = 0; zIndex = 0;
+  boards.forEach((board, i) => {
+    const relPos = i - _stackPos;
+    const y = relPos * CARD_STEP;
+    if (instant) board.style.transition = 'none';
+    board.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px))`;
+    board.style.zIndex = N * 10 - Math.abs(i - activeIdx) * 5;
+    if (instant) {
+      board.offsetHeight; // force reflow to apply instant position
     }
-
-    slide.style.transform = `translateY(${ty}%) translateZ(${tz}px) scale(${scale})`;
-    slide.style.opacity = opacity;
-    slide.style.zIndex = zIndex;
+    if (instant) board.style.transition = '';
   });
 }
 
@@ -718,8 +714,10 @@ function advanceLightbox(dir) {
   if (_lbIdx === -1) return;
   const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
-  _lbCurr = (_lbCurr + dir + N) % N;
-  updateLightboxPositions();
+  _lbCurr = Math.max(0, Math.min(N - 1, _lbCurr + dir));
+  _stackPos = _lbCurr;
+  _stackScrollTotal = _lbCurr * SCROLL_PER_CARD;
+  updateStackPositions(false);
   const counter = document.getElementById('lightbox-counter');
   if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
 }
@@ -759,6 +757,17 @@ function initLightboxEvents() {
   }, { passive: true });
 }
 
+let _parallaxCleanup = null;
+let _carouselScrollOffset = 0;
+
+function updateCarouselPointerEvents(pivots, finalAngles, sceneY) {
+  pivots.forEach((pivot, i) => {
+    let eff = ((finalAngles[i] + sceneY) % 360 + 360) % 360;
+    if (eff > 180) eff -= 360;
+    pivot.style.pointerEvents = Math.abs(eff) < 88 ? 'auto' : 'none';
+  });
+}
+
 function renderCollections() {
   const container = document.getElementById('photo-collections');
   container.innerHTML = '';
@@ -782,15 +791,19 @@ function renderCollections() {
 
   const total = visible.length;
   const step = total <= 1 ? 0 : 360 / total;
+  const pivots = [];
+  const finalAngles = [];
+  _carouselScrollOffset = 0;
 
   visible.forEach((collection, i) => {
     const finalAngle = i * step;
+    finalAngles.push(finalAngle);
 
     const pivot = document.createElement('div');
     pivot.className = 'carousel-pivot';
-    // Start stacked at center, animate to fan position
     pivot.style.transform = 'rotateY(0deg)';
     pivot.style.opacity = '0';
+    pivot.style.pointerEvents = 'none';
 
     const card = document.createElement('div');
     card.className = 'carousel-card';
@@ -823,8 +836,8 @@ function renderCollections() {
     const originalIdx = photoCollections.indexOf(collection);
     pivot.addEventListener('click', () => openLightbox(originalIdx));
     scene.appendChild(pivot);
+    pivots.push(pivot);
 
-    // Stagger fan-out: first card appears, then others spread counter-clockwise
     const delay = 200 + i * 120;
     setTimeout(() => {
       pivot.style.transition = 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease';
@@ -833,13 +846,17 @@ function renderCollections() {
     }, delay);
   });
 
+  // Enable pointer-events on front-facing cards once all animations settle
+  const maxDelay = 200 + (total - 1) * 120 + 1100;
+  setTimeout(() => {
+    updateCarouselPointerEvents(pivots, finalAngles, -30 + _carouselScrollOffset);
+  }, maxDelay);
+
   container.appendChild(stage);
-  initCarouselParallax(stage, scene);
+  initCarouselParallax(stage, scene, pivots, finalAngles);
 }
 
-let _parallaxCleanup = null;
-
-function initCarouselParallax(stage, scene) {
+function initCarouselParallax(stage, scene, pivots, finalAngles) {
   if (_parallaxCleanup) { _parallaxCleanup(); _parallaxCleanup = null; }
 
   const bY = -30;
@@ -848,10 +865,14 @@ function initCarouselParallax(stage, scene) {
 
   scene.style.transform = `rotateY(${bY}deg) rotateX(${bX}deg)`;
 
+  function getSceneY() { return bY + _carouselScrollOffset + cX; }
+
   function loop() {
     cX += (tX - cX) * 0.07;
     cY += (tY - cY) * 0.07;
-    scene.style.transform = `rotateY(${bY + cX}deg) rotateX(${bX + cY}deg)`;
+    const sy = getSceneY();
+    scene.style.transform = `rotateY(${sy}deg) rotateX(${bX + cY}deg)`;
+    updateCarouselPointerEvents(pivots, finalAngles, sy);
     if (Math.abs(tX - cX) > 0.05 || Math.abs(tY - cY) > 0.05) {
       requestAnimationFrame(loop);
     } else {
@@ -859,14 +880,27 @@ function initCarouselParallax(stage, scene) {
     }
   }
 
-  const fn = (e) => {
+  const mouseFn = (e) => {
     if (!document.body.classList.contains('photo-active') || _lbIdx !== -1) return;
     tX = (e.clientX / window.innerWidth * 2 - 1) * 16;
     tY = (e.clientY / window.innerHeight * 2 - 1) * -10;
     if (!running) { running = true; requestAnimationFrame(loop); }
   };
-  document.addEventListener('mousemove', fn);
-  _parallaxCleanup = () => document.removeEventListener('mousemove', fn);
+
+  const wheelFn = (e) => {
+    if (!document.body.classList.contains('photo-active') || _lbIdx !== -1) return;
+    _carouselScrollOffset -= e.deltaY * 0.12;
+    const sy = getSceneY();
+    scene.style.transform = `rotateY(${sy}deg) rotateX(${bX + cY}deg)`;
+    updateCarouselPointerEvents(pivots, finalAngles, sy);
+  };
+
+  document.addEventListener('mousemove', mouseFn);
+  document.addEventListener('wheel', wheelFn, { passive: true });
+  _parallaxCleanup = () => {
+    document.removeEventListener('mousemove', mouseFn);
+    document.removeEventListener('wheel', wheelFn);
+  };
 }
 
 // ==================== SIDEBAR ====================
