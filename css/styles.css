@@ -950,13 +950,10 @@ body.photo-active .photo-bottom-nav {
   top: 50%;
   width: clamp(280px, 52vw, 700px);
   height: 76vh;
-  background: #f0ece4;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 12px 40px rgba(0, 0, 0, 0.45);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 18px 44px;
   box-sizing: border-box;
   will-change: transform;
 }
@@ -1617,6 +1614,5 @@ body.about-active .content {
   .lightbox-board {
     width: 88vw;
     height: 72vh;
-    padding: 14px 14px 36px;
   }
 }
