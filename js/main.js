@@ -651,9 +651,9 @@ function openLightbox(collectionIdx) {
     e.preventDefault();
     const N = photoCollections[_lbIdx].images.length;
     _stackScrollTotal += e.deltaY;
-    _stackScrollTotal = Math.max(0, Math.min((N - 1) * SCROLL_PER_CARD, _stackScrollTotal));
-    _stackPos = _stackScrollTotal / SCROLL_PER_CARD;
-    _lbCurr = Math.round(_stackPos);
+    // Infinite loop: wrap fractional position around N
+    _stackPos = ((_stackScrollTotal / SCROLL_PER_CARD) % N + N) % N;
+    _lbCurr = Math.round(_stackPos) % N;
     updateStackPositions(false);
     const counter = document.getElementById('lightbox-counter');
     if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
@@ -677,20 +677,24 @@ function updateStackPositions(instant) {
 
   const firstBoard = document.querySelector('#lightbox-stack .lightbox-board');
   const CARD_H = firstBoard ? firstBoard.getBoundingClientRect().height : window.innerHeight * 0.76;
-  // All cards originate from center; offset by 20% of card height so only 20% peeks out
   const CARD_STEP = CARD_H * 0.20;
-  const activeIdx = Math.round(_stackPos);
 
   boards.forEach((board, i) => {
-    const relPos = i - _stackPos;
+    // Wrap relPos to shortest path so the loop is seamless
+    let relPos = i - _stackPos;
+    relPos = ((relPos % N) + N) % N;
+    if (relPos > N / 2) relPos -= N;
+
     const absRel = Math.abs(relPos);
     const y = relPos * CARD_STEP;
-    // Push non-active cards back in Z for depth — capped at 2 steps back
     const tz = -Math.min(Math.round(absRel), 2) * 28;
+    // Scale: 1.0 at front, 0.65 at back — interpolates smoothly during scroll
+    const scaleVal = 1.0 - Math.min(absRel, 1) * 0.35;
+    const zIndex = N * 10 - Math.round(absRel) * 5;
 
     if (instant) board.style.transition = 'none';
-    board.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px)) translateZ(${tz}px)`;
-    board.style.zIndex = N * 10 - Math.abs(i - activeIdx) * 5;
+    board.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px)) translateZ(${tz}px) scale(${scaleVal.toFixed(3)})`;
+    board.style.zIndex = zIndex;
     if (instant) board.offsetHeight;
     if (instant) board.style.transition = '';
   });
@@ -717,9 +721,9 @@ function advanceLightbox(dir) {
   if (_lbIdx === -1) return;
   const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
-  _lbCurr = Math.max(0, Math.min(N - 1, _lbCurr + dir));
-  _stackPos = _lbCurr;
-  _stackScrollTotal = _lbCurr * SCROLL_PER_CARD;
+  _stackScrollTotal += dir * SCROLL_PER_CARD;
+  _stackPos = ((_stackScrollTotal / SCROLL_PER_CARD) % N + N) % N;
+  _lbCurr = Math.round(_stackPos) % N;
   updateStackPositions(false);
   const counter = document.getElementById('lightbox-counter');
   if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
