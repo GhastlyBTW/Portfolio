@@ -605,22 +605,22 @@ function openLightbox(collectionIdx) {
   const frame = document.getElementById('lightbox-frame');
   frame.innerHTML = '';
 
-  // Build track
-  const track = document.createElement('div');
-  track.className = 'lightbox-track';
-  track.id = 'lightbox-track';
+  const stage = document.createElement('div');
+  stage.className = 'lightbox-stage';
+  stage.id = 'lightbox-stage';
 
   const images = collection.images.length ? collection.images : [];
   images.forEach((src, i) => {
     const slide = document.createElement('div');
     slide.className = 'lightbox-slide';
+    slide.dataset.index = i;
     const img = document.createElement('img');
     img.src = src;
     img.alt = collection.name + ' — ' + (i + 1);
-    img.loading = i < 2 ? 'eager' : 'lazy';
+    img.loading = i < 3 ? 'eager' : 'lazy';
     img.draggable = false;
     slide.appendChild(img);
-    track.appendChild(slide);
+    stage.appendChild(slide);
   });
 
   const counter = document.createElement('div');
@@ -632,24 +632,31 @@ function openLightbox(collectionIdx) {
   nameTag.className = 'lightbox-name';
   nameTag.textContent = collection.name;
 
-  frame.appendChild(track);
+  frame.appendChild(stage);
   frame.appendChild(counter);
   frame.appendChild(nameTag);
+
+  // Set initial positions without transition (instant)
+  const slides = stage.querySelectorAll('.lightbox-slide');
+  slides.forEach((s) => { s.style.transition = 'none'; });
+  updateLightboxPositions();
+  // Re-enable transitions after next paint
+  requestAnimationFrame(() => {
+    slides.forEach((s) => { s.style.transition = ''; });
+  });
 
   lightbox.removeAttribute('aria-hidden');
   lightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Wheel handler
   _lbWheelFn = (e) => {
     e.preventDefault();
     _lbScrollAcc += e.deltaY;
-    if (_lbScrollAcc > 60) { _lbScrollAcc = 0; advanceLightbox(1); }
-    else if (_lbScrollAcc < -60) { _lbScrollAcc = 0; advanceLightbox(-1); }
+    if (_lbScrollAcc > 55) { _lbScrollAcc = 0; advanceLightbox(1); }
+    else if (_lbScrollAcc < -55) { _lbScrollAcc = 0; advanceLightbox(-1); }
   };
   lightbox.addEventListener('wheel', _lbWheelFn, { passive: false });
 
-  // Keyboard handler
   _lbKeyFn = (e) => {
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight') advanceLightbox(1);
@@ -658,6 +665,36 @@ function openLightbox(collectionIdx) {
   window.addEventListener('keydown', _lbKeyFn);
 
   pushRoute('/photography/' + toSlug(collection.name));
+}
+
+function updateLightboxPositions() {
+  const slides = document.querySelectorAll('#lightbox-stage .lightbox-slide');
+  const N = slides.length;
+  if (!N) return;
+
+  slides.forEach((slide, i) => {
+    let offset = i - _lbCurr;
+    if (offset > N / 2) offset -= N;
+    if (offset < -N / 2) offset += N;
+
+    const abs = Math.abs(offset);
+    const dir = offset >= 0 ? 1 : -1;
+    let ty, tz, scale, opacity, zIndex;
+
+    if (abs === 0) {
+      ty = 0; tz = 0; scale = 1; opacity = 1; zIndex = 10;
+    } else if (abs === 1) {
+      ty = dir * 82; tz = -80; scale = 0.78; opacity = 0.55; zIndex = 5;
+    } else if (abs === 2) {
+      ty = dir * 150; tz = -160; scale = 0.62; opacity = 0.2; zIndex = 2;
+    } else {
+      ty = dir * 200; tz = -240; scale = 0.5; opacity = 0; zIndex = 0;
+    }
+
+    slide.style.transform = `translateY(${ty}%) translateZ(${tz}px) scale(${scale})`;
+    slide.style.opacity = opacity;
+    slide.style.zIndex = zIndex;
+  });
 }
 
 function closeLightbox() {
@@ -669,6 +706,11 @@ function closeLightbox() {
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
   _lbIdx = -1;
+  // Clear content after fade-out transition completes
+  setTimeout(() => {
+    const frame = document.getElementById('lightbox-frame');
+    if (frame) frame.innerHTML = '';
+  }, 520);
   pushRoute('/photography');
 }
 
@@ -677,13 +719,13 @@ function advanceLightbox(dir) {
   const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
   _lbCurr = (_lbCurr + dir + N) % N;
-  const track = document.getElementById('lightbox-track');
-  if (track) track.style.transform = `translateY(-${_lbCurr * 78}vh)`;
+  updateLightboxPositions();
   const counter = document.getElementById('lightbox-counter');
   if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
 }
 
 function exitPhoto() {
+  if (_parallaxCleanup) { _parallaxCleanup(); _parallaxCleanup = null; }
   document.body.classList.remove('photo-active');
   const lightbox = document.getElementById('photo-lightbox');
   if (lightbox && lightbox.classList.contains('open')) {
@@ -693,6 +735,10 @@ function exitPhoto() {
     lightbox.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     _lbIdx = -1;
+    setTimeout(() => {
+      const frame = document.getElementById('lightbox-frame');
+      if (frame) frame.innerHTML = '';
+    }, 520);
   }
 }
 
@@ -704,7 +750,6 @@ function initLightboxEvents() {
   const navBack = document.getElementById('photo-nav-back');
   if (navBack) navBack.addEventListener('click', (e) => { e.preventDefault(); showIndex(); });
 
-  // Spin pinwheel in bottom nav
   const pw = document.getElementById('photo-nav-pinwheel');
   let pwAngle = 0;
   window.addEventListener('wheel', (e) => {
@@ -736,11 +781,10 @@ function renderCollections() {
   stage.appendChild(scene);
 
   const total = visible.length;
-  const spread = total <= 1 ? 0 : 130;
-  const step = total > 1 ? spread / (total - 1) : 0;
+  const step = total <= 1 ? 0 : 360 / total;
 
   visible.forEach((collection, i) => {
-    const finalAngle = -spread / 2 + i * step;
+    const finalAngle = i * step;
 
     const pivot = document.createElement('div');
     pivot.className = 'carousel-pivot';
@@ -793,9 +837,13 @@ function renderCollections() {
   initCarouselParallax(stage, scene);
 }
 
+let _parallaxCleanup = null;
+
 function initCarouselParallax(stage, scene) {
-  const bY = -30; // base tilt Y (so fan is viewed from an angle)
-  const bX = -18; // base tilt X
+  if (_parallaxCleanup) { _parallaxCleanup(); _parallaxCleanup = null; }
+
+  const bY = -30;
+  const bX = -18;
   let tX = 0, tY = 0, cX = 0, cY = 0, running = false;
 
   scene.style.transform = `rotateY(${bY}deg) rotateX(${bX}deg)`;
@@ -811,17 +859,14 @@ function initCarouselParallax(stage, scene) {
     }
   }
 
-  stage.addEventListener('mousemove', (e) => {
-    const r = stage.getBoundingClientRect();
-    tX = ((e.clientX - r.left) / r.width * 2 - 1) * 16;
-    tY = ((e.clientY - r.top) / r.height * 2 - 1) * -10;
+  const fn = (e) => {
+    if (!document.body.classList.contains('photo-active') || _lbIdx !== -1) return;
+    tX = (e.clientX / window.innerWidth * 2 - 1) * 16;
+    tY = (e.clientY / window.innerHeight * 2 - 1) * -10;
     if (!running) { running = true; requestAnimationFrame(loop); }
-  });
-
-  stage.addEventListener('mouseleave', () => {
-    tX = 0; tY = 0;
-    if (!running) { running = true; requestAnimationFrame(loop); }
-  });
+  };
+  document.addEventListener('mousemove', fn);
+  _parallaxCleanup = () => document.removeEventListener('mousemove', fn);
 }
 
 // ==================== SIDEBAR ====================
