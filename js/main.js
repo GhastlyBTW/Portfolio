@@ -590,6 +590,8 @@ let _lbWheelFn = null;
 let _lbKeyFn = null;
 let _boardPool = []; // [{element, imgIdx}] — only 3 boards ever in the DOM
 let _lastActiveIdx = 0;
+let _cachedCardH = 0;   // cached board height; reset on open and resize
+let _stackRafPending = false; // prevents >1 rAF per frame in wheel handler
 
 function openLightbox(collectionIdx) {
   const collection = photoCollections[collectionIdx];
@@ -599,6 +601,7 @@ function openLightbox(collectionIdx) {
   _lbCurr = 0;
   _stackPos = 0;
   _stackScrollTotal = 0;
+  _cachedCardH = 0;
 
   updateMeta({
     title: collection.name + ' — Branden Chi Photography',
@@ -659,11 +662,20 @@ function openLightbox(collectionIdx) {
     const N = photoCollections[_lbIdx].images.length;
     _stackScrollTotal += e.deltaY;
     _stackPos = ((_stackScrollTotal / SCROLL_PER_CARD) % N + N) % N;
-    _lbCurr = Math.round(_stackPos) % N;
-    recycleBoardImages();
-    updateStackPositions(false);
-    const counter = document.getElementById('lightbox-counter');
-    if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
+    const newCurr = Math.round(_stackPos) % N;
+    if (newCurr !== _lbCurr) {
+      _lbCurr = newCurr;
+      recycleBoardImages();
+      const counter = document.getElementById('lightbox-counter');
+      if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
+    }
+    if (!_stackRafPending) {
+      _stackRafPending = true;
+      requestAnimationFrame(() => {
+        updateStackPositions(false);
+        _stackRafPending = false;
+      });
+    }
   };
   lightbox.addEventListener('wheel', _lbWheelFn, { passive: false });
 
@@ -716,8 +728,10 @@ function updateStackPositions(instant) {
   const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
 
-  const CARD_H = _boardPool[0].element.getBoundingClientRect().height || window.innerHeight * 0.76;
-  const CARD_STEP = CARD_H * 0.20;
+  if (!_cachedCardH) {
+    _cachedCardH = _boardPool[0].element.getBoundingClientRect().height || window.innerHeight * 0.76;
+  }
+  const CARD_STEP = _cachedCardH * 0.20;
 
   _boardPool.forEach(({ element, imgIdx }) => {
     let relPos = imgIdx - _stackPos;
@@ -805,8 +819,11 @@ function initLightboxEvents() {
 
 let _parallaxCleanup = null;
 let _carouselScrollOffset = 0;
+let _lastPointerAngle = null;
 
 function updateCarouselPointerEvents(pivots, finalAngles, sceneY) {
+  if (_lastPointerAngle !== null && Math.abs(sceneY - _lastPointerAngle) < 0.5) return;
+  _lastPointerAngle = sceneY;
   pivots.forEach((pivot, i) => {
     let eff = ((finalAngles[i] + sceneY) % 360 + 360) % 360;
     if (eff > 180) eff -= 360;
@@ -840,6 +857,7 @@ function renderCollections() {
   const pivots = [];
   const finalAngles = [];
   _carouselScrollOffset = 0;
+  _lastPointerAngle = null;
 
   visible.forEach((collection, i) => {
     const finalAngle = i * step;
@@ -858,6 +876,7 @@ function renderCollections() {
       const img = document.createElement('img');
       img.src = collection.thumbnail;
       img.alt = collection.name + ' — ' + collection.subtitle;
+      img.loading = 'lazy';
       card.appendChild(img);
     } else {
       const ph = document.createElement('div');
@@ -933,12 +952,19 @@ function initCarouselParallax(stage, scene, pivots, finalAngles) {
     if (!running) { running = true; requestAnimationFrame(loop); }
   };
 
+  let carouselWheelRaf = false;
   const wheelFn = (e) => {
     if (!document.body.classList.contains('photo-active') || _lbIdx !== -1) return;
     _carouselScrollOffset -= e.deltaY * 0.12;
-    const sy = getSceneY();
-    scene.style.transform = `rotateY(${sy}deg) rotateX(${bX + cY}deg)`;
-    updateCarouselPointerEvents(pivots, finalAngles, sy);
+    if (!carouselWheelRaf) {
+      carouselWheelRaf = true;
+      requestAnimationFrame(() => {
+        const sy = getSceneY();
+        scene.style.transform = `rotateY(${sy}deg) rotateX(${bX + cY}deg)`;
+        updateCarouselPointerEvents(pivots, finalAngles, sy);
+        carouselWheelRaf = false;
+      });
+    }
   };
 
   document.addEventListener('mousemove', mouseFn);
@@ -1341,6 +1367,8 @@ function initRandomPhotoThumb() {
 }
 
 // ==================== INIT ====================
+
+window.addEventListener('resize', () => { _cachedCardH = 0; }, { passive: true });
 
 document.addEventListener('DOMContentLoaded', () => {
   initRandomPhotoThumb();

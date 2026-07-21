@@ -952,13 +952,13 @@ body.photo-active .photo-bottom-nav {
   top: 50%;
   width: clamp(280px, 62vw, 860px);
   height: 76vh;
-  background: transparent;
+  background: #0b0f16;
   display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   will-change: transform;
-  filter: drop-shadow(0 16px 48px rgba(0, 0, 0, 0.65));
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.72), 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .lightbox-board img {
@@ -1008,6 +1008,7 @@ body.photo-active .photo-bottom-nav {
   width: 220px;
   height: 155px;
   transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .carousel-pivot {
