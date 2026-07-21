@@ -973,16 +973,19 @@ body.photo-active .photo-bottom-nav {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: clamp(280px, 62vw, 860px);
+  width: fit-content;
+  max-width: clamp(260px, 60vw, 860px);
   background: transparent;
   will-change: transform;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.72), 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .lightbox-board img {
-  width: 100%;
-  height: auto;
   display: block;
+  width: auto;
+  height: auto;
+  max-width: clamp(260px, 60vw, 860px);
+  max-height: 85vh;
   user-select: none;
   pointer-events: none;
 }
@@ -1645,6 +1648,10 @@ body.about-active .content {
   }
 
   .lightbox-board {
-    width: 88vw;
+    max-width: 88vw;
+  }
+
+  .lightbox-board img {
+    max-width: 88vw;
   }
 }

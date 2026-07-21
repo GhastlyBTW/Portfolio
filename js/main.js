@@ -670,9 +670,7 @@ let _stackPos = 0;
 let _stackScrollTotal = 0;
 let _lbWheelFn = null;
 let _lbKeyFn = null;
-let _boardPool = []; // [{element, imgIdx}] — only 3 boards ever in the DOM
-let _lastActiveIdx = 0;
-let _cachedCardW = 0;   // cached board width; reset on open and resize
+let _boardPool = []; // [{element, imgIdx}] — all images rendered as a horizontal strip
 let _stackRafPending = false; // prevents >1 rAF per frame in wheel handler
 
 function openLightbox(collectionIdx) {
@@ -683,7 +681,6 @@ function openLightbox(collectionIdx) {
   _lbCurr = 0;
   _stackPos = 0;
   _stackScrollTotal = 0;
-  _cachedCardW = 0;
 
   updateMeta({
     title: collection.name + ' — Branden Chi Photography',
@@ -703,20 +700,18 @@ function openLightbox(collectionIdx) {
   const images = collection.images.length ? collection.images : [];
   const N = images.length;
   _boardPool = [];
-  _lastActiveIdx = 0;
 
-  // Only render 3 boards: prev, active, next
-  [((N - 1) % N), 0, Math.min(1, N - 1)].forEach((imgIdx, slot) => {
+  images.forEach((src, i) => {
     const board = document.createElement('div');
     board.className = 'lightbox-board';
     const img = document.createElement('img');
-    img.src = images[imgIdx] || '';
-    img.alt = collection.name + ' — ' + (imgIdx + 1);
-    img.loading = slot === 1 ? 'eager' : 'lazy';
+    img.src = src;
+    img.alt = collection.name + ' — ' + (i + 1);
+    img.loading = i < 2 ? 'eager' : 'lazy';
     img.draggable = false;
     board.appendChild(img);
     stack.appendChild(board);
-    _boardPool.push({ element: board, imgIdx });
+    _boardPool.push({ element: board, imgIdx: i });
   });
 
   const counter = document.createElement('div');
@@ -742,12 +737,11 @@ function openLightbox(collectionIdx) {
   _lbWheelFn = (e) => {
     e.preventDefault();
     const N = photoCollections[_lbIdx].images.length;
-    _stackScrollTotal += e.deltaY;
+    _stackScrollTotal += e.deltaY + e.deltaX;
     _stackPos = ((_stackScrollTotal / SCROLL_PER_CARD) % N + N) % N;
     const newCurr = Math.round(_stackPos) % N;
     if (newCurr !== _lbCurr) {
       _lbCurr = newCurr;
-      recycleBoardImages();
       const counter = document.getElementById('lightbox-counter');
       if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
     }
@@ -771,49 +765,12 @@ function openLightbox(collectionIdx) {
   pushRoute('/photography/' + toSlug(collection.name));
 }
 
-function recycleBoardImages() {
-  if (_lbIdx === -1 || !_boardPool.length) return;
-  const collection = photoCollections[_lbIdx];
-  const N = collection.images.length;
-  if (N <= 1 || _lbCurr === _lastActiveIdx) return;
-
-  // Determine scroll direction (shortest path through the loop)
-  const diff = ((_lbCurr - _lastActiveIdx) % N + N) % N;
-  const forward = diff <= N / 2;
-
-  if (forward) {
-    // Recycle the "prev" board (was showing _lastActiveIdx-1) → now shows _lbCurr+1
-    const recycleImg = ((_lastActiveIdx - 1) % N + N) % N;
-    const newImg = (_lbCurr + 1) % N;
-    const board = _boardPool.find(b => b.imgIdx === recycleImg);
-    if (board) {
-      board.imgIdx = newImg;
-      const img = board.element.querySelector('img');
-      if (img) { img.src = collection.images[newImg]; img.alt = collection.name + ' — ' + (newImg + 1); }
-    }
-  } else {
-    // Recycle the "next" board (was showing _lastActiveIdx+1) → now shows _lbCurr-1
-    const recycleImg = (_lastActiveIdx + 1) % N;
-    const newImg = ((_lbCurr - 1) % N + N) % N;
-    const board = _boardPool.find(b => b.imgIdx === recycleImg);
-    if (board) {
-      board.imgIdx = newImg;
-      const img = board.element.querySelector('img');
-      if (img) { img.src = collection.images[newImg]; img.alt = collection.name + ' — ' + (newImg + 1); }
-    }
-  }
-  _lastActiveIdx = _lbCurr;
-}
-
 function updateStackPositions(instant) {
   if (!_boardPool.length || _lbIdx === -1) return;
   const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
 
-  if (!_cachedCardW) {
-    _cachedCardW = _boardPool[0].element.getBoundingClientRect().width || window.innerWidth * 0.62;
-  }
-  const CARD_STEP = _cachedCardW * 0.20;
+  const CARD_STEP = window.innerWidth * 0.70;
 
   _boardPool.forEach(({ element, imgIdx }) => {
     let relPos = imgIdx - _stackPos;
@@ -822,9 +779,9 @@ function updateStackPositions(instant) {
 
     const absRel = Math.abs(relPos);
     const x = relPos * CARD_STEP;
-    const tz = -Math.min(Math.round(absRel), 2) * 28;
+    const tz = -Math.min(Math.round(absRel), 3) * 20;
     const scaleVal = 1.0 - Math.min(absRel, 1) * 0.35;
-    const zIndex = 30 - Math.round(absRel) * 5;
+    const zIndex = 30 - Math.round(Math.min(absRel, 6)) * 4;
 
     if (instant) element.style.transition = 'none';
     element.style.transform = `translateX(calc(-50% + ${x}px)) translateY(-50%) translateZ(${tz}px) scale(${scaleVal.toFixed(3)})`;
@@ -858,7 +815,6 @@ function advanceLightbox(dir) {
   _stackScrollTotal += dir * SCROLL_PER_CARD;
   _stackPos = ((_stackScrollTotal / SCROLL_PER_CARD) % N + N) % N;
   _lbCurr = Math.round(_stackPos) % N;
-  recycleBoardImages();
   updateStackPositions(false);
   const counter = document.getElementById('lightbox-counter');
   if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
@@ -985,16 +941,25 @@ function renderCollections() {
     scene.appendChild(pivot);
     pivots.push(pivot);
 
-    const delay = 200 + i * 120;
-    setTimeout(() => {
-      pivot.style.transition = 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease';
-      pivot.style.opacity = '1';
-      pivot.style.transform = `rotateY(${finalAngle}deg)`;
-    }, delay);
+    if (i === 0) {
+      // Origin card: fades in first at its resting position (no rotation needed)
+      setTimeout(() => {
+        pivot.style.transition = 'opacity 0.5s ease';
+        pivot.style.opacity = '1';
+      }, 150);
+    } else {
+      // Subsequent cards emerge from the origin and fan out to their positions
+      const delay = 550 + (i - 1) * 140;
+      setTimeout(() => {
+        pivot.style.transition = 'transform 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease';
+        pivot.style.opacity = '1';
+        pivot.style.transform = `rotateY(${finalAngle}deg)`;
+      }, delay);
+    }
   });
 
   // Enable pointer-events on front-facing cards once all animations settle
-  const maxDelay = 200 + (total - 1) * 120 + 1100;
+  const maxDelay = 550 + (total - 2) * 140 + 1200;
   setTimeout(() => {
     updateCarouselPointerEvents(pivots, finalAngles, _carouselScrollOffset);
   }, maxDelay);
@@ -1037,7 +1002,7 @@ function initCarouselParallax(stage, scene, pivots, finalAngles) {
   let carouselWheelRaf = false;
   const wheelFn = (e) => {
     if (!document.body.classList.contains('photo-active') || _lbIdx !== -1) return;
-    _carouselScrollOffset -= e.deltaY * 0.12;
+    _carouselScrollOffset -= (e.deltaY + e.deltaX) * 0.12;
     if (!carouselWheelRaf) {
       carouselWheelRaf = true;
       requestAnimationFrame(() => {
@@ -1449,8 +1414,6 @@ function initRandomPhotoThumb() {
 }
 
 // ==================== INIT ====================
-
-window.addEventListener('resize', () => { _cachedCardW = 0; }, { passive: true });
 
 document.addEventListener('DOMContentLoaded', () => {
   initRandomPhotoThumb();
