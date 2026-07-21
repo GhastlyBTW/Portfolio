@@ -584,12 +584,18 @@ function showGallery(collectionIndex, fromPop) {
   grid.innerHTML = '';
 
   if (collection.images.length) {
-    collection.images.forEach((src) => {
+    collection.images.forEach((src, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'gallery-photo-wrap';
+
       const img = document.createElement('img');
       img.src = src;
       img.alt = collection.name + ' — photography by Branden Chi';
-      img.loading = 'lazy';
-      grid.appendChild(img);
+      img.loading = i < 2 ? 'eager' : 'lazy';
+      wrap.appendChild(img);
+      grid.appendChild(wrap);
+
+      setTimeout(() => { wrap.classList.add('in'); }, i * 100 + 120);
     });
   } else {
     const msg = document.createElement('p');
@@ -619,49 +625,94 @@ function renderCollections() {
   const container = document.getElementById('photo-collections');
   container.innerHTML = '';
 
-  photoCollections.forEach((collection, i) => {
-    if (activeFilter !== 'all' && getCollectionCategory(collection) !== activeFilter) return;
-    const article = document.createElement('article');
-    article.className = 'project-card';
+  const visible = photoCollections.filter((c) => activeFilter === 'all' || getCollectionCategory(c) === activeFilter);
 
-    const thumbDiv = document.createElement('div');
-    thumbDiv.className = 'thumbnail';
+  if (!visible.length) {
+    const msg = document.createElement('p');
+    msg.className = 'gallery-empty';
+    msg.textContent = 'No collections found.';
+    container.appendChild(msg);
+    return;
+  }
+
+  const stage = document.createElement('div');
+  stage.className = 'carousel-stage';
+
+  const scene = document.createElement('div');
+  scene.className = 'carousel-scene';
+  stage.appendChild(scene);
+
+  const total = visible.length;
+  const spread = total <= 1 ? 0 : Math.min(72, total * 8);
+
+  visible.forEach((collection, i) => {
+    const angle = total > 1 ? -spread / 2 + (i / (total - 1)) * spread : 0;
+
+    const pivot = document.createElement('div');
+    pivot.className = 'carousel-pivot';
+    pivot.style.transform = `rotateY(${angle}deg)`;
+
+    const card = document.createElement('div');
+    card.className = 'carousel-card';
 
     if (collection.thumbnail) {
       const img = document.createElement('img');
       img.src = collection.thumbnail;
       img.alt = collection.name + ' — ' + collection.subtitle;
-      thumbDiv.appendChild(img);
+      card.appendChild(img);
     } else {
-      const placeholder = document.createElement('div');
-      placeholder.className = 'placeholder-img';
-      thumbDiv.appendChild(placeholder);
+      const ph = document.createElement('div');
+      ph.className = 'placeholder-img';
+      card.appendChild(ph);
     }
 
-    const info = document.createElement('div');
-    info.className = 'card-info';
+    const overlay = document.createElement('div');
+    overlay.className = 'carousel-overlay';
+    const nameEl = document.createElement('span');
+    nameEl.className = 'carousel-name';
+    nameEl.textContent = collection.name;
+    const subEl = document.createElement('span');
+    subEl.className = 'carousel-sub';
+    subEl.textContent = collection.subtitle;
+    overlay.appendChild(nameEl);
+    overlay.appendChild(subEl);
+    card.appendChild(overlay);
 
-    const title = document.createElement('h3');
-    title.className = 'card-title';
-    title.textContent = collection.name;
+    pivot.appendChild(card);
 
-    const meta = document.createElement('div');
-    meta.className = 'card-meta';
+    const originalIdx = photoCollections.indexOf(collection);
+    pivot.addEventListener('click', () => showGallery(originalIdx));
+    scene.appendChild(pivot);
+  });
 
-    const category = document.createElement('div');
-    category.className = 'card-category';
-    category.textContent = collection.subtitle;
+  container.appendChild(stage);
+  initCarouselParallax(stage, scene);
+}
 
-    meta.appendChild(category);
-    info.appendChild(title);
-    info.appendChild(meta);
-    article.appendChild(thumbDiv);
-    article.appendChild(info);
+function initCarouselParallax(stage, scene) {
+  let tX = 0, tY = 0, cX = 0, cY = 0, running = false;
 
-    article.addEventListener('click', () => showGallery(i));
-    article.style.cursor = 'pointer';
+  function loop() {
+    cX += (tX - cX) * 0.07;
+    cY += (tY - cY) * 0.07;
+    scene.style.transform = `rotateY(${cX}deg) rotateX(${cY}deg)`;
+    if (Math.abs(tX - cX) > 0.05 || Math.abs(tY - cY) > 0.05) {
+      requestAnimationFrame(loop);
+    } else {
+      running = false;
+    }
+  }
 
-    container.appendChild(article);
+  stage.addEventListener('mousemove', (e) => {
+    const r = stage.getBoundingClientRect();
+    tX = ((e.clientX - r.left) / r.width * 2 - 1) * 14;
+    tY = ((e.clientY - r.top) / r.height * 2 - 1) * -7;
+    if (!running) { running = true; requestAnimationFrame(loop); }
+  });
+
+  stage.addEventListener('mouseleave', () => {
+    tX = 0; tY = 0;
+    if (!running) { running = true; requestAnimationFrame(loop); }
   });
 }
 
