@@ -672,7 +672,7 @@ let _lbWheelFn = null;
 let _lbKeyFn = null;
 let _boardPool = []; // [{element, imgIdx}] — only 3 boards ever in the DOM
 let _lastActiveIdx = 0;
-let _cachedCardH = 0;   // cached board height; reset on open and resize
+let _cachedCardW = 0;   // cached board width; reset on open and resize
 let _stackRafPending = false; // prevents >1 rAF per frame in wheel handler
 
 function openLightbox(collectionIdx) {
@@ -683,7 +683,7 @@ function openLightbox(collectionIdx) {
   _lbCurr = 0;
   _stackPos = 0;
   _stackScrollTotal = 0;
-  _cachedCardH = 0;
+  _cachedCardW = 0;
 
   updateMeta({
     title: collection.name + ' — Branden Chi Photography',
@@ -810,10 +810,10 @@ function updateStackPositions(instant) {
   const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
 
-  if (!_cachedCardH) {
-    _cachedCardH = _boardPool[0].element.getBoundingClientRect().height || window.innerHeight * 0.76;
+  if (!_cachedCardW) {
+    _cachedCardW = _boardPool[0].element.getBoundingClientRect().width || window.innerWidth * 0.62;
   }
-  const CARD_STEP = _cachedCardH * 0.20;
+  const CARD_STEP = _cachedCardW * 0.20;
 
   _boardPool.forEach(({ element, imgIdx }) => {
     let relPos = imgIdx - _stackPos;
@@ -821,13 +821,13 @@ function updateStackPositions(instant) {
     if (relPos > N / 2) relPos -= N;
 
     const absRel = Math.abs(relPos);
-    const y = relPos * CARD_STEP;
+    const x = relPos * CARD_STEP;
     const tz = -Math.min(Math.round(absRel), 2) * 28;
     const scaleVal = 1.0 - Math.min(absRel, 1) * 0.35;
     const zIndex = 30 - Math.round(absRel) * 5;
 
     if (instant) element.style.transition = 'none';
-    element.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px)) translateZ(${tz}px) scale(${scaleVal.toFixed(3)})`;
+    element.style.transform = `translateX(calc(-50% + ${x}px)) translateY(-50%) translateZ(${tz}px) scale(${scaleVal.toFixed(3)})`;
     element.style.zIndex = zIndex;
     if (instant) element.offsetHeight;
     if (instant) element.style.transition = '';
@@ -1450,7 +1450,7 @@ function initRandomPhotoThumb() {
 
 // ==================== INIT ====================
 
-window.addEventListener('resize', () => { _cachedCardH = 0; }, { passive: true });
+window.addEventListener('resize', () => { _cachedCardW = 0; }, { passive: true });
 
 document.addEventListener('DOMContentLoaded', () => {
   initRandomPhotoThumb();

@@ -543,9 +543,9 @@ ul {
   width: 33%;
   margin: 56px auto;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.75;
-  color: var(--text-muted);
+  color: var(--text);
 }
 
 .gallery-img-row {
@@ -974,20 +974,14 @@ body.photo-active .photo-bottom-nav {
   left: 50%;
   top: 50%;
   width: clamp(280px, 62vw, 860px);
-  height: 76vh;
-  background: #0b0f16;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+  background: transparent;
   will-change: transform;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.72), 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .lightbox-board img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
   display: block;
   user-select: none;
   pointer-events: none;
@@ -1652,6 +1646,5 @@ body.about-active .content {
 
   .lightbox-board {
     width: 88vw;
-    height: 72vh;
   }
 }
