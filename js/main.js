@@ -369,6 +369,7 @@ function showIndex(fromPop) {
     canonical: '/',
   });
   exitAbout();
+  exitPhoto();
   showView('index-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -385,6 +386,7 @@ function showCV(fromPop) {
     canonical: '/cv',
   });
   exitAbout();
+  exitPhoto();
   showView('cv-view');
   jumpTo(0);
   clearActiveProject();
@@ -395,6 +397,7 @@ function showCV(fromPop) {
 
 function showDetail(index, fromPop) {
   exitAbout();
+  exitPhoto();
   if (index === PHOTO_PROJECT_INDEX) {
     showPhotography(fromPop);
     return;
@@ -552,6 +555,8 @@ function showPhotography(fromPop) {
     image: photoCollections[0] ? photoCollections[0].thumbnail : null,
   });
   exitAbout();
+  exitPhoto();
+  document.body.classList.add('photo-active');
   activeFilter = 'all';
   document.querySelectorAll('.photo-filter').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.filter === 'all');
@@ -559,9 +564,8 @@ function showPhotography(fromPop) {
   renderCollections();
   showView('photo-view');
   jumpTo(0);
-  showPhotoNav();
+  showWorkNav();
   clearActiveCollection();
-  observeCollections();
   if (!fromPop) pushRoute('/photography');
   cycleGreeting();
 }
@@ -570,6 +574,25 @@ function showGallery(collectionIndex, fromPop) {
   exitAbout();
   const collection = photoCollections[collectionIndex];
   if (!collection) return;
+  showPhotography(true);
+  setTimeout(() => openLightbox(collectionIndex), 100);
+}
+
+// ==================== LIGHTBOX ====================
+
+let _lbIdx = -1;
+let _lbCurr = 0;
+let _lbScrollAcc = 0;
+let _lbWheelFn = null;
+let _lbKeyFn = null;
+
+function openLightbox(collectionIdx) {
+  const collection = photoCollections[collectionIdx];
+  if (!collection) return;
+
+  _lbIdx = collectionIdx;
+  _lbCurr = 0;
+  _lbScrollAcc = 0;
 
   updateMeta({
     title: collection.name + ' — Branden Chi Photography',
@@ -578,47 +601,117 @@ function showGallery(collectionIndex, fromPop) {
     image: collection.thumbnail,
   });
 
-  document.getElementById('gallery-title').textContent = collection.name;
+  const lightbox = document.getElementById('photo-lightbox');
+  const frame = document.getElementById('lightbox-frame');
+  frame.innerHTML = '';
 
-  const grid = document.getElementById('masonry-grid');
-  grid.innerHTML = '';
+  // Build track
+  const track = document.createElement('div');
+  track.className = 'lightbox-track';
+  track.id = 'lightbox-track';
 
-  if (collection.images.length) {
-    collection.images.forEach((src, i) => {
-      const wrap = document.createElement('div');
-      wrap.className = 'gallery-photo-wrap';
+  const images = collection.images.length ? collection.images : [];
+  images.forEach((src, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'lightbox-slide';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = collection.name + ' — ' + (i + 1);
+    img.loading = i < 2 ? 'eager' : 'lazy';
+    img.draggable = false;
+    slide.appendChild(img);
+    track.appendChild(slide);
+  });
 
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = collection.name + ' — photography by Branden Chi';
-      img.loading = i < 2 ? 'eager' : 'lazy';
-      wrap.appendChild(img);
-      grid.appendChild(wrap);
+  const counter = document.createElement('div');
+  counter.className = 'lightbox-counter';
+  counter.id = 'lightbox-counter';
+  counter.textContent = images.length ? '1 / ' + images.length : '';
 
-      setTimeout(() => { wrap.classList.add('in'); }, i * 100 + 120);
-    });
-  } else {
-    const msg = document.createElement('p');
-    msg.className = 'gallery-empty';
-    msg.textContent = 'Images coming soon.';
-    grid.appendChild(msg);
+  const nameTag = document.createElement('div');
+  nameTag.className = 'lightbox-name';
+  nameTag.textContent = collection.name;
+
+  frame.appendChild(track);
+  frame.appendChild(counter);
+  frame.appendChild(nameTag);
+
+  lightbox.removeAttribute('aria-hidden');
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Wheel handler
+  _lbWheelFn = (e) => {
+    e.preventDefault();
+    _lbScrollAcc += e.deltaY;
+    if (_lbScrollAcc > 60) { _lbScrollAcc = 0; advanceLightbox(1); }
+    else if (_lbScrollAcc < -60) { _lbScrollAcc = 0; advanceLightbox(-1); }
+  };
+  lightbox.addEventListener('wheel', _lbWheelFn, { passive: false });
+
+  // Keyboard handler
+  _lbKeyFn = (e) => {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') advanceLightbox(1);
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') advanceLightbox(-1);
+  };
+  window.addEventListener('keydown', _lbKeyFn);
+
+  pushRoute('/photography/' + toSlug(collection.name));
+}
+
+function closeLightbox() {
+  const lightbox = document.getElementById('photo-lightbox');
+  if (!lightbox.classList.contains('open')) return;
+  if (_lbWheelFn) { lightbox.removeEventListener('wheel', _lbWheelFn); _lbWheelFn = null; }
+  if (_lbKeyFn) { window.removeEventListener('keydown', _lbKeyFn); _lbKeyFn = null; }
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  _lbIdx = -1;
+  pushRoute('/photography');
+}
+
+function advanceLightbox(dir) {
+  if (_lbIdx === -1) return;
+  const N = photoCollections[_lbIdx].images.length;
+  if (!N) return;
+  _lbCurr = (_lbCurr + dir + N) % N;
+  const track = document.getElementById('lightbox-track');
+  if (track) track.style.transform = `translateY(-${_lbCurr * 78}vh)`;
+  const counter = document.getElementById('lightbox-counter');
+  if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
+}
+
+function exitPhoto() {
+  document.body.classList.remove('photo-active');
+  const lightbox = document.getElementById('photo-lightbox');
+  if (lightbox && lightbox.classList.contains('open')) {
+    if (_lbWheelFn) { lightbox.removeEventListener('wheel', _lbWheelFn); _lbWheelFn = null; }
+    if (_lbKeyFn) { window.removeEventListener('keydown', _lbKeyFn); _lbKeyFn = null; }
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    _lbIdx = -1;
   }
+}
 
-  const prevIdx = (collectionIndex - 1 + photoCollections.length) % photoCollections.length;
-  const nextIdx = (collectionIndex + 1) % photoCollections.length;
+function initLightboxEvents() {
+  const lightbox = document.getElementById('photo-lightbox');
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
-  document.getElementById('prev-collection-text').textContent = photoCollections[prevIdx].name;
-  document.getElementById('next-collection-text').textContent = photoCollections[nextIdx].name;
-  document.getElementById('prev-collection').onclick = (e) => { e.preventDefault(); showGallery(prevIdx); };
-  document.getElementById('next-collection').onclick = (e) => { e.preventDefault(); showGallery(nextIdx); };
+  const navBack = document.getElementById('photo-nav-back');
+  if (navBack) navBack.addEventListener('click', (e) => { e.preventDefault(); showIndex(); });
 
-  showView('photo-gallery-view');
-  jumpTo(0);
-  showPhotoNav();
-  setActiveCollection(collectionIndex);
-  document.getElementById('collection-list').classList.add('has-scroll-active');
-  if (!fromPop) pushRoute('/photography/' + toSlug(collection.name));
-  cycleGreeting();
+  // Spin pinwheel in bottom nav
+  const pw = document.getElementById('photo-nav-pinwheel');
+  let pwAngle = 0;
+  window.addEventListener('wheel', (e) => {
+    if (!document.body.classList.contains('photo-active')) return;
+    pwAngle += e.deltaY * 0.3;
+    if (pw) pw.style.transform = `rotate(${pwAngle}deg)`;
+  }, { passive: true });
 }
 
 function renderCollections() {
@@ -643,14 +736,17 @@ function renderCollections() {
   stage.appendChild(scene);
 
   const total = visible.length;
-  const spread = total <= 1 ? 0 : Math.min(72, total * 8);
+  const spread = total <= 1 ? 0 : 130;
+  const step = total > 1 ? spread / (total - 1) : 0;
 
   visible.forEach((collection, i) => {
-    const angle = total > 1 ? -spread / 2 + (i / (total - 1)) * spread : 0;
+    const finalAngle = -spread / 2 + i * step;
 
     const pivot = document.createElement('div');
     pivot.className = 'carousel-pivot';
-    pivot.style.transform = `rotateY(${angle}deg)`;
+    // Start stacked at center, animate to fan position
+    pivot.style.transform = 'rotateY(0deg)';
+    pivot.style.opacity = '0';
 
     const card = document.createElement('div');
     card.className = 'carousel-card';
@@ -681,8 +777,16 @@ function renderCollections() {
     pivot.appendChild(card);
 
     const originalIdx = photoCollections.indexOf(collection);
-    pivot.addEventListener('click', () => showGallery(originalIdx));
+    pivot.addEventListener('click', () => openLightbox(originalIdx));
     scene.appendChild(pivot);
+
+    // Stagger fan-out: first card appears, then others spread counter-clockwise
+    const delay = 200 + i * 120;
+    setTimeout(() => {
+      pivot.style.transition = 'transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease';
+      pivot.style.opacity = '1';
+      pivot.style.transform = `rotateY(${finalAngle}deg)`;
+    }, delay);
   });
 
   container.appendChild(stage);
@@ -690,12 +794,16 @@ function renderCollections() {
 }
 
 function initCarouselParallax(stage, scene) {
+  const bY = -30; // base tilt Y (so fan is viewed from an angle)
+  const bX = -18; // base tilt X
   let tX = 0, tY = 0, cX = 0, cY = 0, running = false;
+
+  scene.style.transform = `rotateY(${bY}deg) rotateX(${bX}deg)`;
 
   function loop() {
     cX += (tX - cX) * 0.07;
     cY += (tY - cY) * 0.07;
-    scene.style.transform = `rotateY(${cX}deg) rotateX(${cY}deg)`;
+    scene.style.transform = `rotateY(${bY + cX}deg) rotateX(${bX + cY}deg)`;
     if (Math.abs(tX - cX) > 0.05 || Math.abs(tY - cY) > 0.05) {
       requestAnimationFrame(loop);
     } else {
@@ -705,8 +813,8 @@ function initCarouselParallax(stage, scene) {
 
   stage.addEventListener('mousemove', (e) => {
     const r = stage.getBoundingClientRect();
-    tX = ((e.clientX - r.left) / r.width * 2 - 1) * 14;
-    tY = ((e.clientY - r.top) / r.height * 2 - 1) * -7;
+    tX = ((e.clientX - r.left) / r.width * 2 - 1) * 16;
+    tY = ((e.clientY - r.top) / r.height * 2 - 1) * -10;
     if (!running) { running = true; requestAnimationFrame(loop); }
   });
 
@@ -1119,6 +1227,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCollectionList();
   initScrollHighlight();
   initHamburger();
+  initLightboxEvents();
 
   handleRoute();
 });
