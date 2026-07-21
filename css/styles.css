@@ -948,7 +948,7 @@ body.photo-active .photo-bottom-nav {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: clamp(280px, 52vw, 700px);
+  width: clamp(280px, 62vw, 860px);
   height: 76vh;
   background: transparent;
   display: flex;

@@ -675,8 +675,9 @@ function updateStackPositions(instant) {
   const N = boards.length;
   if (!N) return;
 
-  const CARD_H = window.innerHeight * 0.76;
-  const PEEK = 48;
+  const firstBoard = document.querySelector('#lightbox-stack .lightbox-board');
+  const CARD_H = firstBoard ? firstBoard.getBoundingClientRect().height : window.innerHeight * 0.76;
+  const PEEK = CARD_H * 0.13; // 13% of actual card height visible on each side
   const CARD_STEP = (window.innerHeight + CARD_H) / 2 - PEEK;
   const activeIdx = Math.round(_stackPos);
 
