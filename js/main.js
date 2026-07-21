@@ -588,6 +588,8 @@ let _stackPos = 0;
 let _stackScrollTotal = 0;
 let _lbWheelFn = null;
 let _lbKeyFn = null;
+let _boardPool = []; // [{element, imgIdx}] — only 3 boards ever in the DOM
+let _lastActiveIdx = 0;
 
 function openLightbox(collectionIdx) {
   const collection = photoCollections[collectionIdx];
@@ -614,17 +616,22 @@ function openLightbox(collectionIdx) {
   stack.id = 'lightbox-stack';
 
   const images = collection.images.length ? collection.images : [];
-  images.forEach((src, i) => {
+  const N = images.length;
+  _boardPool = [];
+  _lastActiveIdx = 0;
+
+  // Only render 3 boards: prev, active, next
+  [((N - 1) % N), 0, Math.min(1, N - 1)].forEach((imgIdx, slot) => {
     const board = document.createElement('div');
     board.className = 'lightbox-board';
-    board.dataset.index = i;
     const img = document.createElement('img');
-    img.src = src;
-    img.alt = collection.name + ' — ' + (i + 1);
-    img.loading = i < 2 ? 'eager' : 'lazy';
+    img.src = images[imgIdx] || '';
+    img.alt = collection.name + ' — ' + (imgIdx + 1);
+    img.loading = slot === 1 ? 'eager' : 'lazy';
     img.draggable = false;
     board.appendChild(img);
     stack.appendChild(board);
+    _boardPool.push({ element: board, imgIdx });
   });
 
   const counter = document.createElement('div');
@@ -651,9 +658,9 @@ function openLightbox(collectionIdx) {
     e.preventDefault();
     const N = photoCollections[_lbIdx].images.length;
     _stackScrollTotal += e.deltaY;
-    // Infinite loop: wrap fractional position around N
     _stackPos = ((_stackScrollTotal / SCROLL_PER_CARD) % N + N) % N;
     _lbCurr = Math.round(_stackPos) % N;
+    recycleBoardImages();
     updateStackPositions(false);
     const counter = document.getElementById('lightbox-counter');
     if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
@@ -670,33 +677,64 @@ function openLightbox(collectionIdx) {
   pushRoute('/photography/' + toSlug(collection.name));
 }
 
+function recycleBoardImages() {
+  if (_lbIdx === -1 || !_boardPool.length) return;
+  const collection = photoCollections[_lbIdx];
+  const N = collection.images.length;
+  if (N <= 1 || _lbCurr === _lastActiveIdx) return;
+
+  // Determine scroll direction (shortest path through the loop)
+  const diff = ((_lbCurr - _lastActiveIdx) % N + N) % N;
+  const forward = diff <= N / 2;
+
+  if (forward) {
+    // Recycle the "prev" board (was showing _lastActiveIdx-1) → now shows _lbCurr+1
+    const recycleImg = ((_lastActiveIdx - 1) % N + N) % N;
+    const newImg = (_lbCurr + 1) % N;
+    const board = _boardPool.find(b => b.imgIdx === recycleImg);
+    if (board) {
+      board.imgIdx = newImg;
+      const img = board.element.querySelector('img');
+      if (img) { img.src = collection.images[newImg]; img.alt = collection.name + ' — ' + (newImg + 1); }
+    }
+  } else {
+    // Recycle the "next" board (was showing _lastActiveIdx+1) → now shows _lbCurr-1
+    const recycleImg = (_lastActiveIdx + 1) % N;
+    const newImg = ((_lbCurr - 1) % N + N) % N;
+    const board = _boardPool.find(b => b.imgIdx === recycleImg);
+    if (board) {
+      board.imgIdx = newImg;
+      const img = board.element.querySelector('img');
+      if (img) { img.src = collection.images[newImg]; img.alt = collection.name + ' — ' + (newImg + 1); }
+    }
+  }
+  _lastActiveIdx = _lbCurr;
+}
+
 function updateStackPositions(instant) {
-  const boards = document.querySelectorAll('#lightbox-stack .lightbox-board');
-  const N = boards.length;
+  if (!_boardPool.length || _lbIdx === -1) return;
+  const N = photoCollections[_lbIdx].images.length;
   if (!N) return;
 
-  const firstBoard = document.querySelector('#lightbox-stack .lightbox-board');
-  const CARD_H = firstBoard ? firstBoard.getBoundingClientRect().height : window.innerHeight * 0.76;
+  const CARD_H = _boardPool[0].element.getBoundingClientRect().height || window.innerHeight * 0.76;
   const CARD_STEP = CARD_H * 0.20;
 
-  boards.forEach((board, i) => {
-    // Wrap relPos to shortest path so the loop is seamless
-    let relPos = i - _stackPos;
+  _boardPool.forEach(({ element, imgIdx }) => {
+    let relPos = imgIdx - _stackPos;
     relPos = ((relPos % N) + N) % N;
     if (relPos > N / 2) relPos -= N;
 
     const absRel = Math.abs(relPos);
     const y = relPos * CARD_STEP;
     const tz = -Math.min(Math.round(absRel), 2) * 28;
-    // Scale: 1.0 at front, 0.65 at back — interpolates smoothly during scroll
     const scaleVal = 1.0 - Math.min(absRel, 1) * 0.35;
-    const zIndex = N * 10 - Math.round(absRel) * 5;
+    const zIndex = 30 - Math.round(absRel) * 5;
 
-    if (instant) board.style.transition = 'none';
-    board.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px)) translateZ(${tz}px) scale(${scaleVal.toFixed(3)})`;
-    board.style.zIndex = zIndex;
-    if (instant) board.offsetHeight;
-    if (instant) board.style.transition = '';
+    if (instant) element.style.transition = 'none';
+    element.style.transform = `translateX(-50%) translateY(calc(-50% + ${y}px)) translateZ(${tz}px) scale(${scaleVal.toFixed(3)})`;
+    element.style.zIndex = zIndex;
+    if (instant) element.offsetHeight;
+    if (instant) element.style.transition = '';
   });
 }
 
@@ -724,6 +762,7 @@ function advanceLightbox(dir) {
   _stackScrollTotal += dir * SCROLL_PER_CARD;
   _stackPos = ((_stackScrollTotal / SCROLL_PER_CARD) % N + N) % N;
   _lbCurr = Math.round(_stackPos) % N;
+  recycleBoardImages();
   updateStackPositions(false);
   const counter = document.getElementById('lightbox-counter');
   if (counter) counter.textContent = (_lbCurr + 1) + ' / ' + N;
