@@ -820,14 +820,14 @@ let _boardPool = []; // [{element, imgIdx}] — all images rendered as a horizon
 let _cachedCardW = 0; // cached board width for CARD_STEP; reset on open/resize
 let _stackRafPending = false; // prevents >1 rAF per frame in wheel handler
 
-function openLightbox(collectionIdx) {
+function openLightbox(collectionIdx, startIdx = 0) {
   const collection = photoCollections[collectionIdx];
   if (!collection) return;
 
   _lbIdx = collectionIdx;
-  _lbCurr = 0;
-  _stackPos = 0;
-  _stackScrollTotal = 0;
+  _lbCurr = startIdx;
+  _stackPos = startIdx;
+  _stackScrollTotal = startIdx * SCROLL_PER_CARD;
   _cachedCardW = 0;
 
   updateMeta({
@@ -1043,6 +1043,41 @@ function applyCarouselFilter() {
   });
 }
 
+function openMobileCollection(collectionIdx) {
+  const container = document.getElementById('photo-collections');
+  const collection = photoCollections[collectionIdx];
+  if (!collection) return;
+  container.innerHTML = '';
+
+  const header = document.createElement('div');
+  header.className = 'photo-masonry-header';
+
+  const backBtn = document.createElement('button');
+  backBtn.className = 'photo-masonry-back';
+  backBtn.textContent = '← Back';
+  backBtn.addEventListener('click', () => renderCollections());
+
+  const title = document.createElement('span');
+  title.className = 'photo-masonry-title';
+  title.textContent = collection.name;
+
+  header.appendChild(backBtn);
+  header.appendChild(title);
+  container.appendChild(header);
+
+  const masonry = document.createElement('div');
+  masonry.className = 'photo-masonry';
+  collection.images.forEach((src, i) => {
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = (collection.alts && collection.alts[i]) || collection.name + ' — ' + (i + 1);
+    img.loading = i < 6 ? 'eager' : 'lazy';
+    img.addEventListener('click', () => openLightbox(collectionIdx, i));
+    masonry.appendChild(img);
+  });
+  container.appendChild(masonry);
+}
+
 function renderCollections() {
   const container = document.getElementById('photo-collections');
   container.innerHTML = '';
@@ -1158,7 +1193,7 @@ function renderCollections() {
     name.className = 'photo-mobile-card-name';
     name.textContent = collection.name;
     card.appendChild(name);
-    card.addEventListener('click', () => openLightbox(i));
+    card.addEventListener('click', () => openMobileCollection(i));
     mobileGrid.appendChild(card);
   });
   container.appendChild(mobileGrid);
