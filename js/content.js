@@ -23,9 +23,9 @@ const CONTENT = {
   // About page bio paragraphs (HTML allowed for italics/bold)
   about: {
     bio: [
-      'I\'m a Korean American Art Director from Delaware, now based in New York City. I\'m drawn to work that makes people stop and think, <em>"I wish I thought of that."</em>',
-      'I care about culture — from cars with family history to comfort food that evolves with us. Those signals shape how I build concepts that feel alive in the real world, not just in a deck.',
-      'Outside of work, I\'m inspired by plants, photography, cars, and learning random skills. I cook often, bake a dangerous chocolate cake, and like making things with my hands.',
+      'Hey! My name is Branden Chi. I was born and raised in the middle of nowhere in Delaware (yes, it\'s a real place), and I\'m now working as an Art Director in the crazy city of New York. I\'ve loved all things art and design ever since I was a kid, and now I get to create cool and crazy things for a living! I originally started my journey with video games and computers, and naturally segued into digital design and now into advertising and art direction.',
+      'When I was younger, I\'d see all these amazing pieces of art, design, and media and always thought to myself, <em>"damn, I wish I had thought of that,"</em> and that feeling is what really drives me to create. I would love to be able to create a piece of work that inspires at least one person to create for themselves.',
+      'Besides games and art, I love creating things with my hands. I have about 20 different incomplete hobbies and many more to explore. Most recently, I\'ve picked up the guitar. Am I good? — No. But it\'s okay — I love being able to (try) playing some of my favorite songs, one of which is featured here on this about page! Other than music, I love to cook. My father loved cooking for the people he loved, and I naturally picked up that trait. So I\'m constantly cooking Korean food for my friends and family and baking chocolate cake for myself (lmk if you want some). Thanks for stopping by, and I hope you learned a little more about me :)',
     ],
   },
 
