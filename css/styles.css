@@ -1689,8 +1689,8 @@ body.about-active .content {
 
   .gallery-img-row img,
   .section-right .gallery-img-row img {
+    flex: none;
     width: 100%;
-    min-width: 0;
   }
 
   .cv-about {

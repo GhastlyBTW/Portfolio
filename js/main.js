@@ -66,8 +66,8 @@ const projects = [
       'Social media post about a woman detained by ICE — Detention Watch Network',
     ],
     sections: [
-      { blocks: [{ type: 'img', idx: 2 }, { type: 'img', idx: 3 }, { type: 'img', idx: 4 }, { type: 'img', idx: 5 }] },
-      { blocks: [{ type: 'img', idx: 6 }, { type: 'img', idx: 7 }, { type: 'img', idx: 8 }, { type: 'img', idx: 9 }] },
+      { blocks: [{ type: 'img', idx: 2 }, { type: 'row', indices: [3, 4, 5] }] },
+      { blocks: [{ type: 'img', idx: 6 }, { type: 'row', indices: [7, 8, 9] }] },
       { blocks: [{ type: 'img', idx: 1 }, { type: 'img', idx: 0 }] },
     ],
   },
