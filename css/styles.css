@@ -1822,12 +1822,21 @@ body.about-active .content {
     left: 0;
     right: 0;
     transform: none;
-    background: linear-gradient(to top, rgba(0, 15, 26, 1) 55%, transparent);
-    padding: 28px 20px 28px;
+    background: linear-gradient(to top, rgba(0, 15, 26, 1) 70%, transparent);
+    padding: 44px 16px 20px;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 6px 16px;
+    flex-wrap: nowrap;
+    gap: 0 10px;
     width: 100%;
+  }
+
+  body.photo-active .photo-filters .filter-divider {
+    display: none;
+  }
+
+  body.photo-active .photo-filters .photo-filter {
+    font-size: 11px;
+    letter-spacing: 0.04em;
   }
 
   /* Collections container: full-width, stack vertically */
@@ -1835,7 +1844,7 @@ body.about-active .content {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding-bottom: 80px;
+    padding-bottom: 120px;
     overflow-y: auto;
     width: 100%;
   }
@@ -2457,7 +2466,7 @@ body.detail-active .detail-bottom-bar {
   }
 
   .section-text {
-    text-align: left;
+    text-align: center;
   }
 
   .section-right {
