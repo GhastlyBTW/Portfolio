@@ -1687,12 +1687,6 @@ body.about-active .content {
     flex-direction: column;
   }
 
-  .gallery-img-row img,
-  .section-right .gallery-img-row img {
-    flex: none;
-    width: 100%;
-  }
-
   .cv-about {
     flex-direction: column;
   }
@@ -2510,5 +2504,19 @@ body.detail-active .detail-bottom-bar {
   /* Photo nav tighter on mobile */
   .photo-bottom-nav {
     padding: 16px 24px;
+  }
+}
+
+/* Gallery row: stack vertically on mobile (placed after base rules to win cascade) */
+@media (max-width: 768px) {
+  .gallery-img-row {
+    flex-direction: column;
+  }
+
+  .gallery-img-row img,
+  .section-right .gallery-img-row img {
+    flex: none;
+    width: 100%;
+    min-width: 0;
   }
 }
