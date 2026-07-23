@@ -2091,7 +2091,7 @@ body.detail-active .detail-accordions { display: none; }
 .section-label {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(16px, 2.2vw, 28px);
+  font-size: clamp(19px, 2.6vw, 32px);
   font-weight: 300;
   letter-spacing: 0.06em;
   color: var(--text);
@@ -2099,7 +2099,7 @@ body.detail-active .detail-accordions { display: none; }
 }
 
 .section-text {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.38);
   text-wrap: pretty;
@@ -2553,7 +2553,7 @@ body.detail-active .detail-bottom-bar {
   }
 
   .section-label {
-    font-size: 22px;
+    font-size: 25px;
   }
 
   .section-text {
