@@ -247,21 +247,43 @@ function initSmoothScroll() {
 
 let _animObserver = null;
 let _hasInitiallyLoaded = false;
+let _dividerScrollHandler = null;
 
 function runTypewriter(el) {
   const text = el.dataset.typewriter || '';
   el.removeAttribute('data-typewriter');
   el.textContent = '';
   el.style.opacity = '1';
+  const totalMs = Math.max(500, Math.min(1200, text.length * 7));
+  const base = totalMs / Math.max(text.length, 1);
   let i = 0;
-  const speed = Math.max(14, Math.min(28, 2200 / Math.max(text.length, 1)));
   const tick = () => {
-    if (i < text.length) {
-      el.textContent += text[i++];
-      setTimeout(tick, speed);
-    }
+    if (i >= text.length) return;
+    el.textContent += text[i];
+    i++;
+    // ease-in-out: slightly slower at edges, fastest in middle
+    const t = i / text.length;
+    const ease = 1 - 0.45 * Math.sin(t * Math.PI);
+    setTimeout(tick, base * ease);
   };
   setTimeout(tick, parseFloat(el.dataset.typewriterDelay) || 0);
+}
+
+function initDividerScroll() {
+  if (_dividerScrollHandler) {
+    window.removeEventListener('scroll', _dividerScrollHandler);
+  }
+  const update = () => {
+    const vh = window.innerHeight;
+    document.querySelectorAll('.project-section-divider').forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.65)));
+      el.style.transform = `scaleX(${progress})`;
+    });
+  };
+  _dividerScrollHandler = update;
+  window.addEventListener('scroll', update, { passive: true });
+  update();
 }
 
 function initAnimObserver() {
@@ -283,7 +305,7 @@ function initAnimObserver() {
 function observeAnimations(container) {
   initAnimObserver();
   container.querySelectorAll(
-    '.anim-slide-left, .anim-fade-up, .anim-draw-line, [data-typewriter]'
+    '.anim-slide-left, .anim-fade-up, [data-typewriter]'
   ).forEach((el) => _animObserver.observe(el));
 }
 
@@ -481,7 +503,7 @@ function renderNextProjectFooter(container, currentIndex) {
   const nextCopy = CONTENT.projects[nextIdx];
 
   const divider = document.createElement('div');
-  divider.className = 'project-section-divider anim-draw-line';
+  divider.className = 'project-section-divider';
   container.appendChild(divider);
 
   const footer = document.createElement('div');
@@ -643,6 +665,7 @@ function renderSplitDetail(gallery, project, copy, index, images) {
 
   renderNextProjectFooter(gallery, index);
   observeAnimations(gallery);
+  initDividerScroll();
 }
 
 function updateDetailOverlaySelection(index) {
@@ -844,6 +867,10 @@ function exitDetail() {
   if (_detailScrollHandler) {
     window.removeEventListener('scroll', _detailScrollHandler);
     _detailScrollHandler = null;
+  }
+  if (_dividerScrollHandler) {
+    window.removeEventListener('scroll', _dividerScrollHandler);
+    _dividerScrollHandler = null;
   }
   const creditsPanel = document.getElementById('credits-panel');
   if (creditsPanel) creditsPanel.classList.remove('open');
