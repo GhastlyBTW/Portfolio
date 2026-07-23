@@ -1,10 +1,5 @@
 const PLACEHOLDER_COUNT = 6;
 const PHOTO_PROJECT_INDEX = 5;
-const LOREM_IPSUM = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-  'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-].join(' ');
 const SITE_BASE = 'https://brandenchi.com';
 const DEFAULT_OG_IMAGE = SITE_BASE + '/assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg';
 
@@ -33,25 +28,19 @@ function toSlug(name) {
 }
 
 function findProjectBySlug(slug) {
-  return projects.findIndex((p) => toSlug(p.name) === slug);
+  return CONTENT.projects.findIndex((p) => toSlug(p.name) === slug);
 }
 
 function findCollectionBySlug(slug) {
   return photoCollections.findIndex((c) => toSlug(c.name) === slug);
 }
 
+// Asset-only project data — all text/copy lives in js/content.js
 const projects = [
+  // 0 — Detention Watch Network
   {
-    name: 'Detention Watch Network',
-    category: 'Art Direction | Copy Writing',
-    year: '2025',
-    description: 'A social awareness campaign examining the documented concerns surrounding U.S. Immigration and Customs Enforcement. Each piece tells a story through the eyes of a victim of ICE — invoking empathy to show the reality of what these people are facing.',
-    detailDescription: 'A social awareness campaign focused on U.S. Immigration and Customs Enforcement and the documented concerns surrounding its practices. Each post tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media content, and a dedicated landing page — all designed to confront viewers with the human cost of detention and drive them toward action.',
     thumbnail: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Posting.gif',
     thumbnailFallback: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg',
-    brief: 'The U.S. Immigration and Customs Enforcement agency has documented concerns surrounding its practices. This project aims to examine those issues and highlight where critics argue reforms may be necessary — driven by seeing the impact ICE actions have had on people personally.',
-    strategy: 'Each post tells a story through the eyes of a victim of ICE. From a child being separated from their family, to an elderly man being beaten up. The visuals are made to invoke emotions of empathy to show the reality of the emotions these people are facing. The campaign spans wild postings, social media posts, and a dedicated landing page.',
-    credits: '',
     gallery: [
       'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkLanding Page.jpg',
       'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkWebsite Landing Page Mockuo.jpg',
@@ -76,27 +65,15 @@ const projects = [
       'Social media post about a child separated from family by ICE — Detention Watch Network',
       'Social media post about a woman detained by ICE — Detention Watch Network',
     ],
-    galleryBlocks: [
-      { type: 'img', idx: 0 },
-      { type: 'img', idx: 1 },
-      { type: 'text' },
-      { type: 'img', idx: 2 },
-      { type: 'row', indices: [3, 4, 5] },
-      { type: 'text' },
-      { type: 'img', idx: 6 },
-      { type: 'row', indices: [7, 8, 9] },
+    sections: [
+      { blocks: [{ type: 'img', idx: 2 }, { type: 'row', indices: [3, 4, 5] }] },
+      { blocks: [{ type: 'img', idx: 6 }, { type: 'row', indices: [7, 8, 9] }] },
+      { blocks: [{ type: 'img', idx: 1 }, { type: 'img', idx: 0 }] },
     ],
   },
+  // 1 — Liquid Dove
   {
-    name: 'Liquid Dove',
-    category: 'Art Direction | Copy Writing | Packaging',
-    year: '2025',
-    description: 'What happens when the calm meets the storm? The Liquid Death and Dove collaboration bridges two distinctly different audiences that value the same thing — through edible Dove products inspired by Liquid Death\'s bold flavors and fearless energy.',
-    detailDescription: 'What happens when the calm meets the storm? Chaos meets care. The Liquid Death and Dove collaboration shows what happens when two brands with shared values — natural ingredients and a healthier planet — collide from opposite ends of the spectrum. Edible Dove products inspired by Liquid Death\'s bold flavors and fearless energy bridge the gap between two distinctly different audiences that value the same thing.',
     thumbnail: 'assets/Thumbnails/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
-    brief: 'How can we make Dove cooler while making Liquid Death more approachable? Despite their unconventional approach, Liquid Death\'s core values already align with Dove\'s commitment to both natural ingredients and a healthier planet. This collab has the opportunity to bridge the gap between two distinctly different audiences that value the same thing.',
-    strategy: 'Combine the bold and daring branding of Liquid Death with the trusted and comforting approach of Dove. Chaos meets care through edible Dove products inspired by Liquid Death\'s bold flavors and fearless energy.',
-    credits: 'Branden Chi, Matthew Payne, Daniyah Stancil',
     gallery: [
       'assets/Liquid Dove/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
       'assets/Liquid Dove/Branden Chi Liquid Dove bottle.png',
@@ -113,28 +90,16 @@ const projects = [
       'Rage bait advertisement alternative for the Liquid Dove campaign',
       'Fake news headline used as a campaign touchpoint for Liquid Dove',
     ],
-    galleryBlocks: [
-      { type: 'img', idx: 0 },
-      { type: 'img', idx: 1 },
-      { type: 'text' },
-      { type: 'img', idx: 2 },
-      { type: 'img', idx: 3 },
-      { type: 'text' },
-      { type: 'img', idx: 4 },
-      { type: 'img', idx: 5 },
+    sections: [
+      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 3 }] },
+      { blocks: [{ type: 'img', idx: 2 }, { type: 'img', idx: 1 }] },
+      { blocks: [{ type: 'img', idx: 5 }] },
     ],
   },
+  // 2 — Emporio Armani - Unforgettable Night
   {
-    name: 'Emporio Armani - Unforgettable Night',
-    category: 'Art Direction | Copy Writing',
-    year: '2025',
-    description: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. Have an unforgettable night with Emporio Armani.',
-    detailDescription: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Smelling good lifts your confidence and lingers in someone else\'s memory. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. This campaign for Emporio Armani\'s fragrance line turns that insight into an experience — teasing with social polls, launching through custom cocktail napkins at top NYC date-night restaurants, and sustaining through partnerships with apps like OpenTable to deliver date tips with every booking.',
     thumbnail: 'assets/Thumbnails/Branden Chi Emporio Armani.gif',
     thumbnailFallback: 'assets/Thumbnails/Branden Chi Emporio Armani Table.jpg',
-    brief: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Smelling good lifts your confidence and lingers in someone else\'s memory. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten.',
-    strategy: 'Tease with online polls asking how important smelling good is on a first date, inviting everyone to weigh in before the campaign drops. Launch by partnering with top date-night restaurants across New York City to slip Emporio Armani date tips onto custom cocktail napkins — guests who collect every tip can scan the final one to unlock a complimentary fragrance voucher. Sustain by partnering with apps like OpenTable to deliver date tips with every booking confirmation and table-ready alert.',
-    credits: '',
     gallery: [
       'assets/Emporio/Branden Chi Emporio Armani Napkins Red Table.jpg',
       'assets/Emporio/Branden Chi Emporio Armani Martini Glass.jpg',
@@ -151,27 +116,15 @@ const projects = [
       'Instagram poll asking followers how important scent is on a first date — Emporio Armani campaign',
       'OpenTable booking confirmation email featuring an Emporio Armani complimentary fragrance voucher',
     ],
-    galleryBlocks: [
-      { type: 'img', idx: 0 },
-      { type: 'img', idx: 1 },
-      { type: 'text' },
-      { type: 'img', idx: 2 },
-      { type: 'img', idx: 3 },
-      { type: 'text' },
-      { type: 'img', idx: 4 },
-      { type: 'img', idx: 5 },
+    sections: [
+      { blocks: [{ type: 'img', idx: 4 }] },
+      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 1 }, { type: 'img', idx: 2 }] },
+      { blocks: [{ type: 'img', idx: 5 }, { type: 'img', idx: 3 }] },
     ],
   },
+  // 3 — Lemaire
   {
-    name: 'Lemaire',
-    category: 'Art Direction',
-    year: '2025',
-    description: 'Lemaire is rooted in sustainability — creating long-lasting pieces meant to be repaired, reworn, and recycled. This social awareness campaign confronts the 92 million tons of textile waste produced globally every year, using striking urban visuals to make the scale of the crisis impossible to ignore.',
-    detailDescription: 'Every year, 92 million tons of textile waste is produced globally — as heavy as 300 Empire State Buildings, an entire city skyline. Lemaire, a brand rooted in sustainability and creating long-lasting pieces meant to be repaired, reworn, and recycled, confronts that reality head-on. Through fact-based billboards in urban environments, a surrealist commercial, and guerilla installations wrapping landmark skyscrapers in discarded clothing, the campaign transforms the invisible weight of fast fashion into something monumental and unmissable.',
     thumbnail: 'assets/Thumbnails/Branden Chi Lemaire Street Billboard Mockup.jpg',
-    brief: 'Every year around 92 million tons of textile waste is produced globally. That is as heavy as roughly 300 Empire State Buildings — an entire city skyline. Lemaire is a brand rooted in sustainability and creating long-lasting pieces of clothing, meant to be repaired, reworn, and recycled.',
-    strategy: 'Turn a skyscraper into a tower of textile waste to visually quantify how badly fast fashion has affected our world. Prime the market with fact-based visual billboards in urban environments, launch a surrealism commercial where a character navigates a world of fast fashion waste, and dress landmark skyscrapers in cities around the world with discarded clothing to symbolize the sheer volume created every year.',
-    credits: '',
     gallery: [
       'assets/Lemaire/Branden Chi Lemaire Street Billboard Mockup.jpg',
       'assets/Lemaire/Branden Chi Lemaire NYC Billboard Mockup.jpg',
@@ -186,26 +139,15 @@ const projects = [
       'Model standing among piles of textile waste — Lemaire campaign visual',
       'City street crowd surrounded by textile waste — Lemaire campaign visual',
     ],
-    galleryBlocks: [
-      { type: 'img', idx: 0 },
-      { type: 'img', idx: 1 },
-      { type: 'text' },
-      { type: 'img', idx: 2 },
-      { type: 'img', idx: 3 },
-      { type: 'text' },
-      { type: 'img', idx: 4 },
+    sections: [
+      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 1 }] },
+      { blocks: [{ type: 'img', idx: 2 }, { type: 'img', idx: 3 }] },
+      { blocks: [{ type: 'img', idx: 4 }] },
     ],
   },
+  // 4 — Polaroid - Frame the Moment
   {
-    name: 'Polaroid - Frame the Moment',
-    category: 'Art Direction | Copy Writing',
-    year: '2025',
-    description: 'With the rise of digital, film cameras have become irrelevant — but Polaroids are physical, personal, and immediate. This guerrilla campaign frames iconic landmarks around the world in the iconic Polaroid frame, turning tourist spots into living instant photos.',
-    detailDescription: 'This campaign follows an unseen traveler framing iconic landmarks around the world inside Polaroid\'s instantly recognizable borders. Each image is paired with a short handwritten caption, echoing how people naturally annotate instant prints and turning every photo into a postcard from the journey. The series forms a loose travel narrative, grounded in Polaroid\'s core truth: instant photos are physical, personal, and immediate. A subtle handwritten "Polaroid 2025" mark appears on the back of each frame, keeping the work cohesive while preserving its organic, human feel. By framing the world through Polaroid, the campaign positions the brand not as a relic of nostalgia, but as a way to keep real moments with you, anywhere you go.',
     thumbnail: 'assets/Polaroid/Polaroid at the beach.jpg',
-    brief: 'Polaroid has been known for their iconic instant nostalgic photos. With the rise of digital, film cameras have become irrelevant in the marketplace today. Polaroids are physical, personal, and immediate — Polaroid keeps the moment with you.',
-    strategy: 'Frame iconic tourist spots around the world with the iconic Polaroid photo frame as a guerrilla installation. Each frame carries a short handwritten caption, mimicking how people naturally jot notes on instant prints, doubling as postcard-style messages from the journey. The frames tell a loose travel narrative and showcase Polaroid\'s role in documenting real moments, anywhere in the world.',
-    credits: '',
     gallery: [
       'assets/Polaroid/Eiffel_tower.jpg',
       'assets/Polaroid/Branden Chi Polaroid Basketball court.jpg',
@@ -216,23 +158,19 @@ const projects = [
       'Basketball court viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
       'Beach scene viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
     ],
-    galleryBlocks: [
-      { type: 'img', idx: 0 },
-      { type: 'text' },
-      { type: 'img', idx: 1 },
-      { type: 'img', idx: 2 },
+    sections: [
+      { blocks: [{ type: 'img', idx: 0 }] },
+      { blocks: [{ type: 'img', idx: 1 }, { type: 'img', idx: 2 }] },
     ],
   },
+  // 5 — Photography: Personal
   {
-    name: 'Photography: Personal',
-    category: 'Digital & Film Photography',
-    year: '2021 - Present',
-    description: 'A collection of my photography that makes me feel fulfilled as an artist and creator. Filled with works from my passion for cars to travels, this gallery is a peek into what makes me who I am.',
-    detailDescription: 'A collection of my photography that makes me feel fulfilled as an artist and creator. Filled with works from my passion for cars to travels, this gallery is a peek into what makes me who I am.',
     thumbnail: null,
     gallery: [],
   },
 ];
+
+let _detailScrollHandler = null;
 
 // photoCollections is loaded from js/photo-collections.js (auto-generated by sync-photos.sh)
 
@@ -376,16 +314,7 @@ function initScrollMotif() {
 
 // ==================== GREETING ====================
 
-const greetings = [
-  'Good day!',
-  'Hello there.',
-  'Welcome in.',
-  'Nice to see you.',
-  'Look around.',
-  'Stay a while.',
-  'Glad you\'re here.',
-  'Loading screen means "creativity" in Korean.',
-];
+const greetings = CONTENT.greetings;
 
 let greetingIndex = Math.floor(Math.random() * greetings.length);
 
@@ -420,6 +349,7 @@ function showIndex(fromPop) {
   });
   exitAbout();
   exitPhoto();
+  exitDetail();
   showView('index-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -437,12 +367,187 @@ function showCV(fromPop) {
   });
   exitAbout();
   exitPhoto();
+  exitDetail();
   showView('cv-view');
   jumpTo(0);
   clearActiveProject();
   showWorkNav();
   if (!fromPop) pushRoute('/cv');
   cycleGreeting();
+}
+
+function renderGalleryBlock(block, images, galleryAlts, name) {
+  if (block.type === 'img') {
+    const src = images[block.idx];
+    if (!src) return null;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = (galleryAlts && galleryAlts[block.idx]) || name;
+    img.loading = 'lazy';
+    return img;
+  } else if (block.type === 'row') {
+    const row = document.createElement('div');
+    row.className = 'gallery-img-row';
+    block.indices.forEach((idx) => {
+      const src = images[idx];
+      if (!src) return;
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = (galleryAlts && galleryAlts[idx]) || name;
+      img.loading = 'lazy';
+      row.appendChild(img);
+    });
+    return row;
+  }
+  return null;
+}
+
+function renderNextProjectFooter(container, currentIndex) {
+  const navIndices = projects.map((_, i) => i).filter(i => i !== PHOTO_PROJECT_INDEX);
+  const navPos = navIndices.indexOf(currentIndex);
+  const nextIdx = navIndices[(navPos + 1) % navIndices.length];
+  const nextProject = projects[nextIdx];
+  const nextCopy = CONTENT.projects[nextIdx];
+
+  const footer = document.createElement('div');
+  footer.className = 'project-next-footer';
+  footer.addEventListener('click', () => showDetail(nextIdx));
+
+  const label = document.createElement('div');
+  label.className = 'project-next-label';
+  label.textContent = 'NEXT PROJECT';
+
+  const content = document.createElement('div');
+  content.className = 'project-next-content';
+
+  const left = document.createElement('div');
+  left.className = 'project-next-left';
+
+  const name = document.createElement('h2');
+  name.className = 'project-next-name';
+  name.textContent = nextCopy.name;
+
+  const desc = document.createElement('p');
+  desc.className = 'project-next-desc';
+  desc.textContent = nextCopy.cardDescription;
+
+  left.appendChild(name);
+  left.appendChild(desc);
+
+  const right = document.createElement('div');
+  right.className = 'project-next-right';
+
+  if (nextProject.thumbnail || nextProject.thumbnailFallback) {
+    const img = document.createElement('img');
+    img.src = nextProject.thumbnailFallback || nextProject.thumbnail;
+    img.alt = nextCopy.name;
+    right.appendChild(img);
+  }
+
+  content.appendChild(left);
+  content.appendChild(right);
+  footer.appendChild(label);
+  footer.appendChild(content);
+  container.appendChild(footer);
+}
+
+function renderSplitDetail(gallery, project, copy, index, images) {
+  // Intro section
+  const intro = document.createElement('div');
+  intro.className = 'project-split-intro';
+
+  const introLeft = document.createElement('div');
+  introLeft.className = 'project-intro-left';
+
+  const metaLine = document.createElement('div');
+  metaLine.className = 'project-meta-line';
+  metaLine.textContent = copy.year + ' · ' + copy.category;
+
+  const displayName = document.createElement('h1');
+  displayName.className = 'project-display-name';
+  displayName.textContent = copy.name;
+
+  introLeft.appendChild(metaLine);
+  introLeft.appendChild(displayName);
+
+  [
+    { label: 'The Brief',    text: copy.brief    },
+    { label: 'The Insight',  text: copy.insight  },
+    { label: 'The Strategy', text: copy.strategy },
+  ].forEach(({ label, text }) => {
+    if (!text) return;
+    const block = document.createElement('div');
+    block.className = 'project-intro-block';
+    const lbl = document.createElement('span');
+    lbl.className = 'project-intro-block-label';
+    lbl.textContent = label;
+    const p = document.createElement('p');
+    p.className = 'project-intro-brief';
+    p.textContent = text;
+    block.appendChild(lbl);
+    block.appendChild(p);
+    introLeft.appendChild(block);
+  });
+
+  const introRight = document.createElement('div');
+  introRight.className = 'project-intro-right';
+
+  if (project.thumbnail) {
+    const heroImg = document.createElement('img');
+    heroImg.src = project.thumbnailFallback || project.thumbnail;
+    heroImg.alt = copy.name;
+    introRight.appendChild(heroImg);
+  }
+
+  intro.appendChild(introLeft);
+  intro.appendChild(introRight);
+  gallery.appendChild(intro);
+
+  // Content sections
+  const contentSections = CONTENT.projects[index].sections || [];
+  (project.sections || []).forEach((sec, si) => {
+    const contentSec = contentSections[si] || {};
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'project-section';
+
+    const leftEl = document.createElement('div');
+    leftEl.className = 'section-left';
+
+    if (contentSec.title) {
+      const label = document.createElement('span');
+      label.className = 'section-label';
+      label.textContent = contentSec.title;
+      leftEl.appendChild(label);
+    }
+
+    if (contentSec.text) {
+      const text = document.createElement('p');
+      text.className = 'section-text';
+      text.textContent = contentSec.text;
+      leftEl.appendChild(text);
+    }
+
+    const rightEl = document.createElement('div');
+    rightEl.className = 'section-right';
+
+    sec.blocks.forEach((block) => {
+      const el = renderGalleryBlock(block, images, project.galleryAlts, copy.name);
+      if (el) rightEl.appendChild(el);
+    });
+
+    sectionEl.appendChild(leftEl);
+    sectionEl.appendChild(rightEl);
+    gallery.appendChild(sectionEl);
+  });
+
+  renderNextProjectFooter(gallery, index);
+}
+
+function updateDetailOverlaySelection(index) {
+  document.querySelectorAll('.project-overlay-item').forEach((item) => {
+    item.classList.toggle('active', parseInt(item.dataset.project, 10) === index);
+  });
 }
 
 function showDetail(index, fromPop) {
@@ -454,121 +559,134 @@ function showDetail(index, fromPop) {
   }
 
   const project = projects[index];
-  if (!project) return;
+  const copy = CONTENT.projects[index];
+  if (!project || !copy) return;
 
   updateMeta({
-    title: project.name + ' — Branden Chi',
-    description: project.description,
-    canonical: '/' + toSlug(project.name),
+    title: copy.name + ' — Branden Chi',
+    description: copy.metaDescription,
+    canonical: '/' + toSlug(copy.name),
     image: project.thumbnailFallback || project.thumbnail,
   });
 
-  document.getElementById('detail-title').textContent = project.name;
+  // Activate detail mode (hides sidebar, shows controls)
+  document.body.classList.add('detail-active');
 
-  const metaRow = document.getElementById('detail-meta');
-  metaRow.querySelector('.detail-year').textContent = project.year;
-  metaRow.querySelector('.detail-category').textContent = project.category;
-
-  const hero = document.getElementById('detail-hero');
-  const heroPlaceholder = hero.querySelector('.placeholder-img');
-  const heroImg = hero.querySelector('img');
-
-  if (project.thumbnail) {
-    const setThumb = (el) => {
-      const heroSrc = project.thumbnailFallback || project.thumbnail;
-      el.src = heroSrc;
-      el.alt = project.name;
-    };
-    if (heroImg) {
-      setThumb(heroImg);
-    } else {
-      const img = document.createElement('img');
-      setThumb(img);
-      hero.appendChild(img);
-    }
-    if (heroPlaceholder) heroPlaceholder.style.display = 'none';
+  const isSplit = !!(project.sections && CONTENT.projects[index].sections);
+  if (isSplit) {
+    document.body.classList.add('detail-split');
   } else {
-    if (heroImg) heroImg.remove();
-    if (heroPlaceholder) heroPlaceholder.style.display = '';
+    document.body.classList.remove('detail-split');
   }
+
+  // Update credits panel content
+  const creditsPanelText = document.getElementById('credits-panel-text');
+  if (creditsPanelText) creditsPanelText.textContent = copy.credits || 'Coming soon.';
 
   const gallery = document.getElementById('detail-gallery');
   gallery.innerHTML = '';
   const images = project.gallery || [];
 
-  if (project.galleryBlocks) {
-    project.galleryBlocks.forEach((block) => {
-      if (block.type === 'img') {
-        const src = images[block.idx];
-        if (!src) return;
+  if (isSplit) {
+    renderSplitDetail(gallery, project, copy, index, images);
+  } else {
+    // Legacy single-column layout for projects without sections
+    document.getElementById('detail-title').textContent = copy.name;
+    const metaRow = document.getElementById('detail-meta');
+    metaRow.querySelector('.detail-year').textContent = copy.year;
+    metaRow.querySelector('.detail-category').textContent = copy.category;
+
+    const hero = document.getElementById('detail-hero');
+    const heroPlaceholder = hero.querySelector('.placeholder-img');
+    const heroImg = hero.querySelector('img');
+    if (project.thumbnail) {
+      const heroSrc = project.thumbnailFallback || project.thumbnail;
+      if (heroImg) { heroImg.src = heroSrc; heroImg.alt = copy.name; }
+      else { const img = document.createElement('img'); img.src = heroSrc; img.alt = copy.name; hero.appendChild(img); }
+      if (heroPlaceholder) heroPlaceholder.style.display = 'none';
+    } else {
+      if (heroImg) heroImg.remove();
+      if (heroPlaceholder) heroPlaceholder.style.display = '';
+    }
+
+    if (project.galleryBlocks) {
+      let textBlockCount = 0;
+      project.galleryBlocks.forEach((block) => {
+        if (block.type === 'text') {
+          const p = document.createElement('p');
+          p.className = 'gallery-text-block';
+          p.textContent = (copy.galleryText && copy.galleryText[textBlockCount]) || '';
+          textBlockCount++;
+          gallery.appendChild(p);
+        } else {
+          const el = renderGalleryBlock(block, images, project.galleryAlts, copy.name);
+          if (el) gallery.appendChild(el);
+        }
+      });
+    } else if (images.length) {
+      images.forEach((src, i) => {
         const img = document.createElement('img');
         img.src = src;
-        img.alt = (project.galleryAlts && project.galleryAlts[block.idx]) || project.name;
+        img.alt = (project.galleryAlts && project.galleryAlts[i]) || copy.name;
         img.loading = 'lazy';
         gallery.appendChild(img);
-      } else if (block.type === 'row') {
-        const row = document.createElement('div');
-        row.className = 'gallery-img-row';
-        block.indices.forEach((idx) => {
-          const src = images[idx];
-          if (!src) return;
-          const img = document.createElement('img');
-          img.src = src;
-          img.alt = (project.galleryAlts && project.galleryAlts[idx]) || project.name;
-          img.loading = 'lazy';
-          row.appendChild(img);
-        });
-        gallery.appendChild(row);
-      } else if (block.type === 'text') {
-        const p = document.createElement('p');
-        p.className = 'gallery-text-block';
-        p.textContent = LOREM_IPSUM;
-        gallery.appendChild(p);
+      });
+    } else {
+      for (let i = 0; i < PLACEHOLDER_COUNT; i++) {
+        const div = document.createElement('div');
+        div.className = 'placeholder-img gallery-placeholder';
+        gallery.appendChild(div);
       }
-    });
-  } else if (images.length) {
-    images.forEach((src, i) => {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = (project.galleryAlts && project.galleryAlts[i]) || project.name;
-      img.loading = 'lazy';
-      gallery.appendChild(img);
-    });
-  } else {
-    for (let i = 0; i < PLACEHOLDER_COUNT; i++) {
-      const div = document.createElement('div');
-      div.className = 'placeholder-img gallery-placeholder';
-      gallery.appendChild(div);
     }
+
+    const navIndices = projects.map((_, i) => i).filter(i => i !== PHOTO_PROJECT_INDEX);
+    const navPos = navIndices.indexOf(index);
+    const prevIdx = navIndices[(navPos - 1 + navIndices.length) % navIndices.length];
+    const nextIdx = navIndices[(navPos + 1) % navIndices.length];
+    document.getElementById('prev-project-text').textContent = CONTENT.projects[prevIdx].name;
+    document.getElementById('next-project-text').textContent = CONTENT.projects[nextIdx].name;
+    document.getElementById('prev-project').onclick = (e) => { e.preventDefault(); showDetail(prevIdx); };
+    document.getElementById('next-project').onclick = (e) => { e.preventDefault(); showDetail(nextIdx); };
   }
 
-  document.getElementById('accordion-brief').textContent = project.brief || 'Coming soon.';
-  document.getElementById('accordion-strategy').textContent = project.strategy || 'Coming soon.';
-  document.getElementById('accordion-credits').textContent = project.credits || 'Coming soon.';
-  document.querySelectorAll('.accordion').forEach((a) => a.classList.remove('open'));
+  updateDetailOverlaySelection(index);
 
-  const navProjects = projects.filter((_, i) => i !== PHOTO_PROJECT_INDEX);
-  const navIndex = navProjects.indexOf(project);
-  const prev = navProjects[(navIndex - 1 + navProjects.length) % navProjects.length];
-  const next = navProjects[(navIndex + 1) % navProjects.length];
+  // Scroll: fade site name + hide credits near bottom
+  const siteNameEl = document.getElementById('detail-site-name-fixed');
+  if (siteNameEl) {
+    siteNameEl.style.opacity = '1';
+    if (_detailScrollHandler) window.removeEventListener('scroll', _detailScrollHandler);
+    _detailScrollHandler = () => {
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
 
-  document.getElementById('prev-project-text').textContent = prev.name;
-  document.getElementById('next-project-text').textContent = next.name;
-  document.getElementById('prev-project').onclick = (e) => { e.preventDefault(); showDetail(projects.indexOf(prev)); };
-  document.getElementById('next-project').onclick = (e) => { e.preventDefault(); showDetail(projects.indexOf(next)); };
+      // Fade name as user scrolls down
+      siteNameEl.style.opacity = Math.max(0, 1 - scrollY / 160);
+
+      // Auto-hide credits when near the bottom of the page
+      const creditsPanel = document.getElementById('credits-panel');
+      if (creditsPanel) {
+        const nearBottom = maxScroll > 0 && scrollY / maxScroll > 0.78;
+        creditsPanel.classList.toggle('scroll-hidden', nearBottom);
+      }
+    };
+    window.addEventListener('scroll', _detailScrollHandler, { passive: true });
+  }
 
   showView('detail-view');
   jumpTo(0);
+  smoothScrollTo(0);
   showWorkNav();
   setActiveProject(index);
   document.getElementById('project-list').classList.add('has-scroll-active');
-  if (!fromPop) pushRoute('/' + toSlug(project.name));
+  if (!fromPop) pushRoute('/' + toSlug(copy.name));
   cycleGreeting();
 }
 
 // ==================== ABOUT ====================
 
 function showAbout(fromPop) {
+  exitDetail();
   updateMeta({
     title: 'About — Branden Chi',
     description: 'Branden Chi is a Korean American Art Director from Delaware, now based in New York City, creating work that makes people stop and think.',
@@ -606,6 +724,19 @@ function showAboutScrollIndicator() {
   }, 1200);
 }
 
+function exitDetail() {
+  document.body.classList.remove('detail-active');
+  document.body.classList.remove('detail-split');
+  if (_detailScrollHandler) {
+    window.removeEventListener('scroll', _detailScrollHandler);
+    _detailScrollHandler = null;
+  }
+  const creditsPanel = document.getElementById('credits-panel');
+  if (creditsPanel) creditsPanel.classList.remove('open');
+  const overlay = document.getElementById('project-overlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
 function exitAbout() {
   document.querySelector('.sidebar').classList.remove('minimal');
   document.body.classList.remove('about-active');
@@ -638,6 +769,7 @@ function showPhotography(fromPop) {
   });
   exitAbout();
   exitPhoto();
+  exitDetail();
   document.body.classList.add('photo-active');
   activeFilter = 'all';
   document.querySelectorAll('.photo-filter').forEach((btn) => {
@@ -670,6 +802,8 @@ let _stackPos = 0;
 let _stackScrollTotal = 0;
 let _lbWheelFn = null;
 let _lbKeyFn = null;
+let _lbTouchStartFn = null;
+let _lbTouchEndFn = null;
 let _boardPool = []; // [{element, imgIdx}] — all images rendered as a horizontal strip
 let _cachedCardW = 0; // cached board width for CARD_STEP; reset on open/resize
 let _stackRafPending = false; // prevents >1 rAF per frame in wheel handler
@@ -764,6 +898,16 @@ function openLightbox(collectionIdx) {
   };
   window.addEventListener('keydown', _lbKeyFn);
 
+  let lbTouchStartX = 0, lbTouchStartY = 0;
+  _lbTouchStartFn = (e) => { lbTouchStartX = e.touches[0].clientX; lbTouchStartY = e.touches[0].clientY; };
+  _lbTouchEndFn = (e) => {
+    const dx = lbTouchStartX - e.changedTouches[0].clientX;
+    const dy = Math.abs(lbTouchStartY - e.changedTouches[0].clientY);
+    if (Math.abs(dx) > 40 && Math.abs(dx) > dy) advanceLightbox(dx > 0 ? 1 : -1);
+  };
+  lightbox.addEventListener('touchstart', _lbTouchStartFn, { passive: true });
+  lightbox.addEventListener('touchend', _lbTouchEndFn, { passive: true });
+
   pushRoute('/photography/' + toSlug(collection.name));
 }
 
@@ -801,6 +945,8 @@ function closeLightbox() {
   if (!lightbox.classList.contains('open')) return;
   if (_lbWheelFn) { lightbox.removeEventListener('wheel', _lbWheelFn); _lbWheelFn = null; }
   if (_lbKeyFn) { window.removeEventListener('keydown', _lbKeyFn); _lbKeyFn = null; }
+  if (_lbTouchStartFn) { lightbox.removeEventListener('touchstart', _lbTouchStartFn); _lbTouchStartFn = null; }
+  if (_lbTouchEndFn) { lightbox.removeEventListener('touchend', _lbTouchEndFn); _lbTouchEndFn = null; }
   lightbox.classList.remove('open');
   lightbox.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
@@ -832,6 +978,8 @@ function exitPhoto() {
   if (lightbox && lightbox.classList.contains('open')) {
     if (_lbWheelFn) { lightbox.removeEventListener('wheel', _lbWheelFn); _lbWheelFn = null; }
     if (_lbKeyFn) { window.removeEventListener('keydown', _lbKeyFn); _lbKeyFn = null; }
+    if (_lbTouchStartFn) { lightbox.removeEventListener('touchstart', _lbTouchStartFn); _lbTouchStartFn = null; }
+    if (_lbTouchEndFn) { lightbox.removeEventListener('touchend', _lbTouchEndFn); _lbTouchEndFn = null; }
     lightbox.classList.remove('open');
     lightbox.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
@@ -863,6 +1011,7 @@ function initLightboxEvents() {
 let _parallaxCleanup = null;
 let _carouselScrollOffset = 0;
 let _lastPointerAngle = null;
+let _carouselPivots = [];
 
 function updateCarouselPointerEvents(pivots, finalAngles, sceneY) {
   if (_lastPointerAngle !== null && Math.abs(sceneY - _lastPointerAngle) < 0.5) return;
@@ -874,13 +1023,20 @@ function updateCarouselPointerEvents(pivots, finalAngles, sceneY) {
   });
 }
 
+function applyCarouselFilter() {
+  _carouselPivots.forEach(({ pivot, collection }) => {
+    const matches = activeFilter === 'all' || getCollectionCategory(collection) === activeFilter;
+    const card = pivot.querySelector('.carousel-card');
+    if (card) card.style.opacity = matches ? '1' : '0.15';
+  });
+}
+
 function renderCollections() {
   const container = document.getElementById('photo-collections');
   container.innerHTML = '';
+  _carouselPivots = [];
 
-  const visible = photoCollections.filter((c) => activeFilter === 'all' || getCollectionCategory(c) === activeFilter);
-
-  if (!visible.length) {
+  if (!photoCollections.length) {
     const msg = document.createElement('p');
     msg.className = 'gallery-empty';
     msg.textContent = 'No collections found.';
@@ -895,14 +1051,14 @@ function renderCollections() {
   scene.className = 'carousel-scene';
   stage.appendChild(scene);
 
-  const total = visible.length;
+  const total = photoCollections.length;
   const step = total <= 1 ? 0 : 360 / total;
   const pivots = [];
   const finalAngles = [];
   _carouselScrollOffset = 0;
   _lastPointerAngle = null;
 
-  visible.forEach((collection, i) => {
+  photoCollections.forEach((collection, i) => {
     const finalAngle = i * step;
     finalAngles.push(finalAngle);
 
@@ -941,10 +1097,10 @@ function renderCollections() {
 
     pivot.appendChild(card);
 
-    const originalIdx = photoCollections.indexOf(collection);
-    pivot.addEventListener('click', () => openLightbox(originalIdx));
+    pivot.addEventListener('click', () => openLightbox(i));
     scene.appendChild(pivot);
     pivots.push(pivot);
+    _carouselPivots.push({ pivot, collection });
 
     if (i === 0) {
       // Origin card: fades in first at its resting position (no rotation needed)
@@ -967,6 +1123,7 @@ function renderCollections() {
   const maxDelay = 550 + (total - 2) * 140 + 1200;
   setTimeout(() => {
     updateCarouselPointerEvents(pivots, finalAngles, _carouselScrollOffset);
+    applyCarouselFilter();
   }, maxDelay);
 
   container.appendChild(stage);
@@ -1019,11 +1176,36 @@ function initCarouselParallax(stage, scene, pivots, finalAngles) {
     }
   };
 
+  let touchStartX = 0;
+  const touchStartFn = (e) => {
+    if (!document.body.classList.contains('photo-active') || _lbIdx !== -1) return;
+    touchStartX = e.touches[0].clientX;
+  };
+  const touchMoveFn = (e) => {
+    if (!document.body.classList.contains('photo-active') || _lbIdx !== -1) return;
+    const dx = touchStartX - e.touches[0].clientX;
+    touchStartX = e.touches[0].clientX;
+    _carouselScrollOffset -= dx * 0.4;
+    if (!carouselWheelRaf) {
+      carouselWheelRaf = true;
+      requestAnimationFrame(() => {
+        const sy = getSceneY();
+        scene.style.transform = `rotateY(${sy}deg) rotateX(${bX + cY}deg)`;
+        updateCarouselPointerEvents(pivots, finalAngles, sy);
+        carouselWheelRaf = false;
+      });
+    }
+  };
+
   document.addEventListener('mousemove', mouseFn);
   document.addEventListener('wheel', wheelFn, { passive: true });
+  document.addEventListener('touchstart', touchStartFn, { passive: true });
+  document.addEventListener('touchmove', touchMoveFn, { passive: true });
   _parallaxCleanup = () => {
     document.removeEventListener('mousemove', mouseFn);
     document.removeEventListener('wheel', wheelFn);
+    document.removeEventListener('touchstart', touchStartFn);
+    document.removeEventListener('touchmove', touchMoveFn);
   };
 }
 
@@ -1133,7 +1315,7 @@ function initNavigation() {
       activeFilter = btn.dataset.filter;
       document.querySelectorAll('.photo-filter').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      renderCollections();
+      applyCarouselFilter();
     });
   });
 }
@@ -1418,11 +1600,93 @@ function initRandomPhotoThumb() {
   placeholder.replaceWith(img);
 }
 
+// ==================== DETAIL OVERLAY & CREDITS ====================
+
+function initDetailOverlay() {
+  const overlay = document.getElementById('project-overlay');
+  const hamburger = document.getElementById('detail-hamburger-btn');
+  const closeBtn = document.getElementById('overlay-close');
+  if (!overlay || !hamburger) return;
+
+  const list = overlay.querySelector('.project-overlay-list');
+  projects.forEach((p, i) => {
+    if (i === PHOTO_PROJECT_INDEX) return;
+    const item = document.createElement('div');
+    item.className = 'project-overlay-item';
+    item.dataset.project = i;
+    item.textContent = CONTENT.projects[i].name;
+    item.addEventListener('click', () => {
+      overlay.classList.remove('open');
+      showDetail(i);
+    });
+    list.appendChild(item);
+  });
+
+  hamburger.addEventListener('click', () => overlay.classList.add('open'));
+  if (closeBtn) closeBtn.addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+  // "Take Me Home" button at top of overlay
+  const takeHomeBtn = document.getElementById('overlay-take-home-btn');
+  if (takeHomeBtn) {
+    takeHomeBtn.addEventListener('click', () => {
+      overlay.classList.remove('open');
+      showIndex();
+    });
+  }
+
+  // Site name in overlay goes to index
+  const overlayHomeLnk = overlay.querySelector('.overlay-home-link');
+  if (overlayHomeLnk) {
+    overlayHomeLnk.addEventListener('click', (e) => {
+      e.preventDefault();
+      overlay.classList.remove('open');
+      showIndex();
+    });
+  }
+
+  // Fixed site name at top-left goes to index
+  const detailSiteName = document.getElementById('detail-site-name-fixed');
+  if (detailSiteName) {
+    detailSiteName.addEventListener('click', (e) => { e.preventDefault(); showIndex(); });
+  }
+
+}
+
+function initCreditsPanel() {
+  const creditsBtn = document.getElementById('detail-credits-btn');
+  const panel = document.getElementById('credits-panel');
+  const closeBtn = document.getElementById('credits-panel-close');
+  if (!creditsBtn || !panel) return;
+
+  creditsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    panel.classList.toggle('open');
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => panel.classList.remove('open'));
+  }
+}
+
 // ==================== INIT ====================
 
 window.addEventListener('resize', () => { _cachedCardW = 0; }, { passive: true });
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Populate copy from content.js
+  const bioEl = document.querySelector('.about-bio');
+  if (bioEl && CONTENT.about && CONTENT.about.bio) {
+    bioEl.innerHTML = CONTENT.about.bio.map(p => `<p>${p}</p>`).join('');
+  }
+  document.querySelectorAll('.project-card').forEach((card) => {
+    const idx = parseInt(card.dataset.index, 10);
+    const copy = CONTENT.projects[idx];
+    if (!copy) return;
+    const descEl = card.querySelector('.card-description');
+    if (descEl) descEl.textContent = copy.cardDescription;
+  });
+
   initRandomPhotoThumb();
   initMusic();
   initLoader();
@@ -1433,6 +1697,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollHighlight();
   initHamburger();
   initLightboxEvents();
+  initDetailOverlay();
+  initCreditsPanel();
 
   handleRoute();
 });
