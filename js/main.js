@@ -243,6 +243,48 @@ function initSmoothScroll() {
   });
 }
 
+// ==================== ANIMATION SYSTEM ====================
+
+let _animObserver = null;
+
+function initAnimObserver() {
+  if (_animObserver) return;
+  _animObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('anim-in');
+        _animObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+}
+
+function observeAnimations(container) {
+  initAnimObserver();
+  container.querySelectorAll('.anim-slide-left, .anim-fade-up, .anim-clip-reveal').forEach((el) => {
+    _animObserver.observe(el);
+  });
+}
+
+function replayHomeAnimations() {
+  const siteName = document.querySelector('.site-name');
+  const sidebarItems = document.querySelectorAll('.sidebar-item');
+  siteName.classList.remove('slide-in');
+  sidebarItems.forEach((item) => item.classList.remove('slide-in'));
+  void siteName.offsetWidth;
+  setTimeout(() => siteName.classList.add('slide-in'), 30);
+  sidebarItems.forEach((item, i) => {
+    setTimeout(() => item.classList.add('slide-in'), 30 + (i + 1) * 60);
+  });
+  // Stagger index cards
+  document.querySelectorAll('#index-view .project-card').forEach((card, i) => {
+    card.classList.remove('anim-in');
+    void card.offsetWidth;
+    card.style.animationDelay = (i * 80) + 'ms';
+    setTimeout(() => card.classList.add('anim-in'), 60 + i * 80);
+  });
+}
+
 // ==================== VIEW MANAGEMENT ====================
 
 const ALL_VIEWS = ['index-view', 'detail-view', 'cv-view', 'photo-view', 'photo-gallery-view', 'about-view'];
@@ -357,6 +399,7 @@ function showIndex(fromPop) {
   showWorkNav();
   if (!fromPop) pushRoute('/');
   cycleGreeting();
+  replayHomeAnimations();
 }
 
 function showCV(fromPop) {
@@ -460,11 +503,12 @@ function renderSplitDetail(gallery, project, copy, index, images) {
   introLeft.className = 'project-intro-left';
 
   const metaLine = document.createElement('div');
-  metaLine.className = 'project-meta-line';
+  metaLine.className = 'project-meta-line anim-fade-up';
   metaLine.textContent = copy.year + ' · ' + copy.category;
 
   const displayName = document.createElement('h1');
-  displayName.className = 'project-display-name';
+  displayName.className = 'project-display-name anim-slide-left';
+  displayName.style.animationDelay = '80ms';
   displayName.textContent = copy.name;
 
   introLeft.appendChild(metaLine);
@@ -473,6 +517,9 @@ function renderSplitDetail(gallery, project, copy, index, images) {
   const accordion = document.createElement('details');
   accordion.className = 'project-intro-accordion';
   if (window.innerWidth > 860) accordion.setAttribute('open', '');
+
+  accordion.classList.add('anim-fade-up');
+  accordion.style.animationDelay = '160ms';
 
   const summary = document.createElement('summary');
   summary.className = 'project-intro-accordion-summary';
@@ -508,6 +555,8 @@ function renderSplitDetail(gallery, project, copy, index, images) {
     const heroImg = document.createElement('img');
     heroImg.src = project.thumbnailFallback || project.thumbnail;
     heroImg.alt = copy.name;
+    heroImg.className = 'anim-fade-up';
+    heroImg.style.animationDelay = '120ms';
     introRight.appendChild(heroImg);
   }
 
@@ -528,14 +577,15 @@ function renderSplitDetail(gallery, project, copy, index, images) {
 
     if (contentSec.title) {
       const label = document.createElement('span');
-      label.className = 'section-label';
+      label.className = 'section-label anim-slide-left';
       label.textContent = contentSec.title;
       leftEl.appendChild(label);
     }
 
     if (contentSec.text) {
       const text = document.createElement('p');
-      text.className = 'section-text';
+      text.className = 'section-text anim-clip-reveal';
+      text.style.animationDelay = '120ms';
       text.textContent = contentSec.text;
       leftEl.appendChild(text);
     }
@@ -543,9 +593,13 @@ function renderSplitDetail(gallery, project, copy, index, images) {
     const rightEl = document.createElement('div');
     rightEl.className = 'section-right';
 
-    sec.blocks.forEach((block) => {
+    sec.blocks.forEach((block, bi) => {
       const el = renderGalleryBlock(block, images, project.galleryAlts, copy.name);
-      if (el) rightEl.appendChild(el);
+      if (el) {
+        el.classList.add('anim-fade-up');
+        el.style.animationDelay = (bi * 100) + 'ms';
+        rightEl.appendChild(el);
+      }
     });
 
     sectionEl.appendChild(leftEl);
@@ -554,6 +608,7 @@ function renderSplitDetail(gallery, project, copy, index, images) {
   });
 
   renderNextProjectFooter(gallery, index);
+  observeAnimations(gallery);
 }
 
 function updateDetailOverlaySelection(index) {
@@ -601,6 +656,12 @@ function showDetail(index, fromPop) {
 
   if (isSplit) {
     renderSplitDetail(gallery, project, copy, index, images);
+    // Intro elements are above the fold — trigger immediately with stagger
+    const introAnims = gallery.querySelectorAll('.project-split-intro .anim-fade-up, .project-split-intro .anim-slide-left');
+    introAnims.forEach((el) => {
+      const delay = parseFloat(el.style.animationDelay) || 0;
+      setTimeout(() => el.classList.add('anim-in'), delay + 50);
+    });
   } else {
     // Legacy single-column layout for projects without sections
     document.getElementById('detail-title').textContent = copy.name;
@@ -715,6 +776,13 @@ function showAbout(fromPop) {
 
   const aboutScroll = document.getElementById('about-scroll');
   aboutScroll.scrollLeft = 0;
+
+  // Animate about page elements
+  document.querySelectorAll('.headshot-img, .about-bio p, .music-label').forEach((el, i) => {
+    el.classList.remove('anim-in');
+    void el.offsetWidth;
+    setTimeout(() => el.classList.add('anim-in'), 80 + i * 90);
+  });
 
   showAboutScrollIndicator();
 }
@@ -1199,10 +1267,16 @@ function renderCollections() {
     name.textContent = collection.name;
     card.appendChild(name);
     card.dataset.collection = i;
+    card.style.animationDelay = (i * 80) + 'ms';
     card.addEventListener('click', () => openMobileCollection(i));
     mobileGrid.appendChild(card);
   });
   container.appendChild(mobileGrid);
+
+  // Stagger mobile cards in
+  mobileGrid.querySelectorAll('.photo-mobile-card').forEach((card, i) => {
+    setTimeout(() => card.classList.add('anim-in'), 80 + i * 80);
+  });
 }
 
 function initCarouselParallax(stage, scene, pivots, finalAngles) {
@@ -1805,6 +1879,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initLightboxEvents();
   initDetailOverlay();
   initCreditsPanel();
+  initAnimObserver();
+
+  // Stagger index cards on first load (after loader clears)
+  setTimeout(() => {
+    document.querySelectorAll('#index-view .project-card').forEach((card, i) => {
+      card.style.animationDelay = (i * 90) + 'ms';
+      setTimeout(() => card.classList.add('anim-in'), 100 + i * 90);
+    });
+  }, 2200);
 
   handleRoute();
 });

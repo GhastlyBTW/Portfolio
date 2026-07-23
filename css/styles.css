@@ -71,6 +71,86 @@ ul {
   list-style: none;
 }
 
+/* ==================== ANIMATION SYSTEM ==================== */
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes clipReveal {
+  from { clip-path: inset(0 100% 0 0); opacity: 1; }
+  to   { clip-path: inset(0 0% 0 0);   opacity: 1; }
+}
+
+.anim-slide-left {
+  opacity: 0;
+}
+.anim-slide-left.anim-in {
+  animation: slideInLeft 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-fade-up {
+  opacity: 0;
+}
+.anim-fade-up.anim-in {
+  animation: fadeInUp 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.anim-clip-reveal {
+  clip-path: inset(0 100% 0 0);
+}
+.anim-clip-reveal.anim-in {
+  animation: clipReveal 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Index project cards */
+#index-view .project-card {
+  opacity: 0;
+  transform: translateY(16px);
+}
+#index-view .project-card.anim-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* About page elements */
+.headshot-img,
+.about-bio p,
+.music-label {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.headshot-img.anim-in,
+.about-bio p.anim-in,
+.music-label.anim-in {
+  animation: fadeInUp 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Thumbnail hover scale */
+.thumbnail {
+  overflow: hidden;
+}
+.thumbnail img {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.thumbnail:hover img {
+  transform: scale(1.04);
+}
+
+/* Photo mobile cards: stagger fade up */
+.photo-mobile-card {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.photo-mobile-card.anim-in {
+  animation: fadeInUp 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 /* ==================== UTILITY ==================== */
 
 .sr-only {
