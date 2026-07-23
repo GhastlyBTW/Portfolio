@@ -246,24 +246,45 @@ function initSmoothScroll() {
 // ==================== ANIMATION SYSTEM ====================
 
 let _animObserver = null;
+let _hasInitiallyLoaded = false;
+
+function runTypewriter(el) {
+  const text = el.dataset.typewriter || '';
+  el.removeAttribute('data-typewriter');
+  el.textContent = '';
+  el.style.opacity = '1';
+  let i = 0;
+  const speed = Math.max(14, Math.min(28, 2200 / Math.max(text.length, 1)));
+  const tick = () => {
+    if (i < text.length) {
+      el.textContent += text[i++];
+      setTimeout(tick, speed);
+    }
+  };
+  setTimeout(tick, parseFloat(el.dataset.typewriterDelay) || 0);
+}
 
 function initAnimObserver() {
   if (_animObserver) return;
   _animObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('anim-in');
-        _animObserver.unobserve(entry.target);
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      if (el.dataset.typewriter !== undefined) {
+        runTypewriter(el);
+      } else {
+        el.classList.add('anim-in');
       }
+      _animObserver.unobserve(el);
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
 }
 
 function observeAnimations(container) {
   initAnimObserver();
-  container.querySelectorAll('.anim-slide-left, .anim-fade-up, .anim-clip-reveal').forEach((el) => {
-    _animObserver.observe(el);
-  });
+  container.querySelectorAll(
+    '.anim-slide-left, .anim-fade-up, .anim-draw-line, [data-typewriter]'
+  ).forEach((el) => _animObserver.observe(el));
 }
 
 function replayHomeAnimations() {
@@ -276,11 +297,10 @@ function replayHomeAnimations() {
   sidebarItems.forEach((item, i) => {
     setTimeout(() => item.classList.add('slide-in'), 30 + (i + 1) * 60);
   });
-  // Stagger index cards
   document.querySelectorAll('#index-view .project-card').forEach((card, i) => {
     card.classList.remove('anim-in');
     void card.offsetWidth;
-    card.style.animationDelay = (i * 80) + 'ms';
+    card.style.animationDelay = '0ms';
     setTimeout(() => card.classList.add('anim-in'), 60 + i * 80);
   });
 }
@@ -399,7 +419,10 @@ function showIndex(fromPop) {
   showWorkNav();
   if (!fromPop) pushRoute('/');
   cycleGreeting();
-  replayHomeAnimations();
+  if (_hasInitiallyLoaded) {
+    replayHomeAnimations();
+  }
+  _hasInitiallyLoaded = true;
 }
 
 function showCV(fromPop) {
@@ -417,6 +440,11 @@ function showCV(fromPop) {
   showWorkNav();
   if (!fromPop) pushRoute('/cv');
   cycleGreeting();
+  document.querySelectorAll('.cv-section-label, .cv-entry').forEach((el, i) => {
+    el.classList.remove('anim-in');
+    void el.offsetWidth;
+    setTimeout(() => el.classList.add('anim-in'), 60 + i * 55);
+  });
 }
 
 function renderGalleryBlock(block, images, galleryAlts, name) {
@@ -451,6 +479,10 @@ function renderNextProjectFooter(container, currentIndex) {
   const nextIdx = navIndices[(navPos + 1) % navIndices.length];
   const nextProject = projects[nextIdx];
   const nextCopy = CONTENT.projects[nextIdx];
+
+  const divider = document.createElement('div');
+  divider.className = 'project-section-divider anim-draw-line';
+  container.appendChild(divider);
 
   const footer = document.createElement('div');
   footer.className = 'project-next-footer';
@@ -584,9 +616,11 @@ function renderSplitDetail(gallery, project, copy, index, images) {
 
     if (contentSec.text) {
       const text = document.createElement('p');
-      text.className = 'section-text anim-clip-reveal';
-      text.style.animationDelay = '120ms';
-      text.textContent = contentSec.text;
+      text.className = 'section-text';
+      text.style.opacity = '0';
+      text.dataset.typewriter = contentSec.text;
+      text.dataset.typewriterDelay = '120';
+      text.textContent = contentSec.text; // keep for layout/sizing
       leftEl.appendChild(text);
     }
 
