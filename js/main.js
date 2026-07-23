@@ -1036,10 +1036,18 @@ function updateCarouselPointerEvents(pivots, finalAngles, sceneY) {
 }
 
 function applyCarouselFilter() {
+  // Desktop 3D carousel
   _carouselPivots.forEach(({ pivot, collection }) => {
     const matches = activeFilter === 'all' || getCollectionCategory(collection) === activeFilter;
     const card = pivot.querySelector('.carousel-card');
     if (card) card.style.opacity = matches ? '1' : '0.15';
+  });
+  // Mobile grid cards
+  document.querySelectorAll('.photo-mobile-card').forEach((card) => {
+    const idx = parseInt(card.dataset.collection);
+    const collection = photoCollections[idx];
+    const matches = !collection || activeFilter === 'all' || getCollectionCategory(collection) === activeFilter;
+    card.style.display = matches ? '' : 'none';
   });
 }
 
@@ -1049,33 +1057,30 @@ function openMobileCollection(collectionIdx) {
   if (!collection) return;
   container.innerHTML = '';
 
-  const header = document.createElement('div');
-  header.className = 'photo-masonry-header';
-
-  const backBtn = document.createElement('button');
-  backBtn.className = 'photo-masonry-back';
-  backBtn.textContent = '← Back';
-  backBtn.addEventListener('click', () => renderCollections());
-
-  const title = document.createElement('span');
+  // Title at top
+  const title = document.createElement('h2');
   title.className = 'photo-masonry-title';
   title.textContent = collection.name;
+  container.appendChild(title);
 
-  header.appendChild(backBtn);
-  header.appendChild(title);
-  container.appendChild(header);
-
+  // Masonry grid — no lightbox, just view in place
   const masonry = document.createElement('div');
   masonry.className = 'photo-masonry';
   collection.images.forEach((src, i) => {
     const img = document.createElement('img');
     img.src = src;
     img.alt = (collection.alts && collection.alts[i]) || collection.name + ' — ' + (i + 1);
-    img.loading = i < 6 ? 'eager' : 'lazy';
-    img.addEventListener('click', () => openLightbox(collectionIdx, i));
+    img.loading = i < 8 ? 'eager' : 'lazy';
     masonry.appendChild(img);
   });
   container.appendChild(masonry);
+
+  // Back button at bottom
+  const backBtn = document.createElement('button');
+  backBtn.className = 'photo-masonry-back';
+  backBtn.textContent = '← Back to Collections';
+  backBtn.addEventListener('click', () => renderCollections());
+  container.appendChild(backBtn);
 }
 
 function renderCollections() {
@@ -1193,6 +1198,7 @@ function renderCollections() {
     name.className = 'photo-mobile-card-name';
     name.textContent = collection.name;
     card.appendChild(name);
+    card.dataset.collection = i;
     card.addEventListener('click', () => openMobileCollection(i));
     mobileGrid.appendChild(card);
   });

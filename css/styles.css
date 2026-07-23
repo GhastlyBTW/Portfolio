@@ -1548,41 +1548,22 @@ body.about-active .content {
 }
 
 /* Masonry view — inside a collection on mobile */
-.photo-masonry-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 12px 8px;
-}
-
-.photo-masonry-back {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-family: var(--font-body);
-  padding: 0;
-  transition: color 0.2s;
-  flex-shrink: 0;
-}
-
-.photo-masonry-back:hover { color: var(--text); }
-
 .photo-masonry-title {
   font-family: var(--font-display);
-  font-size: clamp(18px, 5vw, 28px);
+  font-size: clamp(22px, 6vw, 40px);
   font-weight: 300;
   color: var(--text);
   letter-spacing: 0.03em;
+  display: block;
+  width: 100%;
+  padding: 16px 12px 12px;
 }
 
 .photo-masonry {
   columns: 2;
   column-gap: 6px;
-  padding: 0 12px 24px;
+  padding: 0 12px 12px;
+  width: 100%;
 }
 
 .photo-masonry img {
@@ -1590,14 +1571,26 @@ body.about-active .content {
   display: block;
   margin-bottom: 6px;
   break-inside: avoid;
-  cursor: pointer;
   border-radius: 1px;
-  transition: opacity 0.2s ease;
 }
 
-.photo-masonry img:active {
-  opacity: 0.75;
+.photo-masonry-back {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+  padding: 20px 12px 100px;
+  text-align: center;
+  transition: color 0.2s;
 }
+
+.photo-masonry-back:hover { color: var(--text); }
 
 /* ==================== RESPONSIVE ==================== */
 
@@ -1815,6 +1808,41 @@ body.about-active .content {
 
   .lightbox-board {
     width: 88vw;
+  }
+
+  /* Photography: show sidebar nav on mobile */
+  body.photo-active .sidebar {
+    display: flex !important;
+  }
+
+  /* Filter: move to sticky bottom with bg gradient instead of fixed top */
+  body.photo-active .photo-filters {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    background: linear-gradient(to top, rgba(0, 15, 26, 1) 55%, transparent);
+    padding: 28px 20px 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    width: 100%;
+  }
+
+  /* Collections container: full-width, stack vertically */
+  body.photo-active #photo-collections {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding-bottom: 80px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  /* Hide the photo bottom nav (Photography / star / Home) on mobile */
+  .photo-bottom-nav {
+    display: none !important;
   }
 
   /* Detail pages: show sidebar top bar, hide detail-specific controls */
