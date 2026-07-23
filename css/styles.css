@@ -1556,22 +1556,21 @@ body.about-active .content {
   letter-spacing: 0.03em;
   display: block;
   width: 100%;
-  padding: 16px 12px 12px;
+  padding: 20px 16px 28px;
+  text-align: center;
 }
 
 .photo-masonry {
-  columns: 2;
-  column-gap: 6px;
-  padding: 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
   width: 100%;
 }
 
 .photo-masonry img {
   width: 100%;
   display: block;
-  margin-bottom: 6px;
-  break-inside: avoid;
-  border-radius: 1px;
 }
 
 .photo-masonry-back {
@@ -1585,7 +1584,7 @@ body.about-active .content {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-family: var(--font-body);
-  padding: 20px 12px 100px;
+  padding: 28px 12px 120px;
   text-align: center;
   transition: color 0.2s;
 }
@@ -1688,8 +1687,10 @@ body.about-active .content {
     flex-direction: column;
   }
 
-  .gallery-img-row img {
+  .gallery-img-row img,
+  .section-right .gallery-img-row img {
     width: 100%;
+    min-width: 0;
   }
 
   .cv-about {
@@ -1795,6 +1796,7 @@ body.about-active .content {
 
   .about-bio p {
     font-size: 14px;
+    text-align: center;
   }
 
   /* Replace 3D carousel with flat grid on mobile */
