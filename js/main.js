@@ -470,10 +470,20 @@ function renderSplitDetail(gallery, project, copy, index, images) {
   introLeft.appendChild(metaLine);
   introLeft.appendChild(displayName);
 
+  const accordion = document.createElement('details');
+  accordion.className = 'project-intro-accordion';
+  if (window.innerWidth > 860) accordion.setAttribute('open', '');
+
+  const summary = document.createElement('summary');
+  summary.className = 'project-intro-accordion-summary';
+  summary.textContent = 'About this project';
+  accordion.appendChild(summary);
+
   [
     { label: 'The Brief',    text: copy.brief    },
     { label: 'The Insight',  text: copy.insight  },
     { label: 'The Strategy', text: copy.strategy },
+    { label: 'Credits',      text: copy.credits  },
   ].forEach(({ label, text }) => {
     if (!text) return;
     const block = document.createElement('div');
@@ -486,8 +496,10 @@ function renderSplitDetail(gallery, project, copy, index, images) {
     p.textContent = text;
     block.appendChild(lbl);
     block.appendChild(p);
-    introLeft.appendChild(block);
+    accordion.appendChild(block);
   });
+
+  introLeft.appendChild(accordion);
 
   const introRight = document.createElement('div');
   introRight.className = 'project-intro-right';
@@ -1128,6 +1140,28 @@ function renderCollections() {
 
   container.appendChild(stage);
   initCarouselParallax(stage, scene, pivots, finalAngles);
+
+  // Mobile grid (CSS hides carousel and shows this on small screens)
+  const mobileGrid = document.createElement('div');
+  mobileGrid.className = 'photo-mobile-grid';
+  photoCollections.forEach((collection, i) => {
+    const card = document.createElement('div');
+    card.className = 'photo-mobile-card';
+    if (collection.thumbnail) {
+      const img = document.createElement('img');
+      img.src = collection.thumbnail;
+      img.alt = collection.name;
+      img.loading = 'lazy';
+      card.appendChild(img);
+    }
+    const name = document.createElement('span');
+    name.className = 'photo-mobile-card-name';
+    name.textContent = collection.name;
+    card.appendChild(name);
+    card.addEventListener('click', () => openLightbox(i));
+    mobileGrid.appendChild(card);
+  });
+  container.appendChild(mobileGrid);
 }
 
 function initCarouselParallax(stage, scene, pivots, finalAngles) {
@@ -1418,25 +1452,56 @@ function initHamburger() {
     menu.classList.remove('open');
   }
 
+  // Build project links section
+  const projectSection = document.createElement('div');
+  projectSection.className = 'mobile-menu-projects';
+  projects.forEach((p, i) => {
+    const link = document.createElement('a');
+    link.href = '#';
+    link.className = 'mobile-menu-project-link';
+    link.textContent = i === PHOTO_PROJECT_INDEX ? 'Photography' : CONTENT.projects[i].name;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeMenu();
+      if (i === PHOTO_PROJECT_INDEX) showPhotography();
+      else showDetail(i);
+    });
+    projectSection.appendChild(link);
+  });
+  menu.appendChild(projectSection);
+
+  // Build contact links section
+  const contactSection = document.createElement('div');
+  contactSection.className = 'mobile-menu-contact';
+  [
+    { label: 'Email', href: 'mailto:branden.chi.07@gmail.com', external: false },
+    { label: 'CV',    href: '#',                               external: false, action: () => showCV() },
+    { label: 'About', href: '#',                               external: false, action: () => showAbout() },
+    { label: 'Instagram', href: 'https://www.instagram.com/brand.en_/', external: true },
+    { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/branden-chi-360a06298', external: true },
+  ].forEach(({ label, href, external, action }) => {
+    const a = document.createElement('a');
+    a.href = href;
+    a.textContent = label;
+    if (external) { a.target = '_blank'; a.rel = 'noopener'; }
+    a.addEventListener('click', (e) => {
+      if (action) { e.preventDefault(); closeMenu(); action(); }
+      else closeMenu();
+    });
+    contactSection.appendChild(a);
+  });
+  menu.appendChild(contactSection);
+
+  // Take Me Home button
+  const homeBtn = document.createElement('button');
+  homeBtn.className = 'mobile-menu-home-btn';
+  homeBtn.textContent = 'Take Me Home';
+  homeBtn.addEventListener('click', () => { closeMenu(); showIndex(); });
+  menu.appendChild(homeBtn);
+
   hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('open');
     menu.classList.toggle('open');
-  });
-
-  document.getElementById('mobile-cv-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    closeMenu();
-    showCV();
-  });
-
-  document.getElementById('mobile-about-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    closeMenu();
-    showAbout();
-  });
-
-  menu.querySelectorAll('a[href^="http"], a[href^="mailto"]').forEach((link) => {
-    link.addEventListener('click', closeMenu);
   });
 
   const aboutBack = document.getElementById('about-back-link');
