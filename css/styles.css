@@ -187,7 +187,7 @@ ul {
 }
 
 .loader-logo {
-  height: 192px;
+  height: 230px;
   width: auto;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -274,7 +274,7 @@ ul {
 
 .site-name {
   font-family: var(--font-display);
-  font-size: 25px;
+  font-size: 30px;
   font-weight: 300;
   font-style: italic;
   letter-spacing: 0.03em;
@@ -1240,6 +1240,13 @@ body.about-active .content {
   width: 100%;
 }
 
+.about-cv-panel {
+  max-width: 900px;
+  padding-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Viewfinder */
 
 .headshot-panel {
@@ -1723,7 +1730,7 @@ body.about-active .content {
   }
 
   .site-name {
-    font-size: 22px;
+    font-size: 26px;
     text-align: center;
   }
 
@@ -2045,6 +2052,41 @@ body.detail-active .detail-accordions { display: none; }
   margin-top: 28px;
 }
 
+@media (min-width: 861px) {
+  .project-intro-credits-block { display: none; }
+}
+
+/* Individual accordion items (new design) */
+.project-intro-accordions {
+  margin-top: 28px;
+}
+
+.project-intro-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.project-intro-item:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.project-intro-item-header {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.project-intro-item-label {
+  font-family: var(--font-body);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.project-intro-item-body {
+  padding-bottom: 18px;
+}
+
 .project-intro-block-label {
   display: block;
   font-size: 9px;
@@ -2058,10 +2100,11 @@ body.detail-active .detail-accordions { display: none; }
 .project-intro-brief {
   font-size: 15px;
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.53);
   text-wrap: pretty;
   orphans: 3;
   widows: 3;
+  max-width: 66%;
 }
 
 .project-intro-right img {
@@ -2098,13 +2141,20 @@ body.detail-active .detail-accordions { display: none; }
   margin-bottom: 10px;
 }
 
+.section-label-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 14px 0 18px;
+}
+
 .section-text {
   font-size: 15px;
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.53);
   text-wrap: pretty;
   orphans: 3;
   widows: 3;
+  max-width: 66%;
 }
 
 .section-right {
@@ -2285,7 +2335,7 @@ body.detail-active .detail-controls {
   top: 15px;
   left: 15px;
   font-family: var(--font-display);
-  font-size: 25px;
+  font-size: 30px;
   font-weight: 300;
   font-style: italic;
   letter-spacing: 0.03em;
@@ -2339,15 +2389,21 @@ body.detail-active .detail-bottom-bar {
   inset: 0;
   background: var(--bg);
   z-index: 500;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 80px 40px 60px;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s;
 }
 
 .project-overlay.open {
-  display: flex;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .project-overlay-close {
@@ -2542,6 +2598,7 @@ body.detail-active .detail-bottom-bar {
 
   .project-intro-brief {
     text-align: left;
+    max-width: 100%;
   }
 
   .section-left {
@@ -2558,6 +2615,7 @@ body.detail-active .detail-bottom-bar {
 
   .section-text {
     text-align: center;
+    max-width: 100%;
   }
 
   .section-right {
@@ -2613,4 +2671,129 @@ body.detail-active .detail-bottom-bar {
     width: 100%;
     min-width: 0;
   }
+}
+
+/* =====================================================
+   PASSWORD GATE
+   ===================================================== */
+
+.password-gate {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 15, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+.password-gate.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.password-gate-box {
+  position: relative;
+  width: min(480px, 90vw);
+  padding: 52px 48px 48px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.password-gate-label {
+  font-family: var(--font-body);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 14px;
+}
+
+.password-gate-name {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.password-gate-hint {
+  font-size: 13px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 32px;
+}
+
+.password-gate-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 10px 0;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.password-gate-input:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.password-gate-error {
+  font-size: 11px;
+  color: rgba(255, 120, 120, 0.85);
+  letter-spacing: 0.04em;
+  min-height: 18px;
+  margin-bottom: 24px;
+}
+
+.password-gate-submit {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.password-gate-submit:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.password-gate-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.password-gate-close:hover {
+  color: var(--text);
 }
