@@ -337,7 +337,6 @@ function initLoader() {
   const loader = document.getElementById('loader');
   const logo = document.querySelector('.loader-logo');
   const content = document.getElementById('content');
-  const bgLogo = document.getElementById('bg-logo');
   const siteName = document.querySelector('.site-name');
 
   setTimeout(() => {
@@ -346,7 +345,6 @@ function initLoader() {
 
   setTimeout(() => {
     loader.classList.add('done');
-    bgLogo.classList.add('visible');
   }, 1700);
 
   const sidebarItems = document.querySelectorAll('.sidebar-item');
