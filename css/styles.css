@@ -15,16 +15,16 @@
 }
 
 @font-face {
-  font-family: 'Averia Serif Libre';
-  src: url('../assets/fonts/AveriaSerifLibre-Bold.woff') format('woff');
-  font-weight: 700;
+  font-family: 'Neue Haas Grotesk';
+  src: url('../assets/fonts/neuehaasgrottextround-55roman-trial.woff') format('woff');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Averia Serif Libre';
-  src: url('../assets/fonts/AveriaSerifLibre-Italic.woff') format('woff');
+  font-family: 'Neue Haas Grotesk';
+  src: url('../assets/fonts/neuehaasgrottextround-56italic-trial.woff') format('woff');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -36,7 +36,7 @@
   --text-muted: rgba(255, 255, 255, 0.5);
   --sidebar-width: clamp(340px, 34vw, 520px);
   --font-display: 'Fansan', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-body: 'Averia Serif Libre', Georgia, serif;
+  --font-body: 'Neue Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 *, *::before, *::after {
