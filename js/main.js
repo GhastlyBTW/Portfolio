@@ -75,25 +75,37 @@ const projects = [
   {
     thumbnail: 'assets/Thumbnails/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
     gallery: [
-      'assets/Liquid Dove/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
-      'assets/Liquid Dove/Branden Chi Liquid Dove bottle.png',
-      'assets/Liquid Dove/Branden Chi Liquid Dove BOX.png',
-      'assets/Liquid Dove/Branden Chi Liquid Dove Raigbait_3.jpg',
-      'assets/Liquid Dove/Branden Chi Liquid Dove Ragebait_2.jpg',
-      'assets/Liquid Dove/Branden Chi Liquid Dove News headline.jpg',
+      'assets/Liquid Dove/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',       // 0  rage bait mockup 1
+      'assets/Liquid Dove/Branden Chi Liquid Dove bottle.png',                     // 1  bottle mockup
+      'assets/Liquid Dove/Branden Chi Liquid Dove BOX.png',                        // 2  box mockup
+      'assets/Liquid Dove/Branden Chi Liquid Dove Ragebait_2.jpg',                 // 3  ragebait 2
+      'assets/Liquid Dove/Branden Chi Liquid Dove News headline.jpg',              // 4  CNN
+      'assets/Liquid Dove/Branden ChiLiquid death.gif',                            // 5  gif
+      'assets/Liquid Dove/Branden Chiliquid death pull qoutes mockup.jpg',         // 6  pull quotes
+      'assets/Liquid Dove/Branden Chi Liquid death Billboard 2.jpg',               // 7  billboard 2
+      'assets/Liquid Dove/Branden Chi Liquid Death biting soap.png',               // 8  biting soap
+      'assets/Liquid Dove/Branden Chi Liquid Death bottle photography.png',        // 9  bottle photography
+      'assets/Liquid Dove/Branden Chi Liquid Death box photography 2.png',         // 10 box photography
+      'assets/Liquid Dove/Branden Chiliquid dove bar animation.mp4',               // 11 bar animation
     ],
     galleryAlts: [
       'Billboard rage bait advertisement mockup for the Liquid Dove collaboration campaign',
       'Liquid Dove co-branded water bottle packaging design',
       'Liquid Dove co-branded product box packaging design',
-      'Rage bait advertisement variation for the Liquid Dove campaign',
       'Rage bait advertisement alternative for the Liquid Dove campaign',
       'Fake news headline used as a campaign touchpoint for Liquid Dove',
+      'Animated GIF for the Liquid Dove collaboration campaign',
+      'Pull quotes mockup for the Liquid Dove campaign',
+      'Billboard mockup 2 for the Liquid Dove campaign',
+      'Liquid Death biting soap product shot',
+      'Liquid Death bottle photography',
+      'Liquid Death box photography',
+      'Liquid Dove bar animation',
     ],
     sections: [
-      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 3 }] },
-      { blocks: [{ type: 'img', idx: 2 }, { type: 'img', idx: 1 }] },
-      { blocks: [{ type: 'img', idx: 5 }] },
+      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 8 }, { type: 'img', idx: 7 }] },
+      { blocks: [{ type: 'img', idx: 10 }, { type: 'img', idx: 2 }, { type: 'img', idx: 9 }, { type: 'img', idx: 1 }] },
+      { blocks: [{ type: 'img', idx: 4 }, { type: 'video', idx: 11 }, { type: 'img', idx: 6 }, { type: 'img', idx: 5 }] },
     ],
   },
   // 2 — Emporio Armani - Unforgettable Night
@@ -467,6 +479,18 @@ function renderGalleryBlock(block, images, galleryAlts, name) {
     img.alt = (galleryAlts && galleryAlts[block.idx]) || name;
     img.loading = 'lazy';
     return img;
+  } else if (block.type === 'video') {
+    const src = images[block.idx];
+    if (!src) return null;
+    const video = document.createElement('video');
+    video.src = src;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.style.width = '100%';
+    video.style.display = 'block';
+    return video;
   } else if (block.type === 'row') {
     const row = document.createElement('div');
     row.className = 'gallery-img-row';
