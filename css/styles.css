@@ -15,6 +15,14 @@
 }
 
 @font-face {
+  font-family: 'FansanItalic';
+  src: url('../assets/fonts/Fansan-Italic-iF666bfc3729305.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
   font-family: 'Fansan';
   src: url('../assets/fonts/Fansan-Display-Light-Italic-iF666bfc371353e.woff') format('woff');
   font-weight: 300;
@@ -3053,7 +3061,7 @@ body.detail-active .detail-bottom-bar {
 }
 
 .footer-wordmark {
-  font-family: 'NHGText', var(--font-body);
+  font-family: 'FansanItalic', var(--font-body);
   font-size: 14px;
   font-style: italic;
   text-transform: uppercase;
