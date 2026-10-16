@@ -1083,6 +1083,7 @@ body.gallery-active #photo-gallery-view {
   font-weight: 300;
   font-style: italic;
   letter-spacing: 0.03em;
+  line-height: 1;
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   display: inline-flex;
@@ -1100,8 +1101,10 @@ body.gallery-active #photo-gallery-view {
   font-family: var(--font-body);
   font-size: 12px;
   font-style: italic;
+  line-height: 1;
   color: rgba(255, 255, 255, 0.28);
   letter-spacing: 0.02em;
+  align-self: center;
 }
 
 body.photo-active .sidebar {
@@ -2905,7 +2908,7 @@ body.detail-active .detail-bottom-bar {
 
 .project-next-footer {
   margin-top: 0;
-  padding: 60px 15px 60px 15px;
+  padding: 60px 15px 140px 15px;
   cursor: pointer;
 }
 

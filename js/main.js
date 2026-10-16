@@ -2102,7 +2102,7 @@ function initCursor() {
   document.addEventListener('mouseenter', () => cursor.classList.remove('cursor-hidden'));
 
   // Only interactive elements — avoids false-positives from large padding areas
-  const HOVER_TARGETS = 'a, button, [role="button"], input, select, textarea, label, .project-card';
+  const HOVER_TARGETS = 'a, button, [role="button"], input, select, textarea, label, .project-card, .project-next-footer';
 
   document.addEventListener('mouseover', (e) => {
     if (e.target.closest(HOVER_TARGETS)) cursor.classList.add('cursor-hover');
