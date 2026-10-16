@@ -506,7 +506,7 @@ function showIndex(fromPop) {
   exitAbout();
   exitPhoto();
   exitDetail();
-  hideFooter();
+  showFooter('work');
   showView('index-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -849,20 +849,7 @@ function showDetail(index, fromPop) {
         creditsPanel.classList.toggle('scroll-hidden', nearBottom);
       }
 
-      // Pin controls above the footer when it scrolls into view
-      const controls = document.getElementById('detail-controls');
-      const footer = document.getElementById('site-footer');
-      if (controls) {
-        const controlsH = controls.offsetHeight;
-        if (controlsH > 0 && footer) {
-          const footerTop = footer.getBoundingClientRect().top;
-          if (footerTop < vh - 32) {
-            controls.style.bottom = Math.max(32, vh - footerTop + 16) + 'px';
-          } else {
-            controls.style.bottom = '';
-          }
-        }
-      }
+      // (controls position handled by CSS — footer is now fixed)
     };
     window.addEventListener('scroll', _detailScrollHandler, { passive: true });
   }
@@ -2120,21 +2107,21 @@ function initFooter() {
     item.className = 'footer-nav-item footer-proj-item';
     item.dataset.proj = i;
     item.textContent = copy.name;
+    const imgSrc = copy.thumbnailFallback || copy.thumbnail;
     item.addEventListener('mouseenter', () => {
       _footerMoveHighlightEl(item);
-      document.querySelectorAll('.footer-nav-item').forEach((el) => el.classList.remove('footer-item-active'));
-      item.classList.add('footer-item-active');
+      footerActivate('_proj_' + i, copy.name, copy.category || '', imgSrc ? () => imgSrc : null);
     });
     item.addEventListener('focus', () => {
       _footerMoveHighlightEl(item);
-      document.querySelectorAll('.footer-nav-item').forEach((el) => el.classList.remove('footer-item-active'));
-      item.classList.add('footer-item-active');
+      footerActivate('_proj_' + i, copy.name, copy.category || '', imgSrc ? () => imgSrc : null);
     });
     item.addEventListener('click', (e) => { e.preventDefault(); showDetail(i); });
     nav.appendChild(item);
   });
 
-  nav.addEventListener('mouseleave', footerReturnToDefault);
+  const footer = document.getElementById('site-footer');
+  if (footer) footer.addEventListener('mouseleave', footerReturnToDefault);
 
   const wordmark = document.getElementById('footer-wordmark');
   if (wordmark) wordmark.addEventListener('click', (e) => { e.preventDefault(); showIndex(); });
@@ -2155,111 +2142,85 @@ function initFooter() {
 }
 
 function showFooter(key) {
-  const footer = document.getElementById('site-footer');
-  if (!footer) return;
-  footer.classList.add('visible');
   _footerCurrentKey = key;
   _footerActiveKey = null;
-
-  // Mark current-page dot
   document.querySelectorAll('.footer-nav-item').forEach((item) => {
     item.classList.toggle('footer-current', item.dataset.key === key);
+    item.classList.remove('footer-item-active');
   });
-
-  // Determine default section (next after current, wrapping)
-  const currentIdx = FOOTER_SECTIONS.findIndex((s) => s.key === key);
-  const defaultSection = FOOTER_SECTIONS[(currentIdx + 1) % FOOTER_SECTIONS.length];
-
-  // Build content without animation first (entrance observer staggers them in)
-  _footerBuildContent(defaultSection, true);
-
-  // Position highlight immediately after paint
-  requestAnimationFrame(() => _footerMoveHighlight(defaultSection.key));
-
-  // Entrance: animate blocks in when footer scrolls into view
-  if (_footerObserver) _footerObserver.disconnect();
-  _footerObserver = new IntersectionObserver((entries) => {
-    if (!entries[0].isIntersecting) return;
-    _footerObserver.disconnect();
-    document.querySelectorAll('#footer-blocks .footer-block').forEach((b, i) => {
-      setTimeout(() => b.classList.add('block-in'), i * 60);
-    });
-  }, { threshold: 0.05 });
-  _footerObserver.observe(footer);
+  requestAnimationFrame(() => _footerMoveHighlight(key));
 }
 
 function hideFooter() {
-  const footer = document.getElementById('site-footer');
-  if (footer) footer.classList.remove('visible');
-  _footerCurrentKey = null;
-  _footerActiveKey = null;
-  if (_footerObserver) { _footerObserver.disconnect(); _footerObserver = null; }
+  // Footer is now always visible; this is a no-op kept for call-site compatibility
 }
 
-function footerActivate(key) {
+let _footerPreviewTimer = null;
+
+function footerActivate(key, featuredTitle, featuredMeta, getFeaturedImage) {
   if (_footerActiveKey === key) return;
   _footerActiveKey = key;
 
-  const section = FOOTER_SECTIONS.find((s) => s.key === key);
-  if (!section) return;
-
   _footerMoveHighlight(key);
-
   document.querySelectorAll('.footer-nav-item').forEach((el) => {
-    el.classList.toggle('footer-item-active', el.dataset.key === key);
+    el.classList.toggle('footer-item-active', el.dataset.key === key && !el.dataset.proj);
   });
 
-  // Left window: fade old blocks out, then swap label + build new blocks
-  const container = document.getElementById('footer-blocks');
-  const oldBlocks = container.querySelectorAll('.footer-block');
-  oldBlocks.forEach((b) => {
-    b.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
-    b.classList.remove('block-in');
-  });
-
-  setTimeout(() => {
-    const label = document.getElementById('footer-win-label');
-    if (label) label.textContent = '/' + section.key;
-    container.innerHTML = '';
-    _footerBuildBlocks(container, section.blocks, false);
-  }, 240);
-
-  // Right window: fade out, swap, fade in
-  const img = document.getElementById('footer-feat-img');
-  const captionInner = document.getElementById('footer-caption-inner');
-  const placeholder = document.getElementById('footer-feat-placeholder');
-
-  img.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
-  img.style.opacity = '0';
-  img.style.transform = 'translateX(12px)';
-  captionInner.style.transition = 'opacity 0.2s ease';
-  captionInner.style.opacity = '0';
-
-  setTimeout(() => {
-    const src = section.getFeaturedImage();
-    if (src) {
-      img.src = src;
-      img.style.transform = 'translateX(-12px)';
-      placeholder.style.display = 'none';
-      requestAnimationFrame(() => {
-        img.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-        img.style.opacity = '1';
-        img.style.transform = '';
-      });
-    } else {
-      placeholder.style.display = 'block';
+  // Resolve preview data from section or passed args
+  let title = featuredTitle, meta = featuredMeta, imgSrc = null;
+  if (!title) {
+    const section = FOOTER_SECTIONS.find((s) => s.key === key);
+    if (section) {
+      title = section.featuredTitle;
+      meta = section.featuredMeta;
+      imgSrc = section.getFeaturedImage();
     }
-    document.getElementById('footer-caption-title').textContent = section.featuredTitle;
-    document.getElementById('footer-caption-meta').textContent = section.featuredMeta;
-    captionInner.style.transition = 'opacity 0.3s ease';
-    captionInner.style.opacity = '1';
-  }, 240);
+  } else if (getFeaturedImage) {
+    imgSrc = getFeaturedImage();
+  }
+
+  // Update popup
+  const preview = document.getElementById('footer-preview');
+  const img = document.getElementById('footer-preview-img');
+  const placeholder = document.getElementById('footer-preview-placeholder');
+  const titleEl = document.getElementById('footer-preview-title');
+  const metaEl = document.getElementById('footer-preview-meta');
+  if (!preview) return;
+
+  if (imgSrc) {
+    img.src = imgSrc;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    placeholder.style.display = 'block';
+  }
+  if (titleEl) titleEl.textContent = title || '';
+  if (metaEl) metaEl.textContent = meta || '';
+
+  clearTimeout(_footerPreviewTimer);
+  _footerPreviewTimer = setTimeout(() => preview.classList.add('preview-visible'), 30);
+}
+
+function footerHidePreview() {
+  _footerActiveKey = null;
+  clearTimeout(_footerPreviewTimer);
+  const preview = document.getElementById('footer-preview');
+  if (preview) preview.classList.remove('preview-visible');
+  // Reset highlight to current page
+  if (_footerCurrentKey) {
+    requestAnimationFrame(() => _footerMoveHighlight(_footerCurrentKey));
+    document.querySelectorAll('.footer-nav-item').forEach((el) => {
+      el.classList.remove('footer-item-active');
+    });
+  } else {
+    const highlight = document.getElementById('footer-highlight');
+    if (highlight) highlight.classList.remove('hl-visible');
+  }
 }
 
 function footerReturnToDefault() {
-  if (!_footerCurrentKey) return;
-  const currentIdx = FOOTER_SECTIONS.findIndex((s) => s.key === _footerCurrentKey);
-  footerActivate(FOOTER_SECTIONS[(currentIdx + 1) % FOOTER_SECTIONS.length].key);
+  footerHidePreview();
 }
 
 function _footerMoveHighlight(key) {
@@ -2279,54 +2240,6 @@ function _footerMoveHighlightEl(item) {
   highlight.classList.add('hl-visible');
 }
 
-function _footerBuildContent(section, instant) {
-  const label = document.getElementById('footer-win-label');
-  if (label) label.textContent = '/' + section.key;
-
-  document.querySelectorAll('.footer-nav-item').forEach((el) => {
-    el.classList.toggle('footer-item-active', el.dataset.key === section.key);
-  });
-
-  const container = document.getElementById('footer-blocks');
-  if (container) {
-    container.innerHTML = '';
-    _footerBuildBlocks(container, section.blocks, instant);
-  }
-
-  const img = document.getElementById('footer-feat-img');
-  const placeholder = document.getElementById('footer-feat-placeholder');
-  const titleEl = document.getElementById('footer-caption-title');
-  const metaEl = document.getElementById('footer-caption-meta');
-  if (!img) return;
-
-  const src = section.getFeaturedImage();
-  if (src) {
-    img.src = src;
-    img.classList.add('feat-visible');
-    placeholder.style.display = 'none';
-  } else {
-    img.classList.remove('feat-visible');
-    placeholder.style.display = 'block';
-  }
-  if (titleEl) titleEl.textContent = section.featuredTitle;
-  if (metaEl) metaEl.textContent = section.featuredMeta;
-}
-
-function _footerBuildBlocks(container, blocks, instant) {
-  blocks.forEach((block, i) => {
-    const div = document.createElement('div');
-    div.className = 'footer-block';
-    div.style.width = block.w;
-    div.style.height = block.h;
-    if (block.extra) div.setAttribute('style', div.getAttribute('style') + ';' + block.extra);
-    container.appendChild(div);
-    if (instant) {
-      // No animation — entrance observer or hover will add block-in
-    } else {
-      setTimeout(() => div.classList.add('block-in'), 180 + i * 60);
-    }
-  });
-}
 
 // ==================== CURSOR ====================
 

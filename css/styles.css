@@ -266,7 +266,7 @@ ul {
   left: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  padding: 15px 15px;
+  padding: 15px 15px 100px;
   display: flex;
   flex-direction: column;
   z-index: 100;
@@ -2762,189 +2762,126 @@ body.detail-active .detail-bottom-bar {
   opacity: 0;
 }
 
-/* ==================== FOOTER ==================== */
+/* ==================== FLOATING TASKBAR FOOTER ==================== */
 
 .site-footer {
-  display: none;
-  padding: 60px 0 48px;
-}
-
-.site-footer.visible {
-  display: block;
-}
-
-.footer-inner {
-  width: 100%;
-}
-
-.footer-windows {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.footer-win {
-  flex: 1;
-  height: clamp(190px, 18vw, 240px);
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  position: relative;
-}
-
-.footer-win-left {
-  padding: 14px 14px 10px;
+  position: fixed;
+  bottom: 24px;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  z-index: 9990;
+  pointer-events: none;
 }
 
-.footer-win-label {
-  font-family: var(--font-body);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.25);
-  display: block;
-  flex-shrink: 0;
-  text-transform: lowercase;
-}
-
-.footer-blocks {
-  flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  align-content: flex-start;
+/* Hover preview popup */
+.footer-preview {
+  width: 280px;
+  background: rgba(6, 14, 24, 0.88);
+  backdrop-filter: blur(28px) saturate(1.4);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
   overflow: hidden;
-}
-
-.footer-block {
-  background: rgba(255, 255, 255, 0.11);
-  border-radius: 3px;
-  flex-shrink: 0;
+  margin-bottom: 10px;
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s cubic-bezier(.2,.8,.2,1), transform 0.5s cubic-bezier(.2,.8,.2,1);
+  transform: translateY(10px) scale(0.96);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
 }
 
-.footer-block.block-in {
+.footer-preview.preview-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-/* Right window */
-.footer-win-right {
-  display: flex;
-  flex-direction: column;
-}
-
-.footer-feat-wrap {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-
-.footer-feat-img {
-  position: absolute;
-  inset: 0;
+.footer-preview-img {
   width: 100%;
-  height: 100%;
+  height: 158px;
   object-fit: cover;
-  opacity: 0;
-  transform: translateX(-14px);
-  transition: opacity 0.38s ease, transform 0.38s ease;
-  will-change: opacity, transform;
+  display: block;
 }
 
-.footer-feat-img.feat-visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.footer-feat-placeholder {
-  position: absolute;
-  inset: 0;
+.footer-preview-placeholder {
+  width: 100%;
+  height: 158px;
   background: rgba(255, 255, 255, 0.04);
   display: none;
 }
 
-.footer-caption {
-  height: 34px;
-  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.footer-caption-inner {
-  width: 100%;
-  padding: 0 12px;
+.footer-preview-caption {
+  padding: 10px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
 }
 
-.footer-caption-title {
+.footer-preview-title {
   font-family: var(--font-body);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.footer-caption-meta {
+.footer-preview-meta {
   font-family: var(--font-body);
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.28);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
   white-space: nowrap;
   margin-left: 8px;
   flex-shrink: 0;
 }
 
-/* Rule */
-.footer-rule {
-  height: 0.5px;
-  background: rgba(255, 255, 255, 0.1);
-  margin-bottom: 12px;
-}
-
-/* Taskbar */
+/* Taskbar pill */
 .footer-taskbar {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  pointer-events: all;
+  display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0;
+  background: rgba(8, 18, 30, 0.8);
+  backdrop-filter: blur(32px) saturate(1.5);
+  -webkit-backdrop-filter: blur(32px) saturate(1.5);
+  border: 0.5px solid rgba(255, 255, 255, 0.13);
+  border-radius: 100px;
+  padding: 6px 6px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 .footer-wordmark {
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   white-space: nowrap;
   transition: color 0.3s;
+  padding: 8px 16px;
+  border-radius: 100px;
 }
 
 .footer-wordmark:hover {
-  color: #ffffff;
+  color: #fff;
+}
+
+.footer-sep {
+  width: 0.5px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+  margin: 0 2px;
 }
 
 .footer-nav {
   display: flex;
   align-items: center;
-  justify-content: center;
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border: 0.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 30px;
-  padding: 2px 6px;
-  width: fit-content;
-  justify-self: center;
-  overflow: hidden;
+  padding: 0 4px;
+  overflow: visible;
 }
 
 .footer-nav-item {
@@ -2953,55 +2890,56 @@ body.detail-active .detail-bottom-bar {
   color: rgba(255, 255, 255, 0.38);
   background: none;
   border: none;
-  padding: 6px 12px;
+  padding: 8px 14px;
   cursor: pointer;
   position: relative;
   z-index: 1;
-  transition: color 0.3s;
+  transition: color 0.25s;
   text-decoration: none;
   display: block;
   white-space: nowrap;
+  border-radius: 100px;
 }
 
 .footer-nav-item.footer-item-active {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .footer-nav-item.footer-current::after {
   content: '';
   position: absolute;
-  bottom: -1px;
+  bottom: 2px;
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .footer-nav-sep {
   width: 0.5px;
   height: 14px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.14);
   margin: 0 4px;
   flex-shrink: 0;
 }
 
 .footer-proj-item {
-  font-size: 10px;
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  letter-spacing: 0.01em;
 }
 
 .footer-highlight {
   position: absolute;
   top: 2px;
   bottom: 2px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.09);
   border: 0.5px solid rgba(255, 255, 255, 0.12);
   pointer-events: none;
   opacity: 0;
-  transition: left 0.4s cubic-bezier(.2,.8,.2,1), width 0.4s cubic-bezier(.2,.8,.2,1), opacity 0.3s;
+  transition: left 0.35s cubic-bezier(.2,.8,.2,1), width 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.25s;
 }
 
 .footer-highlight.hl-visible {
@@ -3010,73 +2948,32 @@ body.detail-active .detail-bottom-bar {
 
 .footer-clock {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.22);
   white-space: nowrap;
-  justify-self: end;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .footer-block {
-    transform: none !important;
-    transition: opacity 0.15s ease !important;
-  }
-  .footer-feat-img {
-    transform: none !important;
-    transition: opacity 0.2s ease !important;
-  }
-  .footer-caption-inner {
-    transform: none !important;
-    transition: opacity 0.2s ease !important;
-  }
-  .footer-highlight {
-    transition: opacity 0.2s ease !important;
-  }
+  padding: 8px 16px;
+  border-radius: 100px;
 }
 
 /* Mobile */
 @media (max-width: 768px) {
   .site-footer {
-    padding: 40px 0 36px;
-  }
-
-  .footer-windows {
-    flex-direction: column;
-  }
-
-  .footer-win {
-    height: clamp(160px, 45vw, 220px);
-  }
-
-  .footer-win-right {
-    display: none;
+    bottom: 16px;
   }
 
   .footer-taskbar {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .footer-wordmark {
-    order: 1;
-    margin-right: auto;
-  }
-
-  .footer-clock {
-    order: 2;
-    margin-left: 0;
-  }
-
-  .footer-nav {
-    order: 3;
-    width: 100%;
+    max-width: calc(100vw - 32px);
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    border-radius: 60px;
   }
 
-  .footer-nav::-webkit-scrollbar {
+  .footer-taskbar::-webkit-scrollbar {
     display: none;
+  }
+
+  .footer-preview {
+    width: calc(100vw - 48px);
+    max-width: 280px;
   }
 }
