@@ -419,7 +419,7 @@ function scrollIndexToCard(index) {
 
 // ==================== SMOOTH SCROLL ====================
 
-let _hscrollCooldown = false;
+let _hscrollCooldownTimer = null;
 
 function initSmoothScroll() {
   scroll.current = window.scrollY;
@@ -432,7 +432,12 @@ function initSmoothScroll() {
 
     e.preventDefault();
     if (isIndexVisible() && window.innerWidth > 768) {
-      if (_hscrollCooldown) return;
+      // Extend cooldown on every wheel event — blocks momentum from double-advancing cards
+      if (_hscrollCooldownTimer) {
+        clearTimeout(_hscrollCooldownTimer);
+        _hscrollCooldownTimer = setTimeout(() => { _hscrollCooldownTimer = null; }, 700);
+        return;
+      }
       const el = getIndexScrollArea();
       if (!el) return;
       const cardWidth = el.clientWidth;
@@ -445,8 +450,7 @@ function initSmoothScroll() {
       hscroll.target = targetCard * cardWidth;
       clampHTarget();
       startHScroll();
-      _hscrollCooldown = true;
-      setTimeout(() => { _hscrollCooldown = false; }, 650);
+      _hscrollCooldownTimer = setTimeout(() => { _hscrollCooldownTimer = null; }, 700);
     } else {
       scroll.target += e.deltaY;
       clampTarget();

@@ -1111,7 +1111,8 @@ body.gallery-active #photo-gallery-view {
   top: 0;
   left: 0;
   right: 0;
-  padding: 18px 32px;
+  height: 80px;
+  padding: 0 40px;
   z-index: 200;
   justify-content: space-between;
   align-items: center;
@@ -1171,7 +1172,7 @@ body.photo-active #photo-view {
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 body.photo-active .detail-header {
@@ -1180,9 +1181,9 @@ body.photo-active .detail-header {
 
 body.photo-active .photo-filters {
   position: fixed;
-  top: 22px;
+  top: 40px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   z-index: 200;
   margin-bottom: 0;
   background: none;
