@@ -507,6 +507,7 @@ function showIndex(fromPop) {
   exitPhoto();
   exitDetail();
   showFooter('work');
+  hidePageFooter();
   showView('index-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -855,6 +856,7 @@ function showDetail(index, fromPop) {
   }
 
   showFooter('work');
+  showPageFooter();
   showView('detail-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -877,6 +879,7 @@ function showAbout(fromPop) {
     image: 'assets/about/Branden Chi - About.jpg',
   });
   showFooter('about');
+  showPageFooter();
   showView('about-view');
   jumpTo(0);
   clearActiveProject();
@@ -985,6 +988,7 @@ function showPhotography(fromPop) {
   });
   renderCollections();
   showFooter('photography');
+  showPageFooter();
   showView('photo-view');
   jumpTo(0);
   showWorkNav();
@@ -2088,8 +2092,8 @@ function initFooter() {
     item.className = 'footer-nav-item';
     item.dataset.key = section.key;
     item.textContent = section.label;
-    item.addEventListener('mouseenter', () => footerActivate(section.key));
-    item.addEventListener('focus', () => footerActivate(section.key));
+    item.addEventListener('mouseenter', () => footerActivate(section.key, null, null, null, item));
+    item.addEventListener('focus', () => footerActivate(section.key, null, null, null, item));
     item.addEventListener('click', (e) => { e.preventDefault(); section.navigate(); });
     nav.appendChild(item);
   });
@@ -2110,11 +2114,11 @@ function initFooter() {
     const imgSrc = copy.thumbnailFallback || copy.thumbnail;
     item.addEventListener('mouseenter', () => {
       _footerMoveHighlightEl(item);
-      footerActivate('_proj_' + i, copy.name, copy.category || '', imgSrc ? () => imgSrc : null);
+      footerActivate('_proj_' + i, copy.name, copy.category || '', imgSrc ? () => imgSrc : null, item);
     });
     item.addEventListener('focus', () => {
       _footerMoveHighlightEl(item);
-      footerActivate('_proj_' + i, copy.name, copy.category || '', imgSrc ? () => imgSrc : null);
+      footerActivate('_proj_' + i, copy.name, copy.category || '', imgSrc ? () => imgSrc : null, item);
     });
     item.addEventListener('click', (e) => { e.preventDefault(); showDetail(i); });
     nav.appendChild(item);
@@ -2152,12 +2156,58 @@ function showFooter(key) {
 }
 
 function hideFooter() {
-  // Footer is now always visible; this is a no-op kept for call-site compatibility
+  // Fixed taskbar always visible; this is a no-op kept for call-site compatibility
+}
+
+function showPageFooter() {
+  const el = document.getElementById('site-footer-page');
+  if (el) el.classList.add('visible');
+}
+
+function hidePageFooter() {
+  const el = document.getElementById('site-footer-page');
+  if (el) el.classList.remove('visible');
+}
+
+function initPageFooter() {
+  const nav = document.getElementById('footer-page-nav');
+  if (!nav) return;
+
+  const links = [
+    { label: 'Work', action: () => showIndex() },
+    { label: 'Photography', action: () => showPhotography() },
+    { label: 'About', action: () => showAbout() },
+    { label: 'Contact', action: () => { window.location.href = 'mailto:branden.chi.07@gmail.com'; } },
+  ];
+  links.forEach((l) => {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.className = 'footer-page-link';
+    a.textContent = l.label;
+    a.addEventListener('click', (e) => { e.preventDefault(); l.action(); });
+    nav.appendChild(a);
+  });
+
+  const wordmark = document.getElementById('footer-page-wordmark');
+  if (wordmark) wordmark.addEventListener('click', (e) => { e.preventDefault(); showIndex(); });
+
+  function tickPageClock() {
+    const clock = document.getElementById('footer-page-clock');
+    if (!clock) return;
+    const now = new Date();
+    let h = now.getHours();
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    clock.textContent = `${h}:${m} ${ampm}`;
+  }
+  tickPageClock();
+  setInterval(tickPageClock, 60000);
 }
 
 let _footerPreviewTimer = null;
 
-function footerActivate(key, featuredTitle, featuredMeta, getFeaturedImage) {
+function footerActivate(key, featuredTitle, featuredMeta, getFeaturedImage, triggerEl) {
   if (_footerActiveKey === key) return;
   _footerActiveKey = key;
 
@@ -2179,7 +2229,7 @@ function footerActivate(key, featuredTitle, featuredMeta, getFeaturedImage) {
     imgSrc = getFeaturedImage();
   }
 
-  // Update popup
+  // Update popup content
   const preview = document.getElementById('footer-preview');
   const img = document.getElementById('footer-preview-img');
   const placeholder = document.getElementById('footer-preview-placeholder');
@@ -2197,6 +2247,24 @@ function footerActivate(key, featuredTitle, featuredMeta, getFeaturedImage) {
   }
   if (titleEl) titleEl.textContent = title || '';
   if (metaEl) metaEl.textContent = meta || '';
+
+  // Position popup above the hovered element
+  if (triggerEl) {
+    const taskbar = document.querySelector('.footer-taskbar');
+    if (taskbar) {
+      const taskbarRect = taskbar.getBoundingClientRect();
+      const itemRect = triggerEl.getBoundingClientRect();
+      const taskbarCenter = taskbarRect.left + taskbarRect.width / 2;
+      const itemCenter = itemRect.left + itemRect.width / 2;
+      const offset = itemCenter - taskbarCenter;
+      const previewW = 280;
+      const halfPreview = previewW / 2;
+      const minX = -taskbarCenter + halfPreview + 8;
+      const maxX = (window.innerWidth - taskbarCenter) - halfPreview - 8;
+      const clamped = Math.max(minX, Math.min(maxX, offset));
+      preview.style.setProperty('--preview-x', clamped + 'px');
+    }
+  }
 
   clearTimeout(_footerPreviewTimer);
   _footerPreviewTimer = setTimeout(() => preview.classList.add('preview-visible'), 30);
@@ -2308,6 +2376,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCreditsPanel();
   initAnimObserver();
   initFooter();
+  initPageFooter();
   initCursor();
 
   // Stagger index cards on first load (after loader clears)
