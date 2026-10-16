@@ -420,17 +420,19 @@ function transitionTo(fn) {
   _transitioning = true;
   const overlay = document.getElementById('page-transition');
 
-  // Slide in from right (fast, ease-in)
-  overlay.style.transition = 'transform 0.26s cubic-bezier(0.55, 0, 1, 0.45)';
+  // Slide in: expo ease-out — fast entry, decelerates smoothly to stop
+  overlay.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
   overlay.style.transform = 'translateX(0)';
   overlay.style.pointerEvents = 'all';
   overlay.classList.add('pt-visible');
 
-  // Run navigation, then slide out to left
+  // Korean fill starts at 520ms delay, takes 550ms → fully visible at ~1070ms
+  // Fire fn() at 1500ms (Korean has been fully visible ~430ms)
   setTimeout(() => {
     fn();
     requestAnimationFrame(() => {
-      overlay.style.transition = 'transform 0.44s cubic-bezier(0, 0, 0.25, 1)';
+      // Slide out: expo ease-in — slow start, accelerates to fast exit
+      overlay.style.transition = 'transform 0.75s cubic-bezier(0.55, 0, 1, 1)';
       overlay.style.transform = 'translateX(-100%)';
     });
     setTimeout(() => {
@@ -439,8 +441,8 @@ function transitionTo(fn) {
       overlay.style.pointerEvents = 'none';
       overlay.classList.remove('pt-visible');
       _transitioning = false;
-    }, 460);
-  }, 300);
+    }, 770);
+  }, 1500);
 }
 
 // ==================== LOADER ====================
@@ -1292,7 +1294,7 @@ function renderCollections() {
       const img = document.createElement('img');
       img.src = collection.thumbnail;
       img.alt = collection.name;
-      img.loading = i < 8 ? 'eager' : 'lazy';
+      img.loading = i < 2 ? 'eager' : 'lazy';
       item.appendChild(img);
     }
 
