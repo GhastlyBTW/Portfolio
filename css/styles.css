@@ -2806,6 +2806,38 @@ body.detail-active .detail-bottom-bar {
   color: var(--text);
 }
 
+/* ==================== CUSTOM CURSOR ==================== */
+
+* {
+  cursor: none !important;
+}
+
+.cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.18s ease, height 0.18s ease, background 0.18s ease, border-color 0.18s ease, opacity 0.15s;
+  will-change: left, top;
+  opacity: 1;
+}
+
+.cursor.cursor-hover {
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border-color: white;
+}
+
+.cursor.cursor-hidden {
+  opacity: 0;
+}
+
 /* ==================== FOOTER ==================== */
 
 .site-footer {
@@ -2863,7 +2895,7 @@ body.detail-active .detail-bottom-bar {
 }
 
 .footer-block {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.11);
   border-radius: 3px;
   flex-shrink: 0;
   opacity: 0;
@@ -2965,22 +2997,29 @@ body.detail-active .detail-bottom-bar {
   font-family: var(--font-display);
   font-size: 11px;
   letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   white-space: nowrap;
-  margin-right: 20px;
+  margin-right: 16px;
   transition: color 0.3s;
 }
 
 .footer-wordmark:hover {
-  color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
 }
 
 .footer-nav {
   flex: 1;
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 2px 6px;
+  margin: 0 14px;
+  overflow: hidden;
 }
 
 .footer-nav-item {
@@ -3015,13 +3054,26 @@ body.detail-active .detail-bottom-bar {
   background: rgba(255, 255, 255, 0.55);
 }
 
+.footer-nav-sep {
+  width: 0.5px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.footer-proj-item {
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
 .footer-highlight {
   position: absolute;
-  top: 1px;
-  bottom: 1px;
+  top: 2px;
+  bottom: 2px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 0.5px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.1);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
   pointer-events: none;
   opacity: 0;
   transition: left 0.4s cubic-bezier(.2,.8,.2,1), width 0.4s cubic-bezier(.2,.8,.2,1), opacity 0.3s;

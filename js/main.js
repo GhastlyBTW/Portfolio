@@ -199,11 +199,12 @@ const FOOTER_SECTIONS = [
     featuredTitle: 'Detention Watch Network',
     featuredMeta: '01 / 05',
     blocks: [
-      { w: '100%', h: '11px' },
-      { w: '48%', h: '86px' },
-      { w: '48%', h: '86px' },
-      { w: '48%', h: '86px' },
-      { w: '48%', h: '86px' },
+      { w: '31%', h: '100px' },
+      { w: '31%', h: '100px' },
+      { w: '31%', h: '100px' },
+      { w: '31%', h: '100px' },
+      { w: '31%', h: '100px' },
+      { w: '31%', h: '100px' },
     ],
   },
   {
@@ -218,10 +219,10 @@ const FOOTER_SECTIONS = [
     featuredTitle: 'Personal Photography',
     featuredMeta: 'View all',
     blocks: [
-      { w: '100%', h: '112px' },
-      { w: '31%', h: '56px' },
-      { w: '31%', h: '56px' },
-      { w: '31%', h: '56px' },
+      { w: '100%', h: '130px' },
+      { w: '31%', h: '65px' },
+      { w: '31%', h: '65px' },
+      { w: '31%', h: '65px' },
     ],
   },
   {
@@ -232,15 +233,33 @@ const FOOTER_SECTIONS = [
     featuredTitle: 'Branden Chi',
     featuredMeta: 'Read more',
     blocks: [
-      { w: '52%', h: '13px' },
-      { w: '100%', h: '9px' },
-      { w: '88%', h: '9px' },
-      { w: '72%', h: '9px' },
-      { w: '55%', h: '9px' },
-      { w: '100%', h: '1px', extra: 'margin:7px 0;background:rgba(255,255,255,0.08)' },
-      { w: '40%', h: '9px' },
-      { w: '62%', h: '9px' },
-      { w: '78%', h: '9px' },
+      { w: '52%', h: '16px' },
+      { w: '100%', h: '11px' },
+      { w: '88%', h: '11px' },
+      { w: '72%', h: '11px' },
+      { w: '55%', h: '11px' },
+      { w: '100%', h: '1px', extra: 'margin:8px 0;background:rgba(255,255,255,0.1)' },
+      { w: '40%', h: '11px' },
+      { w: '62%', h: '11px' },
+      { w: '78%', h: '11px' },
+    ],
+  },
+  {
+    key: 'contact',
+    label: 'Contact',
+    navigate() { window.location.href = 'mailto:branden.chi.07@gmail.com'; },
+    getFeaturedImage() { return 'assets/about/Branden Chi About me.jpg'; },
+    featuredTitle: 'branden.chi.07@gmail.com',
+    featuredMeta: 'Copy',
+    blocks: [
+      { w: '65%', h: '16px' },
+      { w: '100%', h: '1px', extra: 'margin:8px 0;background:rgba(255,255,255,0.1)' },
+      { w: '55%', h: '11px' },
+      { w: '38%', h: '11px' },
+      { w: '28%', h: '11px' },
+      { w: '100%', h: '1px', extra: 'margin:8px 0;background:rgba(255,255,255,0.1)' },
+      { w: '45%', h: '11px' },
+      { w: '30%', h: '11px' },
     ],
   },
 ];
@@ -917,6 +936,7 @@ function showDetail(index, fromPop) {
 
 function showAbout(fromPop) {
   exitDetail();
+  exitPhoto();
   updateMeta({
     title: 'About — Branden Chi',
     description: 'Branden Chi is a Korean American Art Director from Delaware, now based in New York City, creating work that makes people stop and think.',
@@ -2128,6 +2148,7 @@ function initFooter() {
   const nav = document.getElementById('footer-nav');
   if (!nav) return;
 
+  // Section items
   FOOTER_SECTIONS.forEach((section) => {
     const item = document.createElement('a');
     item.href = '#';
@@ -2137,6 +2158,33 @@ function initFooter() {
     item.addEventListener('mouseenter', () => footerActivate(section.key));
     item.addEventListener('focus', () => footerActivate(section.key));
     item.addEventListener('click', (e) => { e.preventDefault(); section.navigate(); });
+    nav.appendChild(item);
+  });
+
+  // Separator + project items
+  const sep = document.createElement('div');
+  sep.className = 'footer-nav-sep';
+  nav.appendChild(sep);
+
+  CONTENT.projects.slice(0, PHOTO_PROJECT_INDEX).forEach((proj, i) => {
+    const copy = CONTENT.projects[i];
+    if (!copy || !copy.name) return;
+    const item = document.createElement('a');
+    item.href = '#';
+    item.className = 'footer-nav-item footer-proj-item';
+    item.dataset.proj = i;
+    item.textContent = copy.name;
+    item.addEventListener('mouseenter', () => {
+      _footerMoveHighlightEl(item);
+      document.querySelectorAll('.footer-nav-item').forEach((el) => el.classList.remove('footer-item-active'));
+      item.classList.add('footer-item-active');
+    });
+    item.addEventListener('focus', () => {
+      _footerMoveHighlightEl(item);
+      document.querySelectorAll('.footer-nav-item').forEach((el) => el.classList.remove('footer-item-active'));
+      item.classList.add('footer-item-active');
+    });
+    item.addEventListener('click', (e) => { e.preventDefault(); showDetail(i); });
     nav.appendChild(item);
   });
 
@@ -2271,6 +2319,11 @@ function footerReturnToDefault() {
 function _footerMoveHighlight(key) {
   const nav = document.getElementById('footer-nav');
   const item = nav && nav.querySelector(`[data-key="${key}"]`);
+  if (item) _footerMoveHighlightEl(item);
+}
+
+function _footerMoveHighlightEl(item) {
+  const nav = document.getElementById('footer-nav');
   const highlight = document.getElementById('footer-highlight');
   if (!item || !nav || !highlight) return;
   const navRect = nav.getBoundingClientRect();
@@ -2329,6 +2382,30 @@ function _footerBuildBlocks(container, blocks, instant) {
   });
 }
 
+// ==================== CURSOR ====================
+
+function initCursor() {
+  const cursor = document.getElementById('cursor');
+  if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
+
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    cursor.classList.remove('cursor-hidden');
+  });
+  document.addEventListener('mouseleave', () => cursor.classList.add('cursor-hidden'));
+  document.addEventListener('mouseenter', () => cursor.classList.remove('cursor-hidden'));
+
+  const HOVER_TARGETS = 'a, button, [role="button"], input, select, textarea, label, .project-card, .album-card, .photo-filter, .sidebar-item';
+
+  document.addEventListener('mouseover', (e) => {
+    if (e.target.closest(HOVER_TARGETS)) cursor.classList.add('cursor-hover');
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest(HOVER_TARGETS)) cursor.classList.remove('cursor-hover');
+  });
+}
+
 // ==================== INIT ====================
 
 window.addEventListener('resize', () => { _cachedCardW = 0; }, { passive: true });
@@ -2361,6 +2438,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCreditsPanel();
   initAnimObserver();
   initFooter();
+  initCursor();
 
   // Stagger index cards on first load (after loader clears)
   setTimeout(() => {
