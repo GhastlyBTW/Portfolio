@@ -849,16 +849,15 @@ function showDetail(index, fromPop) {
         creditsPanel.classList.toggle('scroll-hidden', nearBottom);
       }
 
-      // Pin controls above the divider line when it scrolls into view
+      // Pin controls above the footer when it scrolls into view
       const controls = document.getElementById('detail-controls');
-      const divider = document.querySelector('.project-section-divider');
-      if (controls && divider) {
+      const footer = document.getElementById('site-footer');
+      if (controls) {
         const controlsH = controls.offsetHeight;
-        if (controlsH > 0) {
-          const dividerTop = divider.getBoundingClientRect().top;
-          const defaultBottom = 32;
-          if (dividerTop < vh - defaultBottom - controlsH) {
-            controls.style.bottom = (vh - dividerTop + 12) + 'px';
+        if (controlsH > 0 && footer) {
+          const footerTop = footer.getBoundingClientRect().top;
+          if (footerTop < vh - 32) {
+            controls.style.bottom = Math.max(32, vh - footerTop + 16) + 'px';
           } else {
             controls.style.bottom = '';
           }
@@ -2354,7 +2353,7 @@ function initCursor() {
   document.addEventListener('mouseenter', () => cursor.classList.remove('cursor-hidden'));
 
   // Only interactive elements — avoids false-positives from large padding areas
-  const HOVER_TARGETS = 'a, button, [role="button"], input, select, textarea, label';
+  const HOVER_TARGETS = 'a, button, [role="button"], input, select, textarea, label, .project-card';
 
   document.addEventListener('mouseover', (e) => {
     if (e.target.closest(HOVER_TARGETS)) cursor.classList.add('cursor-hover');
