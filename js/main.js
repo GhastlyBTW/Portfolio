@@ -419,6 +419,8 @@ function scrollIndexToCard(index) {
 
 // ==================== SMOOTH SCROLL ====================
 
+let _hscrollCooldown = false;
+
 function initSmoothScroll() {
   scroll.current = window.scrollY;
   scroll.target = window.scrollY;
@@ -426,6 +428,7 @@ function initSmoothScroll() {
   window.addEventListener('wheel', (e) => {
     e.preventDefault();
     if (isIndexVisible() && window.innerWidth > 768) {
+      if (_hscrollCooldown) return;
       const el = getIndexScrollArea();
       if (!el) return;
       const cardWidth = el.clientWidth;
@@ -434,9 +437,12 @@ function initSmoothScroll() {
       const delta = e.deltaY > 0 ? 1 : -1;
       const numCards = CONTENT.projects.length;
       const targetCard = Math.max(0, Math.min(currentCard + delta, numCards - 1));
+      if (targetCard === currentCard) return;
       hscroll.target = targetCard * cardWidth;
       clampHTarget();
       startHScroll();
+      _hscrollCooldown = true;
+      setTimeout(() => { _hscrollCooldown = false; }, 650);
     } else {
       scroll.target += e.deltaY;
       clampTarget();
