@@ -229,7 +229,7 @@ const FOOTER_SECTIONS = [
     key: 'about',
     label: 'About',
     navigate() { showAbout(); },
-    getFeaturedImage() { return 'assets/about/Branden Chi About me.jpg'; },
+    getFeaturedImage() { return 'assets/about/Artboard 2@300x-100.jpg'; },
     featuredTitle: 'Branden Chi',
     featuredMeta: 'Read more',
     blocks: [
@@ -507,7 +507,6 @@ function showIndex(fromPop) {
   exitPhoto();
   exitDetail();
   showFooter('work');
-  hidePageFooter();
   showView('index-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -904,13 +903,28 @@ function showDetail(index, fromPop) {
         creditsPanel.classList.toggle('scroll-hidden', nearBottom);
       }
 
-      // (controls position handled by CSS — footer is now fixed)
+      // Pin controls above the Next Project divider as it scrolls into view
+      const controls = document.getElementById('detail-controls');
+      const divider = document.querySelector('.project-section-divider');
+      if (controls && divider) {
+        const controlsH = controls.offsetHeight;
+        if (controlsH > 0) {
+          const dividerTop = divider.getBoundingClientRect().top;
+          const defaultBottom = 32;
+          if (dividerTop < vh - defaultBottom - controlsH) {
+            const rawBottom = vh - dividerTop + 12;
+            const maxBottom = vh - controlsH - 16;
+            controls.style.bottom = Math.min(rawBottom, maxBottom) + 'px';
+          } else {
+            controls.style.bottom = '';
+          }
+        }
+      }
     };
     window.addEventListener('scroll', _detailScrollHandler, { passive: true });
   }
 
   showFooter('work');
-  showPageFooter();
   showView('detail-view');
   jumpTo(0);
   smoothScrollTo(0);
@@ -933,7 +947,6 @@ function showAbout(fromPop) {
     image: 'assets/about/Branden Chi - About.jpg',
   });
   showFooter('about');
-  showPageFooter();
   showView('about-view');
   jumpTo(0);
   clearActiveProject();
@@ -1042,7 +1055,6 @@ function showPhotography(fromPop) {
   });
   renderCollections();
   showFooter('photography');
-  showPageFooter();
   showView('photo-view');
   jumpTo(0);
   showWorkNav();
@@ -2165,7 +2177,8 @@ function initFooter() {
     item.className = 'footer-nav-item footer-proj-item';
     item.dataset.proj = i;
     item.textContent = copy.name;
-    const imgSrc = copy.thumbnailFallback || copy.thumbnail;
+    const rawProj = projects[i];
+    const imgSrc = rawProj?.thumbnailFallback || rawProj?.thumbnail;
     item.addEventListener('mouseenter', () => {
       _footerMoveHighlightEl(item);
       footerActivate('_proj_' + i, copy.name, copy.category || '', imgSrc ? () => imgSrc : null, item);
@@ -2213,51 +2226,6 @@ function hideFooter() {
   // Fixed taskbar always visible; this is a no-op kept for call-site compatibility
 }
 
-function showPageFooter() {
-  const el = document.getElementById('site-footer-page');
-  if (el) el.classList.add('visible');
-}
-
-function hidePageFooter() {
-  const el = document.getElementById('site-footer-page');
-  if (el) el.classList.remove('visible');
-}
-
-function initPageFooter() {
-  const nav = document.getElementById('footer-page-nav');
-  if (!nav) return;
-
-  const links = [
-    { label: 'Work', action: () => showIndex() },
-    { label: 'Photography', action: () => showPhotography() },
-    { label: 'About', action: () => showAbout() },
-    { label: 'Contact', action: () => { window.location.href = 'mailto:branden.chi.07@gmail.com'; } },
-  ];
-  links.forEach((l) => {
-    const a = document.createElement('a');
-    a.href = '#';
-    a.className = 'footer-page-link';
-    a.textContent = l.label;
-    a.addEventListener('click', (e) => { e.preventDefault(); l.action(); });
-    nav.appendChild(a);
-  });
-
-  const wordmark = document.getElementById('footer-page-wordmark');
-  if (wordmark) wordmark.addEventListener('click', (e) => { e.preventDefault(); showIndex(); });
-
-  function tickPageClock() {
-    const clock = document.getElementById('footer-page-clock');
-    if (!clock) return;
-    const now = new Date();
-    let h = now.getHours();
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    clock.textContent = `${h}:${m} ${ampm}`;
-  }
-  tickPageClock();
-  setInterval(tickPageClock, 60000);
-}
 
 let _footerPreviewTimer = null;
 
@@ -2430,7 +2398,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initCreditsPanel();
   initAnimObserver();
   initFooter();
-  initPageFooter();
   initCursor();
 
   // Stagger index cards on first load (after loader clears)
