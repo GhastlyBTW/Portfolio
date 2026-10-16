@@ -425,12 +425,12 @@ function transitionTo(fn) {
   overlay.classList.add('pt-visible');
 
   // Korean fill starts at 520ms delay, takes 550ms → fully visible at ~1070ms
-  // Fire fn() at 1500ms (Korean has been fully visible ~430ms)
+  // Fire fn() at 1250ms (Korean has been fully visible ~180ms)
   setTimeout(() => {
     fn();
     requestAnimationFrame(() => {
-      // Slide out: expo ease-in — slow start, accelerates to fast exit
-      overlay.style.transition = 'transform 0.75s cubic-bezier(0.55, 0, 1, 1)';
+      // Slide out: starts moving immediately, accelerates to fast exit
+      overlay.style.transition = 'transform 0.5s cubic-bezier(0.3, 0, 0.8, 1)';
       overlay.style.transform = 'translateX(-100%)';
     });
     setTimeout(() => {
@@ -439,8 +439,8 @@ function transitionTo(fn) {
       overlay.style.pointerEvents = 'none';
       overlay.classList.remove('pt-visible');
       _transitioning = false;
-    }, 770);
-  }, 1500);
+    }, 520);
+  }, 1250);
 }
 
 // ==================== LOADER ====================
@@ -1376,7 +1376,7 @@ function initNavigation() {
     transitionTo(() => showIndex());
   });
 
-  document.getElementById('cv-link').addEventListener('click', (e) => {
+  document.getElementById('cv-link')?.addEventListener('click', (e) => {
     e.preventDefault();
     transitionTo(() => showCV());
   });

@@ -312,21 +312,35 @@ ul {
   opacity: 0.7;
 }
 
-.contact-nav {
+.sidebar-info {
+  margin-top: auto;
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
-.contact-nav a {
-  font-size: 15px;
+.sidebar-info-line {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
   line-height: 1.6;
-  transition: opacity 0.2s ease;
 }
 
-.contact-nav a:hover {
-  opacity: 0.6;
+.sidebar-info-sub {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.sidebar-info-about {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  margin-top: 10px;
+  display: inline-block;
+  transition: color 0.2s;
+}
+
+.sidebar-info-about:hover {
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .external-arrow {
@@ -343,53 +357,57 @@ ul {
 }
 
 .work-label {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .project-list li {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .project-list a {
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 13px;
+  line-height: 1.75;
   display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  align-items: baseline;
+  gap: 10px;
   transition: opacity 0.2s ease;
+  opacity: 0.45;
 }
 
 .project-list a:hover {
-  opacity: 1;
+  opacity: 0.75;
 }
 
 .project-list a.active {
-  font-weight: 700;
+  font-weight: 500;
   opacity: 1;
 }
 
 .project-list.has-scroll-active a:not(.active) {
-  opacity: 0.35;
+  opacity: 0.2;
 }
 
-/* Small circular arrow icon */
-.nav-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 19px;
-  height: 19px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.4);
+.proj-num {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.3);
   flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
-.nav-arrow::after {
-  content: '›';
-  font-size: 20px;
+.project-list a.active .proj-num {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* nav-arrow hidden — replaced by proj-num */
+.nav-arrow {
+  display: none;
   line-height: 1;
   margin-top: -1px;
   margin-left: 1px;
