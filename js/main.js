@@ -343,6 +343,23 @@ function clampHTarget() {
   hscroll.target = Math.max(0, Math.min(hscroll.target, getMaxHScroll()));
 }
 
+function updateCardOpacity() {
+  if (window.innerWidth <= 768) return;
+  const el = getIndexScrollArea();
+  if (!el) return;
+  const cardWidth = el.clientWidth;
+  if (cardWidth === 0) return;
+  const x = hscroll.current;
+  document.querySelectorAll('#index-view .project-card').forEach((card, i) => {
+    if (!card.classList.contains('anim-in')) return;
+    const dist = Math.abs(x - i * cardWidth) / cardWidth;
+    const opacity = Math.max(0, 1 - dist);
+    const translateY = (1 - opacity) * 18;
+    card.style.opacity = opacity;
+    card.style.transform = `translateY(${translateY}px)`;
+  });
+}
+
 function tickH() {
   hscroll.current += (hscroll.target - hscroll.current) * hscroll.ease;
   const el = getIndexScrollArea();
@@ -353,11 +370,13 @@ function tickH() {
     el.scrollLeft = hscroll.current;
     hscroll.ticking = false;
     updateSidebarFromHScroll();
+    updateCardOpacity();
     return;
   }
 
   el.scrollLeft = hscroll.current;
   updateSidebarFromHScroll();
+  updateCardOpacity();
   requestAnimationFrame(tickH);
 }
 
@@ -406,8 +425,16 @@ function initSmoothScroll() {
 
   window.addEventListener('wheel', (e) => {
     e.preventDefault();
-    if (isIndexVisible()) {
-      hscroll.target += e.deltaY;
+    if (isIndexVisible() && window.innerWidth > 768) {
+      const el = getIndexScrollArea();
+      if (!el) return;
+      const cardWidth = el.clientWidth;
+      if (cardWidth === 0) return;
+      const currentCard = Math.round(hscroll.target / cardWidth);
+      const delta = e.deltaY > 0 ? 1 : -1;
+      const numCards = CONTENT.projects.length;
+      const targetCard = Math.max(0, Math.min(currentCard + delta, numCards - 1));
+      hscroll.target = targetCard * cardWidth;
       clampHTarget();
       startHScroll();
     } else {
@@ -482,6 +509,8 @@ function replayHomeAnimations() {
   const firstCard = document.querySelector('#index-view .project-card');
   if (firstCard) {
     firstCard.classList.remove('anim-in');
+    firstCard.style.opacity = '';
+    firstCard.style.transform = '';
     void firstCard.offsetWidth;
     firstCard.style.animationDelay = '0ms';
     setTimeout(() => firstCard.classList.add('anim-in'), 60);
@@ -631,9 +660,13 @@ function showIndex(fromPop) {
   showView('index-view');
   document.body.classList.add('index-active');
   jumpTo(0);
-  jumpHTo(0);
-  setActiveProject(0);
-  document.getElementById('project-list').classList.add('has-scroll-active');
+  if (window.innerWidth > 768) {
+    jumpHTo(0);
+    setActiveProject(0);
+    document.getElementById('project-list').classList.add('has-scroll-active');
+  } else {
+    clearActiveProject();
+  }
   showWorkNav();
   if (!fromPop) pushRoute('/');
   cycleGreeting();
@@ -1570,21 +1603,25 @@ function initScrollHighlight() {
   const cards = document.querySelectorAll('#index-view .project-card[data-index]');
   if (!cards.length) return;
 
+  const isMobile = () => window.innerWidth <= 768;
+
   scrollObserver = new IntersectionObserver((entries) => {
     if (!isIndexVisible()) return;
 
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const index = entry.target.dataset.index;
-        projectList.classList.add('has-scroll-active');
-        setActiveProject(index);
-        // Animate card into view if not already done
+        if (isMobile()) {
+          projectList.classList.add('has-scroll-active');
+          setActiveProject(index);
+        }
         if (!entry.target.classList.contains('anim-in')) {
           entry.target.classList.add('anim-in');
+          // Let CSS animation run, then JS opacity takes over on next scroll
         }
       }
     });
-  }, { threshold: 0.5, root: scrollArea });
+  }, { threshold: [0, 0.1, 0.5], root: isMobile() ? null : scrollArea });
 
   cards.forEach((card) => scrollObserver.observe(card));
 }
