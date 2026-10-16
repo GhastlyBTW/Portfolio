@@ -708,8 +708,62 @@ function renderSplitDetail(gallery, project, copy, index, images) {
     gallery.appendChild(sectionEl);
   });
 
+  renderNextProjectFooter(gallery, index);
   observeAnimations(gallery);
   initDividerScroll();
+}
+
+function renderNextProjectFooter(container, currentIndex) {
+  const navIndices = projects.map((_, i) => i).filter(i => i !== PHOTO_PROJECT_INDEX);
+  const navPos = navIndices.indexOf(currentIndex);
+  const nextIdx = navIndices[(navPos + 1) % navIndices.length];
+  const nextProject = projects[nextIdx];
+  const nextCopy = CONTENT.projects[nextIdx];
+
+  const divider = document.createElement('div');
+  divider.className = 'project-section-divider';
+  container.appendChild(divider);
+
+  const footer = document.createElement('div');
+  footer.className = 'project-next-footer';
+  footer.addEventListener('click', () => showDetail(nextIdx));
+
+  const label = document.createElement('div');
+  label.className = 'project-next-label';
+  label.textContent = 'NEXT PROJECT';
+
+  const content = document.createElement('div');
+  content.className = 'project-next-content';
+
+  const left = document.createElement('div');
+  left.className = 'project-next-left';
+
+  const name = document.createElement('h2');
+  name.className = 'project-next-name';
+  name.textContent = nextCopy.name;
+
+  const desc = document.createElement('p');
+  desc.className = 'project-next-desc';
+  desc.textContent = nextCopy.cardDescription;
+
+  left.appendChild(name);
+  left.appendChild(desc);
+
+  const right = document.createElement('div');
+  right.className = 'project-next-right';
+
+  if (nextProject.thumbnail || nextProject.thumbnailFallback) {
+    const img = document.createElement('img');
+    img.src = nextProject.thumbnailFallback || nextProject.thumbnail;
+    img.alt = nextCopy.name;
+    right.appendChild(img);
+  }
+
+  content.appendChild(left);
+  content.appendChild(right);
+  footer.appendChild(label);
+  footer.appendChild(content);
+  container.appendChild(footer);
 }
 
 function updateDetailOverlaySelection(index) {

@@ -2762,6 +2762,85 @@ body.detail-active .detail-bottom-bar {
   opacity: 0;
 }
 
+/* ==================== NEXT PROJECT FOOTER ==================== */
+
+.project-section-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 15px;
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+
+.project-next-footer {
+  margin-top: 0;
+  padding: 60px 15px 60px 15px;
+  cursor: pointer;
+}
+
+.project-next-footer:hover .project-next-name {
+  opacity: 0.65;
+}
+
+.project-next-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 28px;
+}
+
+.project-next-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.project-next-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.project-next-name {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.5vw, 56px);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 16px;
+  transition: opacity 0.3s ease;
+}
+
+.project-next-desc {
+  font-size: 12px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.3);
+  max-width: 420px;
+  text-wrap: pretty;
+}
+
+.project-next-right {
+  width: 42%;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.project-next-right img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 2px;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.project-next-footer:hover .project-next-right img {
+  transform: scale(1.04);
+}
+
 /* ==================== FLOATING TASKBAR FOOTER ==================== */
 
 .site-footer {
