@@ -419,9 +419,11 @@ function scrollIndexToCard(index) {
 
 // ==================== SMOOTH SCROLL ====================
 
-// Idle-based lock: advances one card per gesture, unlocks 200ms after events stop
+// Accumulation-based: require 50px of intentional delta before advancing.
+// During animation, drain accumulator to zero so decaying momentum can't re-trigger.
+let _hscrollAccum = 0;
 let _hscrollLocked = false;
-let _hscrollIdleTimer = null;
+const H_TRIGGER = 50;
 
 function initSmoothScroll() {
   scroll.current = window.scrollY;
@@ -434,28 +436,31 @@ function initSmoothScroll() {
 
     e.preventDefault();
     if (isIndexVisible() && window.innerWidth > 768) {
-      // Reset idle timer on every event — unlock 200ms after events stop
-      if (_hscrollIdleTimer) clearTimeout(_hscrollIdleTimer);
-      _hscrollIdleTimer = setTimeout(() => {
-        _hscrollLocked = false;
-        _hscrollIdleTimer = null;
-      }, 200);
+      if (_hscrollLocked) {
+        _hscrollAccum = 0; // drain momentum during animation — prevents re-trigger on unlock
+        return;
+      }
 
-      if (_hscrollLocked) return;
+      _hscrollAccum += e.deltaY;
+      if (Math.abs(_hscrollAccum) < H_TRIGGER) return;
 
       const el = getIndexScrollArea();
       if (!el) return;
       const cardWidth = el.clientWidth;
       if (cardWidth === 0) return;
       const currentCard = Math.round(hscroll.target / cardWidth);
-      const delta = e.deltaY > 0 ? 1 : -1;
+      const delta = _hscrollAccum > 0 ? 1 : -1;
       const numCards = CONTENT.projects.length;
       const targetCard = Math.max(0, Math.min(currentCard + delta, numCards - 1));
+
+      _hscrollAccum = 0;
       if (targetCard === currentCard) return;
+
       hscroll.target = targetCard * cardWidth;
       clampHTarget();
       startHScroll();
       _hscrollLocked = true;
+      setTimeout(() => { _hscrollLocked = false; }, 600);
     } else {
       scroll.target += e.deltaY;
       clampTarget();
@@ -732,6 +737,7 @@ function renderGalleryBlock(block, images, galleryAlts, name) {
     img.src = src;
     img.alt = (galleryAlts && galleryAlts[block.idx]) || name;
     img.loading = 'lazy';
+    img.decoding = 'async';
     return img;
   } else if (block.type === 'video') {
     const src = images[block.idx];
@@ -755,6 +761,7 @@ function renderGalleryBlock(block, images, galleryAlts, name) {
       img.src = src;
       img.alt = (galleryAlts && galleryAlts[idx]) || name;
       img.loading = 'lazy';
+      img.decoding = 'async';
       row.appendChild(img);
     });
     return row;
@@ -828,6 +835,7 @@ function renderSplitDetail(gallery, project, copy, index, images) {
     const heroImg = document.createElement('img');
     heroImg.src = project.thumbnailFallback || project.thumbnail;
     heroImg.alt = copy.name;
+    heroImg.decoding = 'async';
     heroImg.className = 'anim-fade-up';
     heroImg.style.animationDelay = '120ms';
     introRight.appendChild(heroImg);
@@ -930,6 +938,7 @@ function renderNextProjectFooter(container, currentIndex) {
     const img = document.createElement('img');
     img.src = nextProject.thumbnailFallback || nextProject.thumbnail;
     img.alt = nextCopy.name;
+    img.decoding = 'async';
     right.appendChild(img);
   }
 
@@ -1037,6 +1046,7 @@ function showDetail(index, fromPop) {
         img.src = src;
         img.alt = (project.galleryAlts && project.galleryAlts[i]) || copy.name;
         img.loading = 'lazy';
+        img.decoding = 'async';
         gallery.appendChild(img);
       });
     } else {
@@ -1330,6 +1340,7 @@ function showCollectionGallery(collectionIdx, fromPop) {
     const img = document.createElement('img');
     img.src = src;
     img.loading = i < 3 ? 'eager' : 'lazy';
+    img.decoding = 'async';
     img.alt = collection.name + ' — photo ' + (i + 1);
     strip.appendChild(img);
   });
@@ -1827,6 +1838,7 @@ function initMusic() {
       const img = document.createElement('img');
       img.src = album.cover;
       img.alt = `${album.title} — ${album.artist}`;
+      img.decoding = 'async';
       item.appendChild(img);
     } else {
       const placeholder = document.createElement('div');
@@ -1900,6 +1912,7 @@ function initRandomPhotoThumb() {
   const img = document.createElement('img');
   img.src = src;
   img.alt = 'Photography: Personal';
+  img.decoding = 'async';
   placeholder.replaceWith(img);
 }
 
@@ -2249,8 +2262,8 @@ function initCursor() {
   let tx = -100, ty = -100, cx = -100, cy = -100;
 
   (function lerp() {
-    cx += (tx - cx) * 0.14;
-    cy += (ty - cy) * 0.14;
+    cx += (tx - cx) * 0.18;
+    cy += (ty - cy) * 0.18;
     cursor.style.left = cx + 'px';
     cursor.style.top  = cy + 'px';
     requestAnimationFrame(lerp);

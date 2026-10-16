@@ -4,7 +4,7 @@ const photoCollections = [
   {
     name: 'Dominican Republic',
     subtitle: 'Digital · Sony A7C · Street Photography',
-    thumbnail: 'assets/Photography/Digital/Dominican Republic/DSC00048.webp',
+    thumbnail: 'assets/Photography/thumbs/Digital/Dominican Republic/DSC00048.jpg',
     images: [
       'assets/Photography/Digital/Dominican Republic/DSC00048.webp',
       'assets/Photography/Digital/Dominican Republic/DSC00093.webp',
@@ -46,7 +46,7 @@ const photoCollections = [
   {
     name: 'Javen 350Z',
     subtitle: 'Digital · Sony A7C · Car Photography',
-    thumbnail: 'assets/Photography/Digital/Javen 350Z/DSC03112-2.webp',
+    thumbnail: 'assets/Photography/thumbs/Digital/Javen 350Z/DSC03112-2.jpg',
     images: [
       'assets/Photography/Digital/Javen 350Z/DSC03112-2.webp',
       'assets/Photography/Digital/Javen 350Z/DSC03120.webp',
@@ -67,7 +67,7 @@ const photoCollections = [
   {
     name: 'Museum Research',
     subtitle: 'Digital · Sony A7C · Street Photography',
-    thumbnail: 'assets/Photography/Digital/Museum Research/DSC03147.webp',
+    thumbnail: 'assets/Photography/thumbs/Digital/Museum Research/DSC03147.jpg',
     images: [
       'assets/Photography/Digital/Museum Research/DSC03147.webp',
       'assets/Photography/Digital/Museum Research/DSC03171.webp',
@@ -83,7 +83,7 @@ const photoCollections = [
   {
     name: 'Peeduh',
     subtitle: 'Digital · Sony A7C · Car Photography',
-    thumbnail: 'assets/Photography/Digital/Peeduh/DSC01185-Edit.webp',
+    thumbnail: 'assets/Photography/thumbs/Digital/Peeduh/DSC01185-Edit.jpg',
     images: [
       'assets/Photography/Digital/Peeduh/DSC01185-Edit.webp',
       'assets/Photography/Digital/Peeduh/DSC01185.webp',
@@ -105,7 +105,7 @@ const photoCollections = [
   {
     name: 'Revzilla',
     subtitle: 'Digital · Sony A7C · Car Photography',
-    thumbnail: 'assets/Photography/Digital/Revzilla/DSC03556-2.webp',
+    thumbnail: 'assets/Photography/thumbs/Digital/Revzilla/DSC03556-2.jpg',
     images: [
       'assets/Photography/Digital/Revzilla/DSC03556-2.webp',
       'assets/Photography/Digital/Revzilla/DSC03599.webp',
@@ -127,7 +127,7 @@ const photoCollections = [
   {
     name: 'Sunset on the Concourse',
     subtitle: 'Digital · Sony A7C · Car Photography',
-    thumbnail: 'assets/Photography/Digital/Sunset on the Concourse/01-1.webp',
+    thumbnail: 'assets/Photography/thumbs/Digital/Sunset on the Concourse/01-1.jpg',
     images: [
       'assets/Photography/Digital/Sunset on the Concourse/01-1.webp',
       'assets/Photography/Digital/Sunset on the Concourse/01-2.webp',
@@ -153,7 +153,7 @@ const photoCollections = [
   {
     name: 'Monaco',
     subtitle: '35mm · Canon Sureshot 115u · Kodak Portra 400',
-    thumbnail: 'assets/Photography/Film/Roll 1/brandon da neg roll1 25-3-26-02.webp',
+    thumbnail: 'assets/Photography/thumbs/Film/Roll 1/brandon da neg roll1 25-3-26-02.jpg',
     images: [
       'assets/Photography/Film/Roll 1/brandon da neg roll1 25-3-26-02.webp',
       'assets/Photography/Film/Roll 1/brandon da neg roll1 25-3-26-03.webp',
@@ -176,7 +176,7 @@ const photoCollections = [
   {
     name: 'Venice',
     subtitle: '35mm · Canon Sureshot 115u · Kodak Portra 400',
-    thumbnail: 'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-02.webp',
+    thumbnail: 'assets/Photography/thumbs/Film/Roll 2/branden da neg roll 2 25-3-26-02.jpg',
     images: [
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-02.webp',
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-03.webp',
@@ -208,7 +208,7 @@ const photoCollections = [
   {
     name: 'First Weeks in Rome',
     subtitle: '35mm · Canon Sureshot 115u · Kodak Portra 400',
-    thumbnail: 'assets/Photography/Film/Roll 3/branden da neg roll 3 25-3-26-01.webp',
+    thumbnail: 'assets/Photography/thumbs/Film/Roll 3/branden da neg roll 3 25-3-26-01.jpg',
     images: [
       'assets/Photography/Film/Roll 3/branden da neg roll 3 25-3-26-01.webp',
       'assets/Photography/Film/Roll 3/branden da neg roll 3 25-3-26-07.webp',

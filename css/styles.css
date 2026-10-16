@@ -1013,6 +1013,10 @@ body.gallery-active .photo-filters {
   display: none !important;
 }
 
+body.gallery-active .gallery-back {
+  display: none;
+}
+
 .gallery-info {
   width: var(--sidebar-width);
   flex-shrink: 0;
@@ -1365,12 +1369,12 @@ body.photo-active .photo-bottom-nav {
 }
 
 .pt-logo {
-  clip-path: inset(0 0 100% 0);
+  clip-path: inset(100% 0 0 0);
   transition: clip-path 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.52s;
 }
 
 #page-transition.pt-visible .pt-logo {
-  clip-path: inset(0 0 0% 0);
+  clip-path: inset(0% 0 0 0);
 }
 
 /* ==================== ABOUT VIEW ==================== */
@@ -2975,7 +2979,7 @@ body.detail-active .detail-bottom-bar {
   z-index: 99999;
   transform: translate(-50%, -50%);
   transition: width 0.22s ease, height 0.22s ease, background 0.22s ease, border-color 0.22s ease, opacity 0.2s;
-  will-change: transform;
+  will-change: left, top;
   opacity: 1;
 }
 
