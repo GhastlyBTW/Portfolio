@@ -107,11 +107,13 @@
         <ul class="project-list" id="collection-list"></ul>
       </nav>
 
-      <div class="sidebar-info">
-        <p class="sidebar-info-line sidebar-item">Graphic Designer</p>
-        <p class="sidebar-info-line sidebar-info-sub sidebar-item">New York</p>
-        <a href="#" id="about-link" class="sidebar-info-about sidebar-item">About</a>
-      </div>
+      <nav class="contact-nav">
+        <a href="mailto:branden.chi.07@gmail.com" class="sidebar-item">Email</a>
+        <a href="#" id="cv-link" class="sidebar-item">CV</a>
+        <a href="#" id="about-link" class="sidebar-item">About</a>
+        <a href="https://www.instagram.com/brand.en_/" target="_blank" rel="noopener" class="sidebar-item">Instagram <svg class="external-arrow" xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 8L8 1M8 1H2M8 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="https://www.linkedin.com/in/branden-chi-360a06298" target="_blank" rel="noopener" class="sidebar-item">LinkedIn <svg class="external-arrow" xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 8L8 1M8 1H2M8 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </nav>
 
       <!-- Mobile Spinner -->
       <svg class="mobile-spinner scroll-motif" id="mobile-scroll-motif" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="18" height="18">
@@ -412,6 +414,10 @@
           <h1 class="detail-title">Photography: Personal</h1>
           <a href="#" class="index-link" id="photo-index-link">Home <span class="up-arrow">↑</span></a>
         </div>
+        <div class="photo-top-bar" id="photo-top-bar">
+          <a href="#" class="photo-top-name" id="photo-home-link">BRANDEN CHI <svg class="scroll-motif" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14"><text x="50" y="58" text-anchor="middle" dominant-baseline="central" font-size="90" fill="#fff" font-style="normal" font-family="serif">✽</text></svg></a>
+          <span class="photo-top-quip">yes i shoot film, please ask me about it</span>
+        </div>
         <div class="photo-filters" id="photo-filters">
           <button class="photo-filter active" data-filter="all">All</button>
           <span class="filter-divider">|</span>
@@ -649,16 +655,21 @@
     </div>
   </div>
 
-  <!-- Fixed floating taskbar — utility dock -->
-  <footer class="site-footer" id="site-footer" aria-label="Site footer">
+  <!-- Fixed floating taskbar footer -->
+  <footer class="site-footer" id="site-footer" aria-label="Site footer navigation">
+    <div class="footer-preview" id="footer-preview" aria-hidden="true">
+      <img class="footer-preview-img" id="footer-preview-img" src="" alt="" loading="lazy">
+      <div class="footer-preview-placeholder" id="footer-preview-placeholder"></div>
+      <div class="footer-preview-caption">
+        <span class="footer-preview-title" id="footer-preview-title"></span>
+        <span class="footer-preview-meta" id="footer-preview-meta"></span>
+      </div>
+    </div>
     <div class="footer-taskbar">
-      <a href="/" class="footer-wordmark" id="footer-wordmark">BRANDEN CHI</a>
+      <a href="/" class="footer-wordmark" id="footer-wordmark">Branden Chi</a>
       <div class="footer-sep" aria-hidden="true"></div>
-      <nav class="footer-utils" id="footer-utils" aria-label="Quick actions">
-        <a href="mailto:branden.chi.07@gmail.com" class="footer-util-item">Email</a>
-        <a href="#" id="footer-cv-btn" class="footer-util-item">CV</a>
-        <a href="https://www.instagram.com/brand.en_/" target="_blank" rel="noopener" class="footer-util-item">Instagram <svg class="external-arrow" xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 8L8 1M8 1H2M8 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <a href="https://www.linkedin.com/in/branden-chi-360a06298" target="_blank" rel="noopener" class="footer-util-item">LinkedIn <svg class="external-arrow" xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 8L8 1M8 1H2M8 1V7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <nav class="footer-nav" id="footer-nav" aria-label="Sections">
+        <div class="footer-highlight" id="footer-highlight" aria-hidden="true"></div>
       </nav>
       <div class="footer-sep" aria-hidden="true"></div>
       <span class="footer-clock" id="footer-clock" aria-live="off"></span>
