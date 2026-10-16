@@ -587,58 +587,6 @@ function renderGalleryBlock(block, images, galleryAlts, name) {
   return null;
 }
 
-function renderNextProjectFooter(container, currentIndex) {
-  const navIndices = projects.map((_, i) => i).filter(i => i !== PHOTO_PROJECT_INDEX);
-  const navPos = navIndices.indexOf(currentIndex);
-  const nextIdx = navIndices[(navPos + 1) % navIndices.length];
-  const nextProject = projects[nextIdx];
-  const nextCopy = CONTENT.projects[nextIdx];
-
-  const divider = document.createElement('div');
-  divider.className = 'project-section-divider';
-  container.appendChild(divider);
-
-  const footer = document.createElement('div');
-  footer.className = 'project-next-footer';
-  footer.addEventListener('click', () => showDetail(nextIdx));
-
-  const label = document.createElement('div');
-  label.className = 'project-next-label';
-  label.textContent = 'NEXT PROJECT';
-
-  const content = document.createElement('div');
-  content.className = 'project-next-content';
-
-  const left = document.createElement('div');
-  left.className = 'project-next-left';
-
-  const name = document.createElement('h2');
-  name.className = 'project-next-name';
-  name.textContent = nextCopy.name;
-
-  const desc = document.createElement('p');
-  desc.className = 'project-next-desc';
-  desc.textContent = nextCopy.cardDescription;
-
-  left.appendChild(name);
-  left.appendChild(desc);
-
-  const right = document.createElement('div');
-  right.className = 'project-next-right';
-
-  if (nextProject.thumbnail || nextProject.thumbnailFallback) {
-    const img = document.createElement('img');
-    img.src = nextProject.thumbnailFallback || nextProject.thumbnail;
-    img.alt = nextCopy.name;
-    right.appendChild(img);
-  }
-
-  content.appendChild(left);
-  content.appendChild(right);
-  footer.appendChild(label);
-  footer.appendChild(content);
-  container.appendChild(footer);
-}
 
 function renderSplitDetail(gallery, project, copy, index, images) {
   // Intro section
@@ -759,7 +707,6 @@ function renderSplitDetail(gallery, project, copy, index, images) {
     gallery.appendChild(sectionEl);
   });
 
-  renderNextProjectFooter(gallery, index);
   observeAnimations(gallery);
   initDividerScroll();
 }
@@ -2388,15 +2335,26 @@ function initCursor() {
   const cursor = document.getElementById('cursor');
   if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
 
+  let tx = -100, ty = -100, cx = -100, cy = -100;
+
+  (function lerp() {
+    cx += (tx - cx) * 0.14;
+    cy += (ty - cy) * 0.14;
+    cursor.style.left = cx + 'px';
+    cursor.style.top  = cy + 'px';
+    requestAnimationFrame(lerp);
+  })();
+
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    tx = e.clientX;
+    ty = e.clientY;
     cursor.classList.remove('cursor-hidden');
   });
   document.addEventListener('mouseleave', () => cursor.classList.add('cursor-hidden'));
   document.addEventListener('mouseenter', () => cursor.classList.remove('cursor-hidden'));
 
-  const HOVER_TARGETS = 'a, button, [role="button"], input, select, textarea, label, .project-card, .album-card, .photo-filter, .sidebar-item';
+  // Only interactive elements — avoids false-positives from large padding areas
+  const HOVER_TARGETS = 'a, button, [role="button"], input, select, textarea, label';
 
   document.addEventListener('mouseover', (e) => {
     if (e.target.closest(HOVER_TARGETS)) cursor.classList.add('cursor-hover');

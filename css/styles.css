@@ -15,26 +15,18 @@
 }
 
 @font-face {
-  font-family: 'Neue Haas Grotesk';
-  src: url('../assets/fonts/neuehaasgrottextround-55roman-trial.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Neue Haas Grotesk';
-  src: url('../assets/fonts/neuehaasgrottextround-56italic-trial.woff') format('woff');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Neue Haas Grotesk';
-  src: url('../assets/fonts/neuehaasgrottextround-75bold-trial.otf') format('opentype');
+  font-family: 'Averia Serif Libre';
+  src: url('../assets/fonts/AveriaSerifLibre-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Averia Serif Libre';
+  src: url('../assets/fonts/AveriaSerifLibre-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -44,7 +36,7 @@
   --text-muted: rgba(255, 255, 255, 0.5);
   --sidebar-width: clamp(340px, 34vw, 520px);
   --font-display: 'Fansan', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --font-body: 'Neue Haas Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: 'Averia Serif Libre', Georgia, serif;
 }
 
 *, *::before, *::after {
@@ -2204,74 +2196,6 @@ body.detail-active .detail-accordions { display: none; }
   transform-origin: right center;
 }
 
-.project-next-footer {
-  margin-top: 0;
-  padding: 60px 15px 60px 15px;
-  cursor: pointer;
-}
-
-.project-next-footer:hover .project-next-name {
-  opacity: 0.65;
-}
-
-.project-next-label {
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-family: var(--font-body);
-  color: rgba(255, 255, 255, 0.25);
-  margin-bottom: 28px;
-}
-
-.project-next-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 48px;
-}
-
-.project-next-left {
-  flex: 1;
-  min-width: 0;
-}
-
-.project-next-name {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 3.5vw, 56px);
-  font-weight: 300;
-  line-height: 1;
-  color: var(--text);
-  margin-bottom: 16px;
-  transition: opacity 0.3s ease;
-}
-
-.project-next-desc {
-  font-size: 12px;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.3);
-  max-width: 420px;
-  text-wrap: pretty;
-}
-
-.project-next-right {
-  width: 42%;
-  flex-shrink: 0;
-  overflow: hidden;
-  border-radius: 2px;
-}
-
-.project-next-right img {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 2px;
-  display: block;
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.project-next-footer:hover .project-next-right img {
-  transform: scale(1.04);
-}
 
 /* =====================================================
    DETAIL CONTROLS (bottom-left: credits + hamburger)
@@ -2822,8 +2746,8 @@ body.detail-active .detail-bottom-bar {
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
-  transition: width 0.18s ease, height 0.18s ease, background 0.18s ease, border-color 0.18s ease, opacity 0.15s;
-  will-change: left, top;
+  transition: width 0.22s ease, height 0.22s ease, background 0.22s ease, border-color 0.22s ease, opacity 0.2s;
+  will-change: transform;
   opacity: 1;
 }
 
@@ -2842,7 +2766,7 @@ body.detail-active .detail-bottom-bar {
 
 .site-footer {
   display: none;
-  padding: 60px 0 48px;
+  padding: 60px 40px 48px;
 }
 
 .site-footer.visible {
@@ -2989,8 +2913,10 @@ body.detail-active .detail-bottom-bar {
 
 /* Taskbar */
 .footer-taskbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
+  gap: 16px;
 }
 
 .footer-wordmark {
@@ -3000,7 +2926,6 @@ body.detail-active .detail-bottom-bar {
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   white-space: nowrap;
-  margin-right: 16px;
   transition: color 0.3s;
 }
 
@@ -3009,7 +2934,6 @@ body.detail-active .detail-bottom-bar {
 }
 
 .footer-nav {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3018,13 +2942,14 @@ body.detail-active .detail-bottom-bar {
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 30px;
   padding: 2px 6px;
-  margin: 0 14px;
+  width: fit-content;
+  justify-self: center;
   overflow: hidden;
 }
 
 .footer-nav-item {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.38);
   background: none;
   border: none;
@@ -3088,7 +3013,7 @@ body.detail-active .detail-bottom-bar {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.22);
   white-space: nowrap;
-  margin-left: 14px;
+  justify-self: end;
 }
 
 /* Reduced motion */
