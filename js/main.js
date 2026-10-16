@@ -419,7 +419,9 @@ function scrollIndexToCard(index) {
 
 // ==================== SMOOTH SCROLL ====================
 
-let _hscrollCooldownTimer = null;
+// Idle-based lock: advances one card per gesture, unlocks 200ms after events stop
+let _hscrollLocked = false;
+let _hscrollIdleTimer = null;
 
 function initSmoothScroll() {
   scroll.current = window.scrollY;
@@ -432,12 +434,15 @@ function initSmoothScroll() {
 
     e.preventDefault();
     if (isIndexVisible() && window.innerWidth > 768) {
-      // Extend cooldown on every wheel event — blocks momentum from double-advancing cards
-      if (_hscrollCooldownTimer) {
-        clearTimeout(_hscrollCooldownTimer);
-        _hscrollCooldownTimer = setTimeout(() => { _hscrollCooldownTimer = null; }, 700);
-        return;
-      }
+      // Reset idle timer on every event — unlock 200ms after events stop
+      if (_hscrollIdleTimer) clearTimeout(_hscrollIdleTimer);
+      _hscrollIdleTimer = setTimeout(() => {
+        _hscrollLocked = false;
+        _hscrollIdleTimer = null;
+      }, 200);
+
+      if (_hscrollLocked) return;
+
       const el = getIndexScrollArea();
       if (!el) return;
       const cardWidth = el.clientWidth;
@@ -450,7 +455,7 @@ function initSmoothScroll() {
       hscroll.target = targetCard * cardWidth;
       clampHTarget();
       startHScroll();
-      _hscrollCooldownTimer = setTimeout(() => { _hscrollCooldownTimer = null; }, 700);
+      _hscrollLocked = true;
     } else {
       scroll.target += e.deltaY;
       clampTarget();
@@ -1550,7 +1555,11 @@ function initNavigation() {
 
   document.getElementById('photo-home-link').addEventListener('click', (e) => {
     e.preventDefault();
-    transitionTo(() => showIndex());
+    if (document.body.classList.contains('gallery-active')) {
+      transitionTo(() => showPhotography());
+    } else {
+      transitionTo(() => showIndex());
+    }
   });
 
   document.getElementById('gallery-back-link').addEventListener('click', (e) => {

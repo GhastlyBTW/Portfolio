@@ -1003,6 +1003,16 @@ body.gallery-active #photo-gallery-view {
   display: flex !important;
 }
 
+/* Gallery: show top bar (name + quip only, no filters) */
+body.gallery-active .photo-top-bar {
+  display: flex;
+  z-index: 600;
+}
+
+body.gallery-active .photo-filters {
+  display: none !important;
+}
+
 .gallery-info {
   width: var(--sidebar-width);
   flex-shrink: 0;
