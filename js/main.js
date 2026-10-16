@@ -320,15 +320,101 @@ function jumpTo(y) {
   window.scrollTo(0, y);
 }
 
+// ==================== HORIZONTAL SCROLL (INDEX) ====================
+
+const hscroll = {
+  current: 0,
+  target: 0,
+  ease: 0.08,
+  ticking: false,
+};
+
+function getIndexScrollArea() {
+  return document.getElementById('index-scroll-area');
+}
+
+function getMaxHScroll() {
+  const el = getIndexScrollArea();
+  if (!el) return 0;
+  return el.scrollWidth - el.clientWidth;
+}
+
+function clampHTarget() {
+  hscroll.target = Math.max(0, Math.min(hscroll.target, getMaxHScroll()));
+}
+
+function tickH() {
+  hscroll.current += (hscroll.target - hscroll.current) * hscroll.ease;
+  const el = getIndexScrollArea();
+  if (!el) { hscroll.ticking = false; return; }
+
+  if (Math.abs(hscroll.target - hscroll.current) < 0.5) {
+    hscroll.current = hscroll.target;
+    el.scrollLeft = hscroll.current;
+    hscroll.ticking = false;
+    updateSidebarFromHScroll();
+    return;
+  }
+
+  el.scrollLeft = hscroll.current;
+  updateSidebarFromHScroll();
+  requestAnimationFrame(tickH);
+}
+
+function startHScroll() {
+  if (!hscroll.ticking) {
+    hscroll.ticking = true;
+    requestAnimationFrame(tickH);
+  }
+}
+
+function smoothHScrollTo(x) {
+  hscroll.target = x;
+  clampHTarget();
+  startHScroll();
+}
+
+function jumpHTo(x) {
+  hscroll.current = x;
+  hscroll.target = x;
+  const el = getIndexScrollArea();
+  if (el) el.scrollLeft = x;
+}
+
+function updateSidebarFromHScroll() {
+  const el = getIndexScrollArea();
+  if (!el) return;
+  const cardWidth = el.clientWidth;
+  if (cardWidth === 0) return;
+  const index = Math.round(el.scrollLeft / cardWidth);
+  setActiveProject(index);
+  document.getElementById('project-list').classList.add('has-scroll-active');
+}
+
+function scrollIndexToCard(index) {
+  const el = getIndexScrollArea();
+  if (!el) return;
+  const cardWidth = el.clientWidth;
+  smoothHScrollTo(index * cardWidth);
+}
+
+// ==================== SMOOTH SCROLL ====================
+
 function initSmoothScroll() {
   scroll.current = window.scrollY;
   scroll.target = window.scrollY;
 
   window.addEventListener('wheel', (e) => {
     e.preventDefault();
-    scroll.target += e.deltaY;
-    clampTarget();
-    startTick();
+    if (isIndexVisible()) {
+      hscroll.target += e.deltaY;
+      clampHTarget();
+      startHScroll();
+    } else {
+      scroll.target += e.deltaY;
+      clampTarget();
+      startTick();
+    }
   }, { passive: false });
 
   window.addEventListener('scroll', () => {
@@ -393,12 +479,13 @@ function replayHomeAnimations() {
   sidebarItems.forEach((item, i) => {
     setTimeout(() => item.classList.add('slide-in'), 30 + (i + 1) * 60);
   });
-  document.querySelectorAll('#index-view .project-card').forEach((card, i) => {
-    card.classList.remove('anim-in');
-    void card.offsetWidth;
-    card.style.animationDelay = '0ms';
-    setTimeout(() => card.classList.add('anim-in'), 60 + i * 80);
-  });
+  const firstCard = document.querySelector('#index-view .project-card');
+  if (firstCard) {
+    firstCard.classList.remove('anim-in');
+    void firstCard.offsetWidth;
+    firstCard.style.animationDelay = '0ms';
+    setTimeout(() => firstCard.classList.add('anim-in'), 60);
+  }
 }
 
 // ==================== VIEW MANAGEMENT ====================
@@ -542,9 +629,11 @@ function showIndex(fromPop) {
   exitDetail();
   showFooter('work');
   showView('index-view');
+  document.body.classList.add('index-active');
   jumpTo(0);
-  smoothScrollTo(0);
-  clearActiveProject();
+  jumpHTo(0);
+  setActiveProject(0);
+  document.getElementById('project-list').classList.add('has-scroll-active');
   showWorkNav();
   if (!fromPop) pushRoute('/');
   cycleGreeting();
@@ -806,6 +895,7 @@ function updateDetailOverlaySelection(index) {
 }
 
 function showDetail(index, fromPop) {
+  document.body.classList.remove('index-active');
   exitAbout();
   exitPhoto();
   if (index === PHOTO_PROJECT_INDEX) {
@@ -972,6 +1062,7 @@ function showDetail(index, fromPop) {
 // ==================== ABOUT ====================
 
 function showAbout(fromPop) {
+  document.body.classList.remove('index-active');
   exitDetail();
   exitPhoto();
   updateMeta({
@@ -1073,6 +1164,7 @@ function getCollectionCategory(collection) {
 }
 
 function showPhotography(fromPop) {
+  document.body.classList.remove('index-active');
   updateMeta({
     title: 'Photography — Branden Chi',
     description: 'Personal photography by Branden Chi spanning digital car photography, street photography, and 35mm film — shot on Sony A7C and Canon Sureshot.',
@@ -1345,11 +1437,7 @@ function initNavigation() {
       const index = parseInt(link.dataset.project, 10);
 
       if (isIndexVisible()) {
-        const card = document.querySelector(`.project-card[data-index="${index}"]`);
-        if (card) {
-          const top = card.getBoundingClientRect().top + window.scrollY;
-          smoothScrollTo(top);
-        }
+        scrollIndexToCard(index);
       } else {
         transitionTo(() => showDetail(index));
       }
@@ -1477,6 +1565,7 @@ let scrollObserver = null;
 let collectionObserver = null;
 
 function initScrollHighlight() {
+  const scrollArea = document.getElementById('index-scroll-area');
   const projectList = document.getElementById('project-list');
   const cards = document.querySelectorAll('#index-view .project-card[data-index]');
   if (!cards.length) return;
@@ -1489,9 +1578,13 @@ function initScrollHighlight() {
         const index = entry.target.dataset.index;
         projectList.classList.add('has-scroll-active');
         setActiveProject(index);
+        // Animate card into view if not already done
+        if (!entry.target.classList.contains('anim-in')) {
+          entry.target.classList.add('anim-in');
+        }
       }
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.5, root: scrollArea });
 
   cards.forEach((card) => scrollObserver.observe(card));
 }
@@ -2146,12 +2239,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initFooter();
   initCursor();
 
-  // Stagger index cards on first load (after loader clears)
+  // Animate first card on initial load; others animate via IntersectionObserver as user scrolls
   setTimeout(() => {
-    document.querySelectorAll('#index-view .project-card').forEach((card, i) => {
-      card.style.animationDelay = (i * 90) + 'ms';
-      setTimeout(() => card.classList.add('anim-in'), 100 + i * 90);
-    });
+    const firstCard = document.querySelector('#index-view .project-card');
+    if (firstCard) firstCard.classList.add('anim-in');
   }, 2200);
 
   handleRoute();
