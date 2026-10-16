@@ -320,22 +320,6 @@ ul {
   opacity: 0.7;
 }
 
-.contact-nav {
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.contact-nav a {
-  font-size: 15px;
-  line-height: 1.6;
-  transition: opacity 0.2s ease;
-}
-
-.contact-nav a:hover {
-  opacity: 0.6;
-}
 
 .external-arrow {
   display: inline-block;
@@ -918,6 +902,8 @@ ul {
   aspect-ratio: 1;
   cursor: pointer;
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 300px;
 }
 
 .photo-grid-item img {
@@ -2995,9 +2981,9 @@ body.detail-active .detail-bottom-bar {
 .footer-preview {
   --preview-x: 0px;
   width: 280px;
-  background: rgba(4, 10, 20, 0.92);
-  backdrop-filter: blur(28px) saturate(1.4);
-  -webkit-backdrop-filter: blur(28px) saturate(1.4);
+  background: rgba(4, 10, 20, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 0.5px solid rgba(255, 255, 255, 0.14);
   border-radius: 14px;
   overflow: hidden;
@@ -3057,25 +3043,26 @@ body.detail-active .detail-bottom-bar {
   pointer-events: all;
   display: flex;
   align-items: center;
-  background: rgba(4, 10, 20, 0.82);
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  background: rgba(4, 10, 20, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 0.5px solid rgba(255, 255, 255, 0.1);
   border-radius: 100px;
-  padding: 5px 6px;
+  padding: 7px 8px;
   box-shadow: 0 4px 40px rgba(0, 0, 0, 0.5);
 }
 
 .footer-wordmark {
   font-family: 'NHGText', var(--font-body);
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
-  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   white-space: nowrap;
   transition: color 0.2s;
-  padding: 7px 16px;
+  padding: 8px 18px;
 }
 
 .footer-wordmark:hover {
@@ -3100,11 +3087,11 @@ body.detail-active .detail-bottom-bar {
 
 .footer-nav-item {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.45);
   background: none;
   border: none;
-  padding: 7px 12px;
+  padding: 8px 14px;
   cursor: pointer;
   position: relative;
   z-index: 1;
@@ -3140,7 +3127,7 @@ body.detail-active .detail-bottom-bar {
 }
 
 .footer-proj-item {
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.01em;
 }
 
@@ -3162,10 +3149,10 @@ body.detail-active .detail-bottom-bar {
 
 .footer-clock {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.28);
   white-space: nowrap;
-  padding: 7px 16px;
+  padding: 8px 16px;
 }
 
 /* Mobile */

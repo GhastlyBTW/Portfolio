@@ -246,7 +246,7 @@ const FOOTER_SECTIONS = [
   },
   {
     key: 'contact',
-    label: 'Contact',
+    label: 'Email',
     navigate() { window.location.href = 'mailto:branden.chi.07@gmail.com'; },
     getFeaturedImage() { return 'assets/about/Branden Chi About me.jpg'; },
     featuredTitle: 'branden.chi.07@gmail.com',
@@ -1378,7 +1378,7 @@ function initNavigation() {
     transitionTo(() => showIndex());
   });
 
-  document.getElementById('cv-link').addEventListener('click', (e) => {
+  document.getElementById('cv-link')?.addEventListener('click', (e) => {
     e.preventDefault();
     transitionTo(() => showCV());
   });
@@ -1388,7 +1388,7 @@ function initNavigation() {
     transitionTo(() => showIndex());
   });
 
-  document.getElementById('about-link').addEventListener('click', (e) => {
+  document.getElementById('about-link')?.addEventListener('click', (e) => {
     e.preventDefault();
     transitionTo(() => showAbout());
   });
@@ -1993,17 +1993,12 @@ function footerActivate(key, featuredTitle, featuredMeta, getFeaturedImage, trig
     el.classList.toggle('footer-item-active', el.dataset.key === key && !el.dataset.proj);
   });
 
-  let title = featuredTitle, meta = featuredMeta, imgSrc = null;
-  if (!title) {
-    const section = FOOTER_SECTIONS.find((s) => s.key === key);
-    if (section) {
-      title = section.featuredTitle;
-      meta = section.featuredMeta;
-      imgSrc = section.getFeaturedImage();
-    }
-  } else if (getFeaturedImage) {
-    imgSrc = getFeaturedImage();
-  }
+  // Only show preview popup for project items, not section nav items
+  if (!key.startsWith('_proj_')) return;
+
+  const title = featuredTitle;
+  const meta = featuredMeta;
+  const imgSrc = getFeaturedImage ? getFeaturedImage() : null;
 
   const preview = document.getElementById('footer-preview');
   const img = document.getElementById('footer-preview-img');
