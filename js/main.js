@@ -426,6 +426,10 @@ function initSmoothScroll() {
   scroll.target = window.scrollY;
 
   window.addEventListener('wheel', (e) => {
+    // Let photo view scroll natively — custom scroll is too expensive with backdrop-filter
+    const onPhotoView = document.body.classList.contains('photo-active') && !document.body.classList.contains('gallery-active');
+    if (onPhotoView) return;
+
     e.preventDefault();
     if (isIndexVisible() && window.innerWidth > 768) {
       if (_hscrollCooldown) return;
@@ -1401,8 +1405,16 @@ function applyCollectionFilter() {
   });
 }
 
+let _collectionsRendered = false;
+
 function renderCollections() {
   const container = document.getElementById('photo-collections');
+
+  if (_collectionsRendered) {
+    applyCollectionFilter();
+    return;
+  }
+
   container.innerHTML = '';
 
   if (!photoCollections.length) {
@@ -1426,6 +1438,7 @@ function renderCollections() {
       img.src = collection.thumbnail;
       img.alt = collection.name;
       img.loading = i < 2 ? 'eager' : 'lazy';
+      img.decoding = 'async';
       item.appendChild(img);
     }
 
@@ -1442,6 +1455,7 @@ function renderCollections() {
   });
 
   container.appendChild(grid);
+  _collectionsRendered = true;
   applyCollectionFilter();
 }
 

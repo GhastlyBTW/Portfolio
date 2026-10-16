@@ -187,7 +187,7 @@ const photoCollections = [
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-09.webp',
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-10.webp',
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-11.webp',
-      'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-15.webp',
+
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-17.webp',
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-18.webp',
       'assets/Photography/Film/Roll 2/branden da neg roll 2 25-3-26-19.webp',

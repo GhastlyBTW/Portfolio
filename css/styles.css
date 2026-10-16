@@ -953,8 +953,6 @@ body.index-active .content {
   aspect-ratio: 1;
   cursor: pointer;
   overflow: hidden;
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 300px;
 }
 
 .photo-grid-item img {
@@ -1118,6 +1116,7 @@ body.gallery-active #photo-gallery-view {
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
+  will-change: transform;
 }
 
 .photo-top-name {
@@ -1187,6 +1186,7 @@ body.photo-active .photo-filters {
   z-index: 200;
   margin-bottom: 0;
   background: none;
+  will-change: transform;
 }
 
 body.photo-active #photo-collections {
