@@ -431,6 +431,61 @@ body.index-active .content {
   pointer-events: none;
 }
 
+.about-social-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  margin-top: -60px;
+}
+
+.about-social-icons {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-social-icon {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.about-social-icon:hover {
+  opacity: 1;
+}
+
+.about-social-icon img {
+  display: block;
+  width: 36px;
+  height: 36px;
+}
+
+.sidebar-socials {
+  position: absolute;
+  bottom: 20px;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-social-link {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.sidebar-social-link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
 .index-scroll-area {
   height: 100%;
   overflow-x: scroll;
@@ -881,6 +936,53 @@ body.index-active .content {
   color: var(--text-muted);
 }
 
+/* Promotion: one company, several roles on a small timeline */
+.cv-roles {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.cv-role {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 14px;
+}
+
+.cv-role:last-child {
+  padding-bottom: 0;
+}
+
+/* Dot */
+.cv-role::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+/* Line connecting to the next role */
+.cv-role:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 19px;
+  bottom: 2px;
+  width: 1px;
+  background: var(--text-muted);
+  opacity: 0.5;
+}
+
+.cv-role-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
 /* ==================== PHOTOGRAPHY ==================== */
 
 #photo-view {
@@ -1041,15 +1143,15 @@ body.gallery-active .gallery-back {
 
 .gallery-collection-name {
   font-family: var(--font-display);
-  font-size: clamp(18px, 2vw, 30px);
+  font-size: clamp(36px, 4vw, 56px);
   font-weight: 300;
   color: var(--text);
-  line-height: 1.1;
-  margin: 0 0 14px;
+  line-height: 1.05;
+  margin: 0 0 16px;
 }
 
 .gallery-collection-sub {
-  font-size: 11px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.3);
   line-height: 1.7;
   font-family: var(--font-body);
@@ -1132,6 +1234,12 @@ body.gallery-active .gallery-back {
   align-items: center;
   pointer-events: none;
   will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease;
+}
+
+.photo-top-bar.bar-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
 }
 
 .photo-top-name {
@@ -1154,12 +1262,16 @@ body.gallery-active .gallery-back {
   opacity: 0.6;
 }
 
+.photo-top-name .scroll-motif {
+  margin-top: 0;
+}
+
 .photo-top-quip {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 15px;
   font-style: italic;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.28);
+  color: var(--text-muted);
   letter-spacing: 0.02em;
   align-self: center;
 }
@@ -1360,7 +1472,7 @@ body.photo-active .photo-bottom-nav {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background: #000913;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1403,6 +1515,10 @@ body.about-active .content {
   padding: 15px 40px 0;
 }
 
+body.about-active .sidebar-socials {
+  display: none;
+}
+
 .about-scroll {
   display: flex;
   flex-direction: column;
@@ -1441,6 +1557,7 @@ body.about-active .content {
 .text-panel {
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
 }
 
 .about-bio p {
@@ -1471,11 +1588,14 @@ body.about-active .content {
 /* ==================== ABOUT SCROLL INDICATOR ==================== */
 
 .about-scroll-indicator {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin: 40px auto 0;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.6s ease;
@@ -1713,6 +1833,19 @@ body.about-active .content {
   opacity: 1;
 }
 
+/* When a section is active, dim everything; then restore the current item */
+.mobile-menu.menu-has-current .mobile-menu-project-link,
+.mobile-menu.menu-has-current .mobile-menu-contact a {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.mobile-menu.menu-has-current .mobile-menu-project-link.menu-current,
+.mobile-menu.menu-has-current .mobile-menu-contact a.menu-current {
+  opacity: 0.85;
+  pointer-events: auto;
+}
+
 .mobile-menu-contact {
   display: flex;
   flex-wrap: wrap;
@@ -1906,17 +2039,18 @@ body.about-active .content {
   }
 
   .work-nav,
-  .contact-nav {
+  .contact-nav,
+  .sidebar-socials {
     display: none !important;
   }
 
   .content {
     margin-left: 0;
-    padding: 24px 20px 60px;
+    padding: 24px 40px 60px;
   }
 
   .content-top-bar {
-    margin-bottom: 40px;
+    display: none;
   }
 
   .about-header {
@@ -2076,24 +2210,32 @@ body.about-active .content {
     letter-spacing: 0.04em;
   }
 
-  /* Collections grid: 2 columns on mobile */
+  /* Collections grid: 1 column on mobile */
   body.photo-active #photo-collections {
     padding: 12px 12px 120px;
     overflow-y: auto;
   }
 
   .photo-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2px;
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 
-  /* Gallery: stack vertically on mobile */
+  /* Gallery: vertical scroll on mobile */
+  body.gallery-active {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+
   body.gallery-active #photo-gallery-view {
     flex-direction: column;
+    overflow: hidden;
   }
 
   .gallery-info {
     width: 100%;
+    flex-shrink: 0;
     padding: 20px 20px 16px;
     border-right: none;
     border-bottom: 0.5px solid rgba(255, 255, 255, 0.07);
@@ -2120,8 +2262,32 @@ body.about-active .content {
     display: none;
   }
 
+  /* viewport is the scroll container on mobile */
   .gallery-viewport {
     flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
+
+  .gallery-strip {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    padding: 0;
+    gap: 4px;
+    will-change: unset;
+    transform: none;
+  }
+
+  .gallery-strip img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    flex-shrink: 0;
   }
 
   /* Hide the photo bottom nav (Photography / star / Home) on mobile */
@@ -2180,6 +2346,7 @@ body.about-active .content {
   body.index-active .content {
     height: auto;
     overflow: visible;
+    padding: 0 40px;
   }
   #index-view {
     height: auto;
@@ -2203,7 +2370,9 @@ body.about-active .content {
   }
   .thumbnail {
     flex: none;
-    width: 100%;
+    width: calc(100% + 80px);
+    margin-left: -40px;
+    margin-right: -40px;
     height: auto;
   }
   .thumbnail img {
@@ -2211,9 +2380,30 @@ body.about-active .content {
     height: auto;
     aspect-ratio: 16 / 10;
   }
-  .content-top-bar {
-    position: static;
-    padding: 15px 0;
+  /* Collections grid: 1 column on mobile */
+
+  /* Hide taskbar on mobile */
+  .site-footer {
+    display: none !important;
+  }
+
+  /* Photography: hide the fixed photo-top-bar (sidebar already shows name) */
+  body.photo-active .photo-top-bar {
+    display: none !important;
+  }
+
+  /* Hamburger + spinner: vertically centre within the sticky sidebar */
+  .hamburger {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+  }
+  .mobile-spinner {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
   }
 }
 
@@ -2402,6 +2592,58 @@ body.detail-active .detail-accordions { display: none; }
   display: block;
   border-radius: 2px;
   clip-path: inset(0 2px 2px 0);
+}
+
+/* Video with play/pause + sound buttons */
+.gallery-video-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.gallery-video-wrap video {
+  border-radius: 2px;
+}
+
+.gallery-video-controls {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.gallery-video-btn {
+  width: 36px;
+  height: 36px;
+  padding: 9px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.gallery-video-btn:hover,
+.gallery-video-btn:focus-visible {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.gallery-video-btn svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+/* Vertical videos: centered at half width so they don't run two screens tall */
+video.gallery-video-narrow {
+  width: 50% !important;
+  margin: 0 auto;
 }
 
 .section-right .gallery-img-row {
@@ -3285,4 +3527,23 @@ body.detail-active .detail-bottom-bar {
     width: calc(100vw - 48px);
     max-width: 280px;
   }
+
+  /* Next-project footer: stack vertically, image full width */
+  .project-next-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .project-next-right {
+    width: 100%;
+    order: -1;
+  }
+
+  .project-next-name {
+    font-size: clamp(28px, 8vw, 44px);
+  }
+}
+
+@media (max-width: 768px) {
+  video.gallery-video-narrow { width: 100% !important; }
 }

@@ -20,6 +20,13 @@ const CONTENT = {
     'Aren\'t I so cool? (Yes, I am.)',
   ],
 
+  // Rotating quip in the top-right of the Photography page —
+  // a new one is picked every time the page is opened or refreshed
+  photoQuips: [
+    'Everybody look at me i shoot 35mm!',
+    'Sony > Canon, argue with the wall.',
+  ],
+
   // About page bio paragraphs (HTML allowed for italics/bold)
   about: {
     bio: [
@@ -30,14 +37,16 @@ const CONTENT = {
   },
 
   // ── Projects ─────────────────────────────────────────────
-  // Index must match the projects array order in main.js (0–5).
+  // Index must match the projects array order in main.js (0–3).
+  // shortName is the condensed label for the bottom nav bar.
   // galleryText entries map to each {type:'text'} block in that
   // project's gallery, in order top-to-bottom.
   projects: [
 
     // 0 — Detention Watch Network
     {
-      name: 'Detention Watch Network',
+      name: 'Detention Watch Network — Through Their Eyes',
+      shortName: 'DWN',   // used in the bottom nav bar
       category: 'Art Direction | Copy Writing',
       year: '2025',
 
@@ -48,22 +57,26 @@ const CONTENT = {
       metaDescription: 'A social awareness campaign examining the documented concerns surrounding U.S. Immigration and Customs Enforcement. Each piece tells a story through the eyes of a victim of ICE — invoking empathy to show the reality of what these people are facing.',
 
       // Accordion — The brief
-      brief: 'Create a social awareness campaign about a topic that is relevent in today\'s society',
+      brief: 'Detention Watch Network has spent decades fighting immigration detention through reports, research and policy work — but data alone doesn\'t make people stop and feel it. DWN needed a campaign that embodied its message in a way it had never tried before: one that set the statistics aside and put the public face to face with the people living it.',
 
       // Accordion — My insight
-      insight: 'With Phones and social media, and all of the information that is available to us, it is easy to ignore these very real scenarios and stories that are happening as we speak. Individuals are not seeing the human impact of these situations.',
+      insight: 'With phones, social media, and the abundance of information that is available to us today, it is easy to ignore very real scenarios and stories that are happening as we speak. Individuals are not seeing the human impact of these situations.',
 
       // Accordion — My strategy
-      strategy: 'Each piece of media — poster, social post, or video — tells a story through the eyes of an ICE victim, a story too many across the U.S. have heard before. The strategy: put these stories somewhere impossible to ignore.',
+      strategy: 'The strategy was to take the very real stories happening to thousands of people across America every day and put them in places that are almost impossible to ignore. We slapped wild posting posters up in high-traffic areas and along commuter routes in cities throughout the United States, then paired the postings and billboards with live audio from ICE detention moments captured on camera. Together, the dramatic imagery, real stories, and unforgettable audio created a 360-degree picture of what thousands of people in this country go through every day — for everyone who passes.',
 
       // Accordion — Credits
-      credits: 'Art Direction: Branden Chi | Copy Writing: Branden Chi | Design: Branden Chi | Photography: Midjourney',
+      credits: 'Art Direction: Branden Chi | Copy Writing: Branden Chi | Design: Branden Chi | Photography: Midjourney | Video: Seedance 2.0 & Magnific AI',
 
       // Section headings + text for the split project layout
       sections: [
         {
           title: 'Wild Posting',
-          text: 'We brought the stories of ICE victims to places where they\'re not so easy to ignore. Placed in high-foot-traffic metro areas, the wild postings and guerrilla installations were built to be seen by as many people as possible.',
+          text: 'The visuals show realities many individuals face in the wake of ICE detentions. The body copy is pulled from quotes of real people: children, husbands, fathers, wives, mothers. The posters would be paired with speakers playing audio of recorded ICE detentions from phones, body cameras, and more, so people can not only see but hear the visceral emotion of these situations. All to tell a story that no one can ignore.',
+        },
+        {
+          title: 'Audible Billboards',
+          text: 'Same concept as the wild postings. These would be placed in high-traffic electronic billboard areas. Think subways, city streets, etc. This particular placement is from inside the Oculus at the World Trade Center in NYC, which sees approximately 200,000 people in foot traffic every day.',
         },
         {
           title: 'Social Media',
@@ -76,108 +89,63 @@ const CONTENT = {
       ],
     },
 
-    // 1 — Liquid Dove
+    // 1 — Polaroid — Frame the Moment
     {
-      name: 'Liquid Dove',
-      category: 'Art Direction | Copy Writing | Packaging',
-      year: '2025',
-
-      cardDescription: 'Collaboration campaign with Liquid Death and Dove to bring edible Dove, and Liquid Death scented, hygiene products to market to disrupt and disturb viewers.',
-
-      metaDescription: 'What happens when the calm meets the storm? The Liquid Death and Dove collaboration bridges two distinctly different audiences that value the same thing — through edible Dove products inspired by Liquid Death\'s bold flavors and fearless energy.',
-
-      brief: 'Dove and Liquid Death needed a campaign that could combine two opposite brand identities — gentle skincare and edgy canned water — into a single collab: a limited-edition Dove bar scented like Liquid Death, and edible Liquid Death "snacks" made to look like bars of soap.',
-
-      insight: 'Both brands sat on opposite ends of the spectrum. Content that provokes a strong reaction — shock, disbelief, even a little outrage — gets remembered and shared more than content that plays it safe.',
-
-      strategy: 'Use that opposition directly. Combine the two brands into a product so unexpected that people stop and stare in disbelief — the contrast does the work of grabbing attention, and the "wacky" factor is what makes it stick.',
-
-      credits: 'Art Direction: Branden Chi | Design: Branden Chi | Copy Writing: Matthew Payne | Packaging: Matthew Payne',
-
-      sections: [
-        { title: 'Rage Bait', text: 'The point of the visuals — and the product itself — was to make people stop and stare in utter disbelief. Something this strange, and the first question is always the same: why would anyone eat that? That\'s exactly the reaction we were after. Some people say all publicity is good publicity — we leaned into that philosophy hard, building imagery striking enough to make people recoil at the thought. The stronger the reaction, the harder it sticks, and sometimes that\'s what makes a damn good ad.' },
-        { title: 'Packaging', text: 'The packaging\'s job was to replace the product it was mimicking entirely — not reference it, replace it. Since none of this was ever going to sit on a shelf, there was no need for the frills or bright lettering that usually do the selling. Instead, each product got to fully commit to the world it was borrowing from: the Liquid Death–scented Dove body wash packaged exactly like a can of Liquid Death, and the Liquid Death–flavored soap bars packaged exactly like a bar of Dove.' },
-        { title: 'Press', text: 'A project this outrageous was bound to stir up controversy — in fact, there was A LOT to say. But we weren\'t just interested in what the media had to say — we asked all of you. We ran a survey on rage bait to see how people REALLY react to it. Safe to say — our idea worked.' },
-      ],
-    },
-
-    // 2 — Emporio Armani - Unforgettable Night
-    {
-      name: 'Emporio Armani - Unforgettable Night',
-      category: 'Art Direction | Copy Writing',
-      year: '2025',
-
-      cardDescription: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge.',
-
-      metaDescription: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night — scent delivers that edge. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. Have an unforgettable night with Emporio Armani.',
-
-      brief: 'Introduce Emporio Armani\'s new cologne line through a campaign built entirely on copy.',
-
-      insight: 'Everyone knows that first dates come with nerves. A small boost of comfort can shift the whole night. Scent delivers that edge. Smelling good lifts your confidence and lingers in someone else\'s memory. Fragrance is a subtle extension of you, often the first thing noticed and the last thing forgotten. So have an unforgettable night with Emporio Armani.',
-
-      strategy: 'Create a top 10 tips list for individuals to follow on first dates. Finish all 10, and receive a complimentary Emporio Armani cologne or perfume for a job well done.',
-
-      credits: 'Art Direction: Branden Chi | Copy Writing: Branden Chi | Design: Branden Chi',
-
-      sections: [
-        { title: 'Tease', text: 'We\'ll tease with online polls asking netizens about how important smelling good is on a first date. Inviting everyone to weigh in and debate before the campaign drops.' },
-        { title: 'Launch', text: 'We\'ll launch by partnering with top date-night restaurants across New York City to slip Emporio Armani\'s date tips onto custom cocktail napkins. Guests who collect every tip over the course of their evening can scan the final one to unlock a complimentary Emporio Armani fragrance voucher.' },
-        { title: 'Sustain', text: 'We\'ll partner up with apps like Open Table to deliver these date tips with every booking confirmation and table-ready alert.' },
-      ],
-    },
-
-    // 3 — Lemaire
-    {
-      name: 'Lemaire',
-      category: 'Art Direction',
-      year: '2025',
-
-      cardDescription: 'Fast fashion generates 92 million tons of textile waste every year. Lemaire confronts that reality head-on — using striking visuals to make the scale of the crisis impossible to ignore.',
-
-      metaDescription: 'Lemaire is rooted in sustainability — creating long-lasting pieces meant to be repaired, reworn, and recycled. This social awareness campaign confronts the 92 million tons of textile waste produced globally every year, using striking urban visuals to make the scale of the crisis impossible to ignore.',
-
-      brief: 'Every year around 92 million tons of textile waste is produced globally. That is as heavy as roughly 300 Empire State Buildings — an entire city skyline. Lemaire is a brand rooted in sustainability and creating long-lasting pieces of clothing, meant to be repaired, reworn, and recycled.',
-
-      insight: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
-
-      strategy: 'Turn a skyscraper into a tower of textile waste to visually quantify how badly fast fashion has affected our world. Prime the market with fact-based visual billboards in urban environments, launch a surrealism commercial where a character navigates a world of fast fashion waste, and dress landmark skyscrapers in cities around the world with discarded clothing to symbolize the sheer volume created every year.',
-
-      credits: 'Art Direction: Branden Chi | Design: Branden Chi',
-
-      sections: [
-        { title: 'Tease', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-        { title: 'Launch', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-        { title: 'Sustain', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-      ],
-    },
-
-    // 4 — Polaroid - Frame the Moment
-    {
-      name: 'Polaroid - Frame the Moment',
+      name: 'Polaroid — Frame the Moment',
+      shortName: 'Polaroid',   // used in the bottom nav bar
       category: 'Art Direction | Copy Writing',
       year: '2025',
 
       cardDescription: 'In a world where travel lives and dies in camera rolls, moments disappear as fast as they\'re captured. Polaroid pushes back by making memories physical again.',
 
-      metaDescription: 'With the rise of digital, film cameras have become irrelevant — but Polaroids are physical, personal, and immediate. This guerrilla campaign frames iconic landmarks around the world in the iconic Polaroid frame, turning tourist spots into living instant photos.',
+      metaDescription: 'With the rise of digital, film cameras have become irrelevant — but Polaroids are physical, personal, and immediate. This guerrilla campaign frames high-traffic scenic spots across New York City in the iconic Polaroid frame, turning everyday views into living instant photos.',
 
-      brief: 'Polaroid has been known for their iconic instant nostalgic photos. With the rise of digital, film cameras have become irrelevant in the marketplace today. Polaroids are physical, personal, and immediate — Polaroid keeps the moment with you.',
+      brief: 'With the release of the Go Gen 3, Polaroid needed a new way to promote a camera built for travel. We wanted New Yorkers to see the Go Gen 3 as a more permanent, meaningful way to capture memories — not another phone photo you\'d never look at twice.',
 
-      insight: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+      insight: 'Polaroid has been known for their iconic instant nostalgic photos. With the rise of digital, film cameras have become irrelevant in the marketplace today. Polaroids are physical, personal, and immediate — Polaroid keeps the moment with you.',
 
-      strategy: 'Frame iconic tourist spots around the world with the iconic Polaroid photo frame as a guerrilla installation. Each frame carries a short handwritten caption, mimicking how people naturally jot notes on instant prints, doubling as postcard-style messages from the journey. The frames tell a loose travel narrative and showcase Polaroid\'s role in documenting real moments, anywhere in the world.',
+      strategy: 'Frame high-traffic scenic spots around New York City with the iconic Polaroid photo frame as a guerrilla installation. Each frame carries a short handwritten caption, mimicking how people naturally jot notes on instant prints, doubling as postcard-style messages from the journey. The frames tell a loose travel narrative and showcase Polaroid\'s role in documenting real moments, right here in the city.',
 
-      credits: 'Art Direction: Branden Chi | Copy Writing: Branden Chi | Design: Branden Chi',
+      credits: 'Art Direction: Branden Chi | Copy Writing: Branden Chi | Design: Branden Chi | Photography: Branden Chi',
 
       sections: [
         { title: 'Campaign', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-        { title: 'World Tour', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
+        { title: 'Expanding the Campaign', text: 'Frame the Moment doesn\'t stop at the installations. We bring it into people\'s everyday lives through social media and wild postings — traditional media that sits alongside the guerrilla frames and spotlights the precious moments our users have captured on their Go Gen 3.' },
       ],
     },
 
-    // 5 — Photography: Personal (index card only — no detail page)
+    // 2 — Dove
+    {
+      name: 'Dove — Done with Gentle',
+      shortName: 'Dove',   // used in the bottom nav bar
+      category: 'Art Direction | Concept | Copywriting',
+      year: '2025',
+
+      cardDescription: 'The softest brand on the shelf stops playing nice, in a city that never did.',
+
+      metaDescription: 'Dove — Done with Gentle: the softest brand on the shelf stops playing nice, in a city that never did. People eat Dove, and we don\'t explain why.',
+
+      // Custom labels for the intro blocks (instead of Brief / Insight / Strategy)
+      introBlocks: [
+        { label: 'Brief',    text: 'Dove is one of the most recognized names in personal care. Gen Z is no stranger to Dove, but with fresh new brands popping up left and right, Dove needed a way to put itself back at the top of mind for a younger audience.' },
+        { label: 'Insight',  text: 'Gentle used to be Dove\'s edge. Now that a gentle, caring tone is the category norm, Dove blends in with everyone else.' },
+        { label: 'The Idea', text: 'Fill the city with provocative, un-gentle imagery that makes people question what they\'re seeing and why, and turn that reaction into earned media.' },
+      ],
+
+      brief: '',
+      insight: '',
+      strategy: '',
+      credits: '',   // no credits — the Credits button is hidden
+
+      sections: [
+        { title: 'How It Works', text: 'Across New York, billboards and posters show people calmly biting into a bar of Dove, with nothing but the logo. No headline, no reassurance, just the question everyone asks out loud: why are they eating Dove? Then the bars turn up in bodega freezers, white chocolate over vanilla ice cream in the classic Dove box, for people to find. Dove\'s done being the brand that tells you to be careful.' },
+      ],
+    },
+
+    // 3 — Photography: Personal (index card only — no detail page)
     {
       name: 'Photography: Personal',
+      shortName: 'Photography',   // used in the bottom nav bar
       category: 'Digital & Film Photography',
       year: '2021 - Present',
 

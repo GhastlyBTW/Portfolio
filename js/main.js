@@ -1,7 +1,7 @@
 const PLACEHOLDER_COUNT = 6;
-const PHOTO_PROJECT_INDEX = 5;
+const PHOTO_PROJECT_INDEX = 3;
 const SITE_BASE = 'https://brandenchi.com';
-const DEFAULT_OG_IMAGE = SITE_BASE + '/assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg';
+const DEFAULT_OG_IMAGE = SITE_BASE + '/assets/Thumbnails/Branden Chi Detention Watch Network Wall Mockup Share.jpg';
 
 function updateMeta({ title, description, canonical, image }) {
   document.title = title;
@@ -27,7 +27,11 @@ function toSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
+// Old URLs that should still open a renamed project
+const SLUG_ALIASES = { 'detention-watch-network': 'detention-watch-network-through-their-eyes', 'dove': 'dove-done-with-gentle', 'liquid-dove': 'dove-done-with-gentle' };
+
 function findProjectBySlug(slug) {
+  slug = SLUG_ALIASES[slug] || slug;
   return CONTENT.projects.findIndex((p) => toSlug(p.name) === slug);
 }
 
@@ -37,147 +41,124 @@ function findCollectionBySlug(slug) {
 
 // Asset-only project data — all text/copy lives in js/content.js
 const projects = [
-  // 0 — Detention Watch Network
+  // 0 — Detention Watch Network — Through Their Eyes
   {
-    thumbnail: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Posting.gif',
-    thumbnailFallback: 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg',
+    thumbnail: 'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Wall Mockup.webp',
     gallery: [
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkLanding Page.jpg',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkWebsite Landing Page Mockuo.jpg',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkWild Posting.jpg',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkElderly Man Poster.jpg',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkWoman Poster.jpg',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkYoung Man Poster.jpg',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkSocial Media post Phone Mockup.jpg',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkElderly Man Social Post.png',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkLittle Kid Social Post.png',
-      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch NetworkWoman Social Post.jpg',
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Elderly Man Poster.webp',   // 0  vertical
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Child Poster.webp',         // 1  vertical
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Young Man Poster.webp',     // 2  vertical
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Woman Poster.webp',         // 3  vertical
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Oculus Video.mp4',          // 4  video (has sound)
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Elderly Man Banner.webp',   // 5  horizontal
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Child Banner.webp',         // 6  horizontal
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Young Man Banner.webp',     // 7  horizontal
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Woman Banner.webp',         // 8  horizontal
+      'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Wall Mockup.webp',          // 9  poster wall
     ],
     galleryAlts: [
-      'Detention Watch Network campaign website landing page design',
-      'Detention Watch Network campaign website mockup displayed on a desktop screen',
-      'Wild posting street advertisement for the Detention Watch Network ICE awareness campaign',
-      'Poster of an elderly man detained by ICE — Detention Watch Network campaign',
-      'Poster of a woman detained by ICE — Detention Watch Network campaign',
-      'Poster of a young man detained by ICE — Detention Watch Network campaign',
-      'Detention Watch Network social media post displayed on a phone mockup',
-      'Social media post about an elderly man detained by ICE — Detention Watch Network',
-      'Social media post about a child separated from family by ICE — Detention Watch Network',
-      'Social media post about a woman detained by ICE — Detention Watch Network',
+      'Through Their Eyes poster — elderly man: "A piece of paper doesn\'t make you human"',
+      'Through Their Eyes poster — crying child: "I was afraid that I would go to school and never see her again"',
+      'Through Their Eyes poster — young man in glasses: "We aren\'t guilty for the policies of our own government"',
+      'Through Their Eyes poster — young woman: "I\'m still trying to process being stopped because of my color and my race"',
+      'Video of Through Their Eyes digital banners running along the Oculus concourse in New York City',
+      'Through Their Eyes horizontal banner — elderly man',
+      'Through Their Eyes horizontal banner — crying child',
+      'Through Their Eyes horizontal banner — young man in glasses',
+      'Through Their Eyes horizontal banner — young woman',
+      'Wall of Through Their Eyes wild posting posters',
     ],
+    // Wild Posting: wall mockup + posters grid. Audible Billboards: Oculus video + banners stacked.
     sections: [
-      { blocks: [{ type: 'img', idx: 2 }, { type: 'row', indices: [3, 4, 5] }] },
-      { blocks: [{ type: 'img', idx: 6 }, { type: 'row', indices: [7, 8, 9] }] },
-      { blocks: [{ type: 'img', idx: 1 }, { type: 'img', idx: 0 }] },
+      { blocks: [
+        { type: 'img', idx: 9 },
+        { type: 'row', indices: [0, 1, 2, 3] },
+      ] },
+      // Audible Billboards
+      { blocks: [
+        { type: 'video', idx: 4, inView: true, controls: true, sound: true,
+          poster: 'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Oculus Video Poster.webp' },
+        { type: 'img', idx: 5 },
+        { type: 'img', idx: 6 },
+        { type: 'img', idx: 7 },
+        { type: 'img', idx: 8 },
+      ] },
     ],
   },
-  // 1 — Liquid Dove
+  // 1 — Polaroid — Frame the Moment
   {
-    thumbnail: 'assets/Thumbnails/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',
+    thumbnail: 'assets/Polaroid/Branden Chi Polaroid Frame the Moment Park.webp',
     gallery: [
-      'assets/Liquid Dove/Branden Chi Liquid Dove Rage Bait Ad Mockup.jpg',       // 0  rage bait mockup 1
-      'assets/Liquid Dove/Branden Chi Liquid Dove bottle.png',                     // 1  bottle mockup
-      'assets/Liquid Dove/Branden Chi Liquid Dove BOX.png',                        // 2  box mockup
-      'assets/Liquid Dove/Branden Chi Liquid Dove Ragebait_2.jpg',                 // 3  ragebait 2
-      'assets/Liquid Dove/Branden Chi Liquid Dove News headline.jpg',              // 4  CNN
-      'assets/Liquid Dove/Branden ChiLiquid death.gif',                            // 5  gif
-      'assets/Liquid Dove/Branden Chiliquid death pull qoutes mockup.jpg',         // 6  pull quotes
-      'assets/Liquid Dove/Branden Chi Liquid death Billboard 2.jpg',               // 7  billboard 2
-      'assets/Liquid Dove/Branden Chi Liquid Death biting soap.png',               // 8  biting soap
-      'assets/Liquid Dove/Branden Chi Liquid Death bottle photography.png',        // 9  bottle photography
-      'assets/Liquid Dove/Branden Chi Liquid Death box photography 2.png',         // 10 box photography
-      'assets/Liquid Dove/Branden Chiliquid dove bar animation.mp4',               // 11 bar animation
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Oculus.webp',
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Subway.webp',
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Park.webp',
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Bridge.webp',
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Wild Posting mockup.webp',          // 4  wild posting mockup
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Baby Birth Wild Posting.webp',      // 5  vertical frame
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Friends on the beach.webp',         // 6  horizontal frame
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Man on a trip Wild posting.webp',   // 7  horizontal frame
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Birthday Wild posting.webp',        // 8  vertical frame
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment wedding Wild posting.webp',         // 9  vertical frame
+      'assets/Polaroid/Branden Chi Polaroid Frame the Moment Mountain Top Wild Posting.webp',    // 10 horizontal frame
+      'assets/Polaroid/Social Ad Mockup.png',                                  // 11 social ad mockup
+      'assets/Polaroid/Polaroid Ad.mp4',                                       // 12 vertical video ad
     ],
     galleryAlts: [
-      'Billboard rage bait advertisement mockup for the Liquid Dove collaboration campaign',
-      'Liquid Dove co-branded water bottle packaging design',
-      'Liquid Dove co-branded product box packaging design',
-      'Rage bait advertisement alternative for the Liquid Dove campaign',
-      'Fake news headline used as a campaign touchpoint for Liquid Dove',
-      'Animated GIF for the Liquid Dove collaboration campaign',
-      'Pull quotes mockup for the Liquid Dove campaign',
-      'Billboard mockup 2 for the Liquid Dove campaign',
-      'Liquid Death biting soap product shot',
-      'Liquid Death bottle photography',
-      'Liquid Death box photography',
-      'Liquid Dove bar animation',
+      'Polaroid frame installation at the Oculus — Polaroid Frame the Moment campaign',
+      'Polaroid frame installation in a subway station — Polaroid Frame the Moment campaign',
+      'Polaroid frame installation in a park — Polaroid Frame the Moment campaign',
+      'Polaroid frame installation framing a bridge — Polaroid Frame the Moment campaign',
+      'Polaroid Frame the Moment wild posting wall mockup',
+      'Frame Her Moment poster — new mother holding her baby in a Polaroid frame',
+      'Frame Our Moment poster — friends on the beach at sunset in a Polaroid frame',
+      'Frame His Moment poster — man on a coastal trip in a Polaroid frame',
+      'Frame Your Moment poster — friends celebrating a birthday in a Polaroid frame',
+      'Frame Their Moment poster — newlyweds at their wedding in a Polaroid frame',
+      'Frame That Moment poster — woman on a mountain top in a Polaroid frame',
+      'Polaroid Frame the Moment social media ad mockup',
+      'Polaroid Frame the Moment vertical video ad',
     ],
+    // Posters alternate vertical/horizontal frames in a checkerboard so like layouts never touch
     sections: [
-      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 8 }, { type: 'img', idx: 7 }] },
-      { blocks: [{ type: 'img', idx: 10 }, { type: 'img', idx: 2 }, { type: 'img', idx: 9 }, { type: 'img', idx: 1 }] },
-      { blocks: [{ type: 'img', idx: 4 }, { type: 'video', idx: 11 }, { type: 'img', idx: 6 }, { type: 'img', idx: 5 }] },
+      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 1 }, { type: 'img', idx: 2 }, { type: 'img', idx: 3 }] },
+      { blocks: [
+        { type: 'img', idx: 4 },
+        { type: 'row', indices: [5, 6] },
+        { type: 'row', indices: [7, 8] },
+        { type: 'row', indices: [9, 10] },
+        { type: 'img', idx: 11 },
+        { type: 'video', idx: 12, narrow: true },
+      ] },
     ],
   },
-  // 2 — Emporio Armani - Unforgettable Night
+  // 2 — Dove — Done with Gentle
   {
-    thumbnail: 'assets/Thumbnails/Branden Chi Emporio Armani.gif',
-    thumbnailFallback: 'assets/Thumbnails/Branden Chi Emporio Armani Table.jpg',
+    thumbnail: 'assets/Dove/Branden Chi Dove Guy Biting Soap.webp',   // header: man close-up
+    heroAlt: 'Key visual: close-up of a man in silver sunglasses and rings calmly biting into a bar of Dove',
     gallery: [
-      'assets/Emporio/Branden Chi Emporio Armani Napkins Red Table.jpg',
-      'assets/Emporio/Branden Chi Emporio Armani Martini Glass.jpg',
-      'assets/Emporio/Branden Chi Emporio Armani Napkin.jpg',
-      'assets/Emporio/Branden Chi Emporio Armani Open Table Phone.png',
-      'assets/Emporio/Branden Chi Emporio Armani Instagram Poll.png',
-      'assets/Emporio/Branden Chi Emporio Armani Open Table Confirmation code.jpg',
+      'assets/Dove/Branden Chi Dove Girl Biting Soap.webp',       // 0
+      'assets/Dove/Branden Chi Dove Social Media Mockups.webp',   // 1
+      'assets/Dove/Branden Chi Dove Soap Being Eaten.webp',       // 2  animated
+      'assets/Dove/Branden Chi Dove Billboard Girl.webp',         // 3
+      'assets/Dove/Branden Chi Dove Billboard Guy.webp',          // 4
     ],
     galleryAlts: [
-      'Custom Emporio Armani cocktail napkins displayed on a red restaurant table — Unforgettable Night campaign',
-      'Martini glass with a branded Emporio Armani cocktail napkin at a date-night restaurant',
-      'Close-up of an Emporio Armani cocktail napkin with handwritten first-date fragrance tips',
-      'OpenTable app on iPhone showing an Emporio Armani date tip notification',
-      'Instagram poll asking followers how important scent is on a first date — Emporio Armani campaign',
-      'OpenTable booking confirmation email featuring an Emporio Armani complimentary fragrance voucher',
+      'Key visual: close-up of a woman in black sunglasses and stiletto nails calmly biting into a bar of Dove',
+      'Three phones showing behind-the-scenes Instagram Reels from the Dove — Done with Gentle shoot',
+      'Animation of a bar of Dove being eaten, one bite at a time',
+      'Logo-only billboard in New York: close-up of a woman with stiletto nails biting into a bar of Dove',
+      'Logo-only billboard in New York: close-up of a man in rings and sunglasses biting into a bar of Dove',
     ],
     sections: [
-      { blocks: [{ type: 'img', idx: 4 }] },
-      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 1 }, { type: 'img', idx: 2 }] },
-      { blocks: [{ type: 'img', idx: 5 }, { type: 'img', idx: 3 }] },
+      { blocks: [
+        { type: 'img', idx: 0 },
+        { type: 'row', indices: [3, 4] },   // billboards two-up (stack on mobile)
+        { type: 'img', idx: 1 },
+        { type: 'img', idx: 2 },   // animation stays last
+      ] },
     ],
   },
-  // 3 — Lemaire
-  {
-    locked: true,
-    thumbnail: 'assets/Thumbnails/Branden Chi Lemaire Street Billboard Mockup.jpg',
-    gallery: [
-      'assets/Lemaire/Branden Chi Lemaire Street Billboard Mockup.jpg',
-      'assets/Lemaire/Branden Chi Lemaire NYC Billboard Mockup.jpg',
-      'assets/Lemaire/Branden Chi Lemaire Clothing Waste Skyscraper.jpg',
-      'assets/Lemaire/Branden Chi Lemaire Model Clothing Waste.jpg',
-      'assets/Lemaire/Branden Chi Lemaire Crowd City Street.jpg',
-    ],
-    galleryAlts: [
-      'Street-level billboard mockup for Lemaire textile waste sustainability campaign',
-      'New York City billboard mockup for Lemaire fast fashion awareness campaign',
-      'Concept of a skyscraper wrapped in discarded clothing — Lemaire guerrilla installation',
-      'Model standing among piles of textile waste — Lemaire campaign visual',
-      'City street crowd surrounded by textile waste — Lemaire campaign visual',
-    ],
-    sections: [
-      { blocks: [{ type: 'img', idx: 0 }, { type: 'img', idx: 1 }] },
-      { blocks: [{ type: 'img', idx: 2 }, { type: 'img', idx: 3 }] },
-      { blocks: [{ type: 'img', idx: 4 }] },
-    ],
-  },
-  // 4 — Polaroid - Frame the Moment
-  {
-    locked: true,
-    thumbnail: 'assets/Polaroid/Polaroid at the beach.jpg',
-    gallery: [
-      'assets/Polaroid/Eiffel_tower.jpg',
-      'assets/Polaroid/Branden Chi Polaroid Basketball court.jpg',
-      'assets/Polaroid/Polaroid at the beach.jpg',
-    ],
-    galleryAlts: [
-      'Eiffel Tower viewed through a Polaroid frame with a handwritten caption — Polaroid Frame the Moment campaign',
-      'Basketball court viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
-      'Beach scene viewed through a Polaroid frame — Polaroid Frame the Moment campaign',
-    ],
-    sections: [
-      { blocks: [{ type: 'img', idx: 0 }] },
-      { blocks: [{ type: 'img', idx: 1 }, { type: 'img', idx: 2 }] },
-    ],
-  },
-  // 5 — Photography: Personal
+  // 3 — Photography: Personal
   {
     thumbnail: null,
     gallery: [],
@@ -195,9 +176,9 @@ const FOOTER_SECTIONS = [
     key: 'work',
     label: 'Work',
     navigate() { transitionTo(() => showIndex()); },
-    getFeaturedImage() { return 'assets/Thumbnails/Branden Chi Detention Watch Network Wild Postings.jpg'; },
-    featuredTitle: 'Detention Watch Network',
-    featuredMeta: '01 / 05',
+    getFeaturedImage() { return 'assets/Detention Watch Network Web Photos/Branden Chi Detention Watch Network Wall Mockup.webp'; },
+    featuredTitle: 'Detention Watch Network — Through Their Eyes',
+    featuredMeta: '01 / 03',
     blocks: [
       { w: '31%', h: '100px' },
       { w: '31%', h: '100px' },
@@ -343,14 +324,25 @@ function clampHTarget() {
   hscroll.target = Math.max(0, Math.min(hscroll.target, getMaxHScroll()));
 }
 
+// Measured once and refreshed on resize, so the swipe animation never forces a layout read per frame
+let _hCardWidth = 0;
+let _hCards = null;
+function getHCardWidth() {
+  if (!_hCardWidth) { const el = getIndexScrollArea(); _hCardWidth = el ? el.clientWidth : 0; }
+  return _hCardWidth;
+}
+function getHCards() {
+  if (!_hCards) _hCards = Array.from(document.querySelectorAll('#index-view .project-card'));
+  return _hCards;
+}
+window.addEventListener('resize', () => { _hCardWidth = 0; });
+
 function updateCardOpacity() {
   if (window.innerWidth <= 768) return;
-  const el = getIndexScrollArea();
-  if (!el) return;
-  const cardWidth = el.clientWidth;
+  const cardWidth = getHCardWidth();
   if (cardWidth === 0) return;
   const x = hscroll.current;
-  document.querySelectorAll('#index-view .project-card').forEach((card, i) => {
+  getHCards().forEach((card, i) => {
     if (!card.classList.contains('anim-in')) return;
     const dist = Math.abs(x - i * cardWidth) / cardWidth;
     const opacity = Math.max(0, 1 - dist);
@@ -400,12 +392,12 @@ function jumpHTo(x) {
   if (el) el.scrollLeft = x;
 }
 
+let _hActiveIndex = -1;
 function updateSidebarFromHScroll() {
-  const el = getIndexScrollArea();
-  if (!el) return;
-  const cardWidth = el.clientWidth;
+  const cardWidth = getHCardWidth();
   if (cardWidth === 0) return;
-  const index = Math.round(el.scrollLeft / cardWidth);
+  const index = Math.round(hscroll.current / cardWidth);
+  if (index === _hActiveIndex) return;   // only touch the sidebar when the card actually changes
   setActiveProject(index);
   document.getElementById('project-list').classList.add('has-scroll-active');
 }
@@ -413,7 +405,7 @@ function updateSidebarFromHScroll() {
 function scrollIndexToCard(index) {
   const el = getIndexScrollArea();
   if (!el) return;
-  const cardWidth = el.clientWidth;
+  const cardWidth = getHCardWidth();
   smoothHScrollTo(index * cardWidth);
 }
 
@@ -444,9 +436,7 @@ function initSmoothScroll() {
       _hscrollAccum += e.deltaY;
       if (Math.abs(_hscrollAccum) < H_TRIGGER) return;
 
-      const el = getIndexScrollArea();
-      if (!el) return;
-      const cardWidth = el.clientWidth;
+      const cardWidth = getHCardWidth();
       if (cardWidth === 0) return;
       const currentCard = Math.round(hscroll.target / cardWidth);
       const delta = _hscrollAccum > 0 ? 1 : -1;
@@ -648,15 +638,34 @@ const greetings = CONTENT.greetings;
 
 let greetingIndex = Math.floor(Math.random() * greetings.length);
 
+function setGreetingText(text) {
+  ['greeting', 'about-greeting'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  });
+}
+
 function cycleGreeting() {
-  const el = document.getElementById('greeting');
-  if (!el) return;
-  el.style.opacity = '0';
+  const els = ['greeting', 'about-greeting'].map((id) => document.getElementById(id)).filter(Boolean);
+  if (!els.length) return;
+  els.forEach((el) => { el.style.opacity = '0'; });
   setTimeout(() => {
     greetingIndex = (greetingIndex + 1) % greetings.length;
-    el.textContent = greetings[greetingIndex];
-    el.style.opacity = '1';
+    const text = greetings[greetingIndex];
+    els.forEach((el) => { el.textContent = text; el.style.opacity = '1'; });
   }, 300);
+}
+
+// Photography quip — random each visit, never the same one twice in a row
+let photoQuipIndex = -1;
+function pickPhotoQuip() {
+  const quips = CONTENT.photoQuips || [];
+  const el = document.getElementById('photo-top-quip');
+  if (!el || !quips.length) return;
+  let i = Math.floor(Math.random() * quips.length);
+  if (quips.length > 1 && i === photoQuipIndex) i = (i + 1) % quips.length;
+  photoQuipIndex = i;
+  el.textContent = quips[i];
 }
 
 // ==================== NAVIGATION ====================
@@ -729,6 +738,91 @@ function showCV(fromPop) {
   }, 80);
 }
 
+// Video with optional play/pause + sound buttons, and optional play-only-when-visible.
+const VIDEO_ICONS = {
+  pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>',
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>',
+  muted: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h3l5-4v14l-5-4H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  sound: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h3l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+};
+
+function wrapGalleryVideo(video, block) {
+  const wrap = document.createElement('div');
+  wrap.className = 'gallery-video-wrap';
+  wrap.appendChild(video);
+  let userPaused = false;
+  let userMuted = false;   // only true if the visitor pressed mute themselves
+
+  // Play with sound when the browser allows it. If it blocks sound (no click on the
+  // page yet), play muted and switch the sound on at the visitor's first click/tap.
+  const startPlayback = () => {
+    if (!block.sound || userMuted) { video.play().catch(() => {}); return; }
+    video.muted = false;
+    video.play().catch(() => {
+      video.muted = true;
+      video.dispatchEvent(new Event('volumechange'));
+      video.play().catch(() => {});
+      const unmuteOnGesture = () => {
+        if (!userMuted) { video.muted = false; video.dispatchEvent(new Event('volumechange')); }
+      };
+      document.addEventListener('pointerdown', unmuteOnGesture, { once: true, capture: true });
+      document.addEventListener('keydown', unmuteOnGesture, { once: true, capture: true });
+    });
+  };
+
+  if (block.controls) {
+    const bar = document.createElement('div');
+    bar.className = 'gallery-video-controls';
+
+    const playBtn = document.createElement('button');
+    playBtn.type = 'button';
+    playBtn.className = 'gallery-video-btn';
+    const syncPlay = () => {
+      const paused = video.paused;
+      playBtn.innerHTML = paused ? VIDEO_ICONS.play : VIDEO_ICONS.pause;
+      playBtn.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+    };
+    playBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (video.paused) { userPaused = false; startPlayback(); }
+      else { userPaused = true; video.pause(); }
+    });
+    video.addEventListener('play', syncPlay);
+    video.addEventListener('pause', syncPlay);
+    syncPlay();
+
+    const soundBtn = document.createElement('button');
+    soundBtn.type = 'button';
+    soundBtn.className = 'gallery-video-btn';
+    const syncSound = () => {
+      soundBtn.innerHTML = video.muted ? VIDEO_ICONS.muted : VIDEO_ICONS.sound;
+      soundBtn.setAttribute('aria-label', video.muted ? 'Turn sound on' : 'Mute');
+    };
+    soundBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      userMuted = video.muted;
+      syncSound();
+    });
+    video.addEventListener('volumechange', syncSound);
+    syncSound();
+
+    bar.appendChild(playBtn);
+    bar.appendChild(soundBtn);
+    wrap.appendChild(bar);
+  }
+
+  if (block.inView && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { if (!userPaused) startPlayback(); }
+      else if (!video.paused) video.pause();
+    }, { threshold: 0.4 }).observe(wrap);
+  } else if (block.inView) {
+    video.autoplay = true;
+  }
+  return wrap;
+}
+
 function renderGalleryBlock(block, images, galleryAlts, name) {
   if (block.type === 'img') {
     const src = images[block.idx];
@@ -744,13 +838,18 @@ function renderGalleryBlock(block, images, galleryAlts, name) {
     if (!src) return null;
     const video = document.createElement('video');
     video.src = src;
-    video.autoplay = true;
+    video.autoplay = !block.inView;          // inView videos start only once scrolled to
     video.loop = true;
-    video.muted = true;
+    video.muted = true;                      // browsers only autoplay muted video
     video.playsInline = true;
+    video.preload = block.inView ? 'metadata' : 'auto';
+    if (block.poster) video.poster = block.poster;
     video.style.width = '100%';
     video.style.display = 'block';
-    return video;
+    if (block.narrow) video.classList.add('gallery-video-narrow');
+    if (galleryAlts && galleryAlts[block.idx]) video.setAttribute('aria-label', galleryAlts[block.idx]);
+    if (!block.inView && !block.controls) return video;
+    return wrapGalleryVideo(video, block);
   } else if (block.type === 'row') {
     const row = document.createElement('div');
     row.className = 'gallery-img-row';
@@ -794,11 +893,11 @@ function renderSplitDetail(gallery, project, copy, index, images) {
   accordionWrap.className = 'project-intro-accordions anim-slide-left';
   accordionWrap.style.animationDelay = '160ms';
 
-  [
+  (copy.introBlocks || [
     { label: 'Brief',    text: copy.brief    },
     { label: 'Insight',  text: copy.insight  },
     { label: 'Strategy', text: copy.strategy },
-  ].forEach(({ label, text }) => {
+  ]).forEach(({ label, text }) => {
     if (!text) return;
 
     const item = document.createElement('div');
@@ -834,7 +933,7 @@ function renderSplitDetail(gallery, project, copy, index, images) {
   if (project.thumbnail) {
     const heroImg = document.createElement('img');
     heroImg.src = project.thumbnailFallback || project.thumbnail;
-    heroImg.alt = copy.name;
+    heroImg.alt = project.heroAlt || copy.name;
     heroImg.decoding = 'async';
     heroImg.className = 'anim-fade-up';
     heroImg.style.animationDelay = '120ms';
@@ -955,7 +1054,10 @@ function updateDetailOverlaySelection(index) {
   });
 }
 
+let _activeDetailIndex = -1;
+
 function showDetail(index, fromPop) {
+  _activeDetailIndex = index;
   document.body.classList.remove('index-active');
   exitAbout();
   exitPhoto();
@@ -992,7 +1094,9 @@ function showDetail(index, fromPop) {
 
   // Update credits panel content
   const creditsPanelText = document.getElementById('credits-panel-text');
-  if (creditsPanelText) creditsPanelText.textContent = copy.credits || 'Coming soon.';
+  if (creditsPanelText) creditsPanelText.textContent = copy.credits || '';
+  const creditsBtnEl = document.getElementById('detail-credits-btn');
+  if (creditsBtnEl) creditsBtnEl.style.display = copy.credits ? '' : 'none';
 
   const gallery = document.getElementById('detail-gallery');
   gallery.innerHTML = '';
@@ -1237,6 +1341,7 @@ function showPhotography(fromPop) {
   exitPhoto();
   exitDetail();
   document.body.classList.add('photo-active');
+  pickPhotoQuip();
   activeFilter = 'all';
   document.querySelectorAll('.photo-filter').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.filter === 'all');
@@ -1249,6 +1354,7 @@ function showPhotography(fromPop) {
   clearActiveCollection();
   if (!fromPop) pushRoute('/photography');
   cycleGreeting();
+  initPhotoBarScroll();
 }
 
 function showGallery(collectionIndex, fromPop) {
@@ -1284,6 +1390,7 @@ function updateGalleryCounter(idx, total) {
 
 function startGalleryRaf() {
   if (_galleryRafId) return;
+  if (window.innerWidth <= 768) return;
   function tick() {
     _galleryScrollX += (_galleryTargetX - _galleryScrollX) * 0.1;
     const strip = document.getElementById('gallery-strip');
@@ -1335,7 +1442,7 @@ function showCollectionGallery(collectionIdx, fromPop) {
   // Build image strip
   const strip = document.getElementById('gallery-strip');
   strip.innerHTML = '';
-  strip.style.transform = 'translateX(0)';
+  strip.style.transform = window.innerWidth <= 768 ? '' : 'translateX(0)';
   collection.images.forEach((src, i) => {
     const img = document.createElement('img');
     img.src = src;
@@ -1347,30 +1454,34 @@ function showCollectionGallery(collectionIdx, fromPop) {
 
   updateGalleryCounter(0, collection.images.length);
 
-  // Wheel handler: vertical scroll → horizontal strip movement
-  _galleryWheelFn = (e) => {
-    e.preventDefault();
-    const delta = (e.deltaY || 0) + (e.deltaX || 0);
-    _galleryTargetX -= delta * 1.2;
-    _galleryTargetX = Math.max(getGalleryMaxScroll(), Math.min(0, _galleryTargetX));
-    startGalleryRaf();
-  };
-  window.addEventListener('wheel', _galleryWheelFn, { passive: false });
+  const _galleryMobile = window.innerWidth <= 768;
 
-  // Touch swipe
-  _galleryTouchFn = (e) => {
-    if (e.type === 'touchstart') {
-      _galleryTouchStartX = e.touches[0].clientX;
-    } else if (e.type === 'touchmove') {
-      const dx = _galleryTouchStartX - e.touches[0].clientX;
-      _galleryTouchStartX = e.touches[0].clientX;
-      _galleryTargetX -= dx * 1.5;
+  if (!_galleryMobile) {
+    // Wheel handler: vertical scroll → horizontal strip movement
+    _galleryWheelFn = (e) => {
+      e.preventDefault();
+      const delta = (e.deltaY || 0) + (e.deltaX || 0);
+      _galleryTargetX -= delta * 1.2;
       _galleryTargetX = Math.max(getGalleryMaxScroll(), Math.min(0, _galleryTargetX));
       startGalleryRaf();
-    }
-  };
-  window.addEventListener('touchstart', _galleryTouchFn, { passive: true });
-  window.addEventListener('touchmove', _galleryTouchFn, { passive: true });
+    };
+    window.addEventListener('wheel', _galleryWheelFn, { passive: false });
+
+    // Touch swipe (horizontal) on desktop/tablet
+    _galleryTouchFn = (e) => {
+      if (e.type === 'touchstart') {
+        _galleryTouchStartX = e.touches[0].clientX;
+      } else if (e.type === 'touchmove') {
+        const dx = _galleryTouchStartX - e.touches[0].clientX;
+        _galleryTouchStartX = e.touches[0].clientX;
+        _galleryTargetX -= dx * 1.5;
+        _galleryTargetX = Math.max(getGalleryMaxScroll(), Math.min(0, _galleryTargetX));
+        startGalleryRaf();
+      }
+    };
+    window.addEventListener('touchstart', _galleryTouchFn, { passive: true });
+    window.addEventListener('touchmove', _galleryTouchFn, { passive: true });
+  }
 
   document.body.classList.add('photo-active');
   document.body.classList.add('gallery-active');
@@ -1395,24 +1506,39 @@ function exitGallery() {
   document.body.classList.remove('gallery-active');
 }
 
+let _photoBarScrollHandler = null;
+
+function initPhotoBarScroll() {
+  const bar = document.getElementById('photo-top-bar');
+  if (!bar) return;
+  let lastY = window.scrollY;
+  bar.classList.remove('bar-hidden');
+  _photoBarScrollHandler = () => {
+    if (!document.body.classList.contains('photo-active') || document.body.classList.contains('gallery-active')) return;
+    const y = window.scrollY;
+    if (y > lastY && y > 60) {
+      bar.classList.add('bar-hidden');
+    } else {
+      bar.classList.remove('bar-hidden');
+    }
+    lastY = y;
+  };
+  window.addEventListener('scroll', _photoBarScrollHandler, { passive: true });
+}
+
 function exitPhoto() {
   if (_parallaxCleanup) { _parallaxCleanup(); _parallaxCleanup = null; }
+  if (_photoBarScrollHandler) {
+    window.removeEventListener('scroll', _photoBarScrollHandler);
+    _photoBarScrollHandler = null;
+  }
+  const bar = document.getElementById('photo-top-bar');
+  if (bar) bar.classList.remove('bar-hidden');
   exitGallery();
   document.body.classList.remove('photo-active');
 }
 
-function initLightboxEvents() {
-  const navBack = document.getElementById('photo-nav-back');
-  if (navBack) navBack.addEventListener('click', (e) => { e.preventDefault(); showIndex(); });
-
-  const pw = document.getElementById('photo-nav-pinwheel');
-  let pwAngle = 0;
-  window.addEventListener('wheel', (e) => {
-    if (!document.body.classList.contains('photo-active') || document.body.classList.contains('gallery-active')) return;
-    pwAngle += e.deltaY * 0.3;
-    if (pw) pw.style.transform = `rotate(${pwAngle}deg)`;
-  }, { passive: true });
-}
+function initLightboxEvents() {}
 
 let _parallaxCleanup = null;
 
@@ -1482,6 +1608,7 @@ function renderCollections() {
 // ==================== SIDEBAR ====================
 
 function setActiveProject(index) {
+  _hActiveIndex = index;
   const links = document.querySelectorAll('#project-list a');
   links.forEach((link) => link.classList.remove('active'));
   const activeLink = document.querySelector(`#project-list a[data-project="${index}"]`);
@@ -1552,16 +1679,6 @@ function initNavigation() {
   document.getElementById('about-link')?.addEventListener('click', (e) => {
     e.preventDefault();
     transitionTo(() => showAbout());
-  });
-
-  document.getElementById('about-index-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    transitionTo(() => showIndex());
-  });
-
-  document.getElementById('photo-index-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    transitionTo(() => showIndex());
   });
 
   document.getElementById('photo-home-link').addEventListener('click', (e) => {
@@ -1704,10 +1821,12 @@ function initHamburger() {
   // Build project links section
   const projectSection = document.createElement('div');
   projectSection.className = 'mobile-menu-projects';
+  const _menuProjectLinks = [];
   projects.forEach((p, i) => {
     const link = document.createElement('a');
     link.href = '#';
     link.className = 'mobile-menu-project-link';
+    link.dataset.projectIdx = i;
     link.textContent = i === PHOTO_PROJECT_INDEX ? 'Photography' : CONTENT.projects[i].name;
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1716,19 +1835,21 @@ function initHamburger() {
       else transitionTo(() => showDetail(i));
     });
     projectSection.appendChild(link);
+    _menuProjectLinks.push(link);
   });
   menu.appendChild(projectSection);
 
   // Build contact links section
   const contactSection = document.createElement('div');
   contactSection.className = 'mobile-menu-contact';
+  const _menuContactLinks = {};
   [
-    { label: 'Email', href: 'mailto:branden.chi.07@gmail.com', external: false },
-    { label: 'CV',    href: '#',                               external: false, action: () => transitionTo(() => showCV()) },
-    { label: 'About', href: '#',                               external: false, action: () => transitionTo(() => showAbout()) },
-    { label: 'Instagram', href: 'https://www.instagram.com/brand.en_/', external: true },
-    { label: 'LinkedIn',  href: 'https://www.linkedin.com/in/branden-chi-360a06298', external: true },
-  ].forEach(({ label, href, external, action }) => {
+    { label: 'Email', key: 'email', href: 'mailto:branden.chi.07@gmail.com', external: false },
+    { label: 'CV',    key: 'cv',    href: '#', external: false, action: () => transitionTo(() => showCV()) },
+    { label: 'About', key: 'about', href: '#', external: false, action: () => transitionTo(() => showAbout()) },
+    { label: 'Instagram', key: 'instagram', href: 'https://www.instagram.com/brand.en_/', external: true },
+    { label: 'LinkedIn',  key: 'linkedin',  href: 'https://www.linkedin.com/in/branden-chi-360a06298', external: true },
+  ].forEach(({ label, key, href, external, action }) => {
     const a = document.createElement('a');
     a.href = href;
     a.textContent = label;
@@ -1738,6 +1859,7 @@ function initHamburger() {
       else closeMenu();
     });
     contactSection.appendChild(a);
+    _menuContactLinks[key] = a;
   });
   menu.appendChild(contactSection);
 
@@ -1748,7 +1870,30 @@ function initHamburger() {
   homeBtn.addEventListener('click', () => { closeMenu(); transitionTo(() => showIndex()); });
   menu.appendChild(homeBtn);
 
+  function updateMenuActive() {
+    const b = document.body.classList;
+    const isPhoto = b.contains('photo-active') || b.contains('gallery-active');
+    const isAbout = b.contains('about-active');
+    const isCv    = b.contains('cv-active');
+    const isDetail = b.contains('detail-active');
+    const hasSection = isPhoto || isAbout || isCv || isDetail;
+
+    menu.classList.toggle('menu-has-current', hasSection);
+
+    _menuProjectLinks.forEach((link) => {
+      const idx = parseInt(link.dataset.projectIdx, 10);
+      const isCurrent = idx === PHOTO_PROJECT_INDEX
+        ? isPhoto
+        : (isDetail && _activeDetailIndex === idx);
+      link.classList.toggle('menu-current', isCurrent);
+    });
+
+    if (_menuContactLinks.about) _menuContactLinks.about.classList.toggle('menu-current', isAbout);
+    if (_menuContactLinks.cv)    _menuContactLinks.cv.classList.toggle('menu-current', isCv);
+  }
+
   hamburger.addEventListener('click', () => {
+    updateMenuActive();
     hamburger.classList.toggle('open');
     menu.classList.toggle('open');
   });
@@ -2111,7 +2256,7 @@ function initFooter() {
     item.href = '#';
     item.className = 'footer-nav-item footer-proj-item';
     item.dataset.proj = i;
-    item.textContent = copy.name;
+    item.textContent = copy.shortName || copy.name;
     const rawProj = projects[i];
     const imgSrc = rawProj?.thumbnailFallback || rawProj?.thumbnail;
     item.addEventListener('mouseenter', () => {
