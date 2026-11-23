@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Private page: shared by link only. Not linked anywhere on the site and not in the sitemap. -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Branden Chi — For Mother</title>
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preload" href="/assets/fonts/Fansan-Display-Medium-iF666bfc3717abf.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="/for-mother-4c0e6cce/mother.css">
+</head>
+<body>
+
+  <!-- ============ 1. HEADSHOT + FIVE WORDS ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-sticky">
+      <img class="hero-img" src="/assets/about/Branden Chi - About.jpg" alt="Branden Chi" fetchpriority="high">
+      <div class="hero-shade"></div>
+
+      <!-- EDIT: your five words -->
+      <div class="hero-words" aria-label="Five words">
+        <span class="hero-word" style="--x:22%; --y:18%; --r:-6deg">Lorem</span>
+        <span class="hero-word" style="--x:76%; --y:14%; --r:5deg">Ipsum</span>
+        <span class="hero-word" style="--x:50%; --y:8%;  --r:-2deg">Dolor</span>
+        <span class="hero-word" style="--x:17%; --y:44%; --r:4deg">Sit</span>
+        <span class="hero-word" style="--x:82%; --y:42%; --r:-5deg">Amet</span>
+      </div>
+
+      <div class="hero-hint">Scroll</div>
+    </div>
+  </section>
+
+  <!-- ============ 2. WORKING AT MOTHER + FLOATING MOODBOARD ============ -->
+  <section class="mood" id="mood">
+    <div class="mood-stage" id="mood-stage" aria-hidden="true"></div>
+
+    <div class="copy-box reveal">
+      <div class="copy-label">What do you think it's like working at Mother?</div>
+      <!-- EDIT: your answer -->
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+  </section>
+
+  <!-- ============ 3. EARLIEST AD ============ -->
+  <section class="ad" id="ad">
+    <div class="section-label reveal">The earliest ad I can remember</div>
+    <!-- EDIT: the ad's name, brand and year -->
+    <h2 class="ad-title reveal">Lorem Ipsum</h2>
+    <div class="ad-meta reveal">Brand · Agency · Year</div>
+
+    <!-- EDIT: drop the video file at this path (or swap in a YouTube embed, see README note in mother.js) -->
+    <div class="ad-video reveal" id="ad-video">
+      <video src="/assets/Mother/Branden Chi Mother Earliest Ad.mp4" playsinline controls preload="metadata"></video>
+      <div class="ad-video-missing">Video coming soon</div>
+    </div>
+  </section>
+
+  <!-- ============ 4. PROUD ============ -->
+  <section class="proud" id="proud">
+    <div class="proud-col reveal">
+      <div class="section-label">What I'm most proud of</div>
+      <!-- EDIT -->
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+    </div>
+    <div class="proud-col reveal">
+      <div class="section-label">What I'm least proud of</div>
+      <!-- EDIT -->
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
+    </div>
+  </section>
+
+  <!-- ============ 5. CV (pulled live from the main site so it never goes stale) ============ -->
+  <section class="cv" id="cv">
+    <div class="section-label reveal">CV</div>
+    <div id="cv-slot"></div>
+  </section>
+
+  <!-- ============ 6. HOME ============ -->
+  <footer class="end">
+    <a class="home-btn" href="https://brandenchi.com/">Home <span aria-hidden="true">↗</span></a>
+    <div class="end-sig">Branden Chi — Art Director, New York City</div>
+  </footer>
+
+  <script src="/for-mother-4c0e6cce/mother.js"></script>
+</body>
+</html>
