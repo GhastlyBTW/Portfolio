@@ -238,19 +238,21 @@ window.addEventListener('load', revealPassed);
 
 /* ============ 3. Earliest ad video ============ */
 (function adVideo() {
-  const wrap = document.getElementById('spot-video');
+  const wrap = document.getElementById('rocket-video');
   if (AD_YOUTUBE_ID) {
     wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(AD_YOUTUBE_ID)}?rel=0&modestbranding=1&playsinline=1"
       title="Earliest ad" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`;
     return;
   }
   const video = wrap.querySelector('video');
-  // Start at half volume; the original spot is mixed loud.
+  // Start quieter: browser volume is linear, so 0.5 barely sounds quieter.
+  // 0.25 sounds roughly half as loud. The original spot is mixed loud.
+  const START_VOLUME = 0.25;
   // Set it up front, again once the file loads, and again on first play,
   // because some browsers reset volume when the media loads. After the first
   // play the viewer's own volume choice is left alone.
   let volumeSet = false;
-  const halfVolume = () => { if (!volumeSet) video.volume = 0.5; };
+  const halfVolume = () => { if (!volumeSet) video.volume = START_VOLUME; };
   halfVolume();
   video.addEventListener('loadedmetadata', halfVolume);
   video.addEventListener('canplay', halfVolume);
