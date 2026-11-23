@@ -41,6 +41,23 @@ function observeReveals(root = document) {
 }
 observeReveals();
 
+// Safety net: anything that has reached the screen gets shown, even if the
+// observer above missed it (fast scrolls, jumps, browser quirks).
+function revealPassed() {
+  const limit = window.innerHeight * 0.95;
+  document.querySelectorAll('.reveal:not(.in)').forEach((el) => {
+    if (el.getBoundingClientRect().top < limit) {
+      el.classList.add('in');
+      revealObserver.unobserve(el);
+    }
+  });
+}
+let revealTick = false;
+window.addEventListener('scroll', () => {
+  if (!revealTick) { revealTick = true; requestAnimationFrame(() => { revealTick = false; revealPassed(); }); }
+}, { passive: true });
+window.addEventListener('load', revealPassed);
+
 /* ============ 1. Hero: five words pop in over the headshot ============ */
 (function hero() {
   const section = document.getElementById('hero');
@@ -228,6 +245,9 @@ observeReveals();
     return;
   }
   const video = wrap.querySelector('video');
+  // Start at half volume; the original spot is mixed loud.
+  video.volume = 0.5;
+  video.addEventListener('loadedmetadata', () => { if (video.volume === 1) video.volume = 0.5; });
   video.addEventListener('error', () => wrap.classList.add('missing'));
   // A <video> with a missing src fires error on its <source>-less element in most browsers,
   // but double-check once metadata should have arrived.
