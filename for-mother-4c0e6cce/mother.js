@@ -68,6 +68,24 @@ observeReveals();
   update();
 })();
 
+/* ============ Name: the ✽ spins as you scroll, like the home screen ============ */
+(function scrollMotif() {
+  const motif = document.getElementById('scroll-motif');
+  if (!motif || reduceMotion) return;
+  let rotation = 0;
+  let running = false;
+  function animate() {
+    const target = window.scrollY * 0.3;
+    rotation += (target - rotation) * 0.08;
+    motif.style.transform = `rotate(${rotation.toFixed(2)}deg)`;
+    if (Math.abs(target - rotation) > 0.1) requestAnimationFrame(animate);
+    else running = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!running) { running = true; requestAnimationFrame(animate); }
+  }, { passive: true });
+})();
+
 /* ============ 2. Floating 3D moodboard ============ */
 (function moodboard() {
   const section = document.getElementById('mood');
