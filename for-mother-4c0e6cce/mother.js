@@ -238,7 +238,7 @@ window.addEventListener('load', revealPassed);
 
 /* ============ 3. Earliest ad video ============ */
 (function adVideo() {
-  const wrap = document.getElementById('ad-video');
+  const wrap = document.getElementById('spot-video');
   if (AD_YOUTUBE_ID) {
     wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(AD_YOUTUBE_ID)}?rel=0&modestbranding=1&playsinline=1"
       title="Earliest ad" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen loading="lazy"></iframe>`;
@@ -246,8 +246,15 @@ window.addEventListener('load', revealPassed);
   }
   const video = wrap.querySelector('video');
   // Start at half volume; the original spot is mixed loud.
-  video.volume = 0.5;
-  video.addEventListener('loadedmetadata', () => { if (video.volume === 1) video.volume = 0.5; });
+  // Set it up front, again once the file loads, and again on first play,
+  // because some browsers reset volume when the media loads. After the first
+  // play the viewer's own volume choice is left alone.
+  let volumeSet = false;
+  const halfVolume = () => { if (!volumeSet) video.volume = 0.5; };
+  halfVolume();
+  video.addEventListener('loadedmetadata', halfVolume);
+  video.addEventListener('canplay', halfVolume);
+  video.addEventListener('play', () => { halfVolume(); volumeSet = true; });
   video.addEventListener('error', () => wrap.classList.add('missing'));
   // A <video> with a missing src fires error on its <source>-less element in most browsers,
   // but double-check once metadata should have arrived.

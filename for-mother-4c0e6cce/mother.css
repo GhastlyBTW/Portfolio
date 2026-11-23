@@ -250,14 +250,14 @@ a { color: inherit; text-decoration: none; }
 
 /* ==================== 3. EARLIEST AD ==================== */
 
-.ad {
+.spot {
   padding: 18vh var(--gutter);
   max-width: 1200px;
   margin: 0 auto;
 }
 
 /* Heading on the left, story on the right, video underneath */
-.ad-head {
+.spot-head {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(32px, 6vw, 96px);
@@ -265,33 +265,33 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 48px;
 }
 
-.ad-title {
+.spot-title {
   font-family: var(--font-display);
   font-weight: 500;
   font-size: clamp(40px, 6vw, 84px);
   line-height: 1;
 }
 
-.ad-copy {
+.spot-copy {
   font-size: 16px;
   line-height: 1.7;
 }
 
-.ad-video {
+.spot-video {
   position: relative;
   aspect-ratio: 16 / 9;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--line);
 }
-.ad-video video,
-.ad-video iframe {
+.spot-video video,
+.spot-video iframe {
   width: 100%;
   height: 100%;
   border: 0;
   object-fit: contain;
   background: #000;
 }
-.ad-video-missing {
+.spot-video-missing {
   display: none;
   position: absolute;
   inset: 0;
@@ -300,8 +300,8 @@ a { color: inherit; text-decoration: none; }
   color: var(--muted);
   font-size: 14px;
 }
-.ad-video.missing video { display: none; }
-.ad-video.missing .ad-video-missing { display: flex; }
+.spot-video.missing video { display: none; }
+.spot-video.missing .spot-video-missing { display: flex; }
 
 /* ==================== 4. PROUD ==================== */
 
@@ -396,7 +396,7 @@ a { color: inherit; text-decoration: none; }
   .hero-words { font-size: clamp(22px, 7.6vw, 40px); }
   .site-name { font-size: 26px; }
   .mood { min-height: 130vh; }
-  .proud, .ad-head { grid-template-columns: 1fr; }
+  .proud, .spot-head { grid-template-columns: 1fr; }
   .cv-about, .cv-section { flex-direction: column; gap: 8px; }
   .cv-about-left, .cv-about-right,
   .cv-section-label, .cv-section-content { width: 100%; }
