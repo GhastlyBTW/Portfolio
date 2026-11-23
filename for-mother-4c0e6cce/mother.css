@@ -71,22 +71,27 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-.hero-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 30%;
+.hero-sticky {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Slightly larger than the About headshot (825px), always fits the screen height */
+.hero-frame {
+  position: relative;
+  width: min(950px, calc(100vw - 32px), calc(78svh * 1.25));
+  aspect-ratio: 5 / 4;
   transform: scale(var(--zoom, 1));
   will-change: transform;
 }
 
-.hero-shade {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at 50% 35%, transparent 30%, rgba(0, 15, 26, 0.7) 100%);
-  opacity: var(--shade, 0.4);
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  filter: brightness(var(--bright, 1));
 }
 
 .hero-words { position: absolute; inset: 0; pointer-events: none; }
@@ -97,7 +102,7 @@ a { color: inherit; text-decoration: none; }
   top: var(--y);
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(40px, 8vw, 128px);
+  font-size: clamp(30px, 5.5vw, 88px);
   line-height: 1;
   letter-spacing: -0.01em;
   white-space: nowrap;
@@ -330,8 +335,9 @@ a { color: inherit; text-decoration: none; }
 
 .home-btn {
   font-family: var(--font-display);
-  font-size: clamp(22px, 3vw, 32px);
-  padding: 18px 36px;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  padding: 10px 22px;
   border: 1px solid var(--text);
   border-radius: 999px;
   transition: background 0.3s ease, color 0.3s ease;
@@ -344,13 +350,7 @@ a { color: inherit; text-decoration: none; }
 /* ==================== MOBILE ==================== */
 
 @media (max-width: 768px) {
-  .hero-word { font-size: clamp(32px, 11vw, 64px); }
-  /* Keep the words above the head on tall, narrow screens */
-  .hero-word:nth-child(1) { --x: 30% !important; --y: 12% !important; }
-  .hero-word:nth-child(2) { --x: 70% !important; --y: 18% !important; }
-  .hero-word:nth-child(3) { --x: 50% !important; --y: 5%  !important; }
-  .hero-word:nth-child(4) { --x: 26% !important; --y: 24% !important; }
-  .hero-word:nth-child(5) { --x: 74% !important; --y: 30% !important; }
+  .hero-word { font-size: clamp(22px, 8vw, 40px); }
   .mood { min-height: 130vh; }
   .proud { grid-template-columns: 1fr; }
   .cv-about, .cv-section { flex-direction: column; gap: 8px; }

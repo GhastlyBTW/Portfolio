@@ -57,8 +57,8 @@ observeReveals();
     const total = section.offsetHeight - window.innerHeight;
     const p = Math.min(1, Math.max(0, -section.getBoundingClientRect().top / total));
     words.forEach((w, i) => w.classList.toggle('on', p >= steps[i]));
-    if (!reduceMotion) sticky.style.setProperty('--zoom', (1 + p * 0.08).toFixed(4));
-    sticky.style.setProperty('--shade', (0.4 + p * 0.4).toFixed(3));
+    if (!reduceMotion) sticky.style.setProperty('--zoom', (1 + p * 0.04).toFixed(4));
+    sticky.style.setProperty('--bright', (1 - p * 0.3).toFixed(3));
     hint.style.opacity = p > 0.03 ? 0 : 1;
   }
   window.addEventListener('scroll', () => {
