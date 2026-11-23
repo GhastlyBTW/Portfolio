@@ -259,7 +259,8 @@ body::before {
   font-size: 16px;
   line-height: 1.7;
 }
-.copy-box p + p { margin-top: 16px; }
+.copy-box p + p,
+.proud p + p { margin-top: 16px; }
 
 /* ==================== 3. EARLIEST AD ==================== */
 
