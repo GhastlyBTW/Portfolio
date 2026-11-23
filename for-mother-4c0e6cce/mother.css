@@ -262,6 +262,21 @@ body::before {
 .copy-box p + p,
 .proud p + p { margin-top: 16px; }
 
+/* ==================== 2b. HANDS DIRTY ==================== */
+
+.dirt {
+  padding: 14vh var(--gutter) 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.dirt .copy-label { font-weight: 500; max-width: 680px; }
+.dirt p {
+  max-width: 680px;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.dirt p + p { margin-top: 16px; }
+
 /* ==================== 3. EARLIEST AD ==================== */
 
 .rocket {
