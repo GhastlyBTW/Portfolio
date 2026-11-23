@@ -247,12 +247,28 @@ body::before {
   border: 1px solid var(--line);
 }
 
-.copy-label {
+/* One heading size for every question on the page (the Mother question's size) */
+.q-heading {
   font-family: var(--font-display);
+  font-weight: 500;
   font-size: clamp(24px, 3vw, 36px);
   line-height: 1.1;
   margin-bottom: 24px;
 }
+
+/* One centred text column, the same width as the Mother answer box,
+   so every section's heading and text line up down the page */
+.col {
+  width: min(620px, 100%);
+  margin: 0 auto;
+  padding: 0 clamp(28px, 4vw, 48px);
+  border: 1px solid transparent; /* matches the Mother box border so text lines up exactly */
+}
+.col p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+.col p + p { margin-top: 16px; }
 
 .copy-box p,
 .proud p {
@@ -261,21 +277,13 @@ body::before {
 }
 .copy-box p + p,
 .proud p + p { margin-top: 16px; }
+.proud .proud-next { margin-top: 64px; }
 
 /* ==================== 2b. HANDS DIRTY ==================== */
 
 .dirt {
   padding: 14vh var(--gutter) 0;
-  max-width: 1200px;
-  margin: 0 auto;
 }
-.dirt .copy-label { font-weight: 500; max-width: 680px; }
-.dirt p {
-  max-width: 680px;
-  font-size: 16px;
-  line-height: 1.7;
-}
-.dirt p + p { margin-top: 16px; }
 
 /* ==================== 3. EARLIEST AD ==================== */
 
@@ -285,22 +293,14 @@ body::before {
   margin: 0 auto;
 }
 
-/* Label, title, story, then the video: stacked, always visible */
-.rocket-title {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(40px, 6vw, 84px);
-  line-height: 1;
-}
+/* Label, heading, story in the centred column; the video runs wider below */
+#rocket .section-label { margin-bottom: 10px; }
 
 .rocket-story {
   display: block;
   opacity: 1;
   visibility: visible;
-  max-width: 680px;
-  margin: 28px 0 48px;
-  font-size: 16px;
-  line-height: 1.7;
+  margin-bottom: 48px;
 }
 
 .rocket-video {
@@ -332,9 +332,6 @@ body::before {
 /* ==================== 4. PROUD ==================== */
 
 .proud {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(32px, 6vw, 96px);
   padding: 14vh var(--gutter);
   max-width: 1200px;
   margin: 0 auto;
@@ -422,7 +419,7 @@ body::before {
   .hero-words { font-size: clamp(20px, 6.8vw, 38px); }
   .site-name { font-size: 26px; }
   .mood { min-height: 130vh; }
-  .proud { grid-template-columns: 1fr; }
+
   .cv-about, .cv-section { flex-direction: column; gap: 8px; }
   .cv-about-left, .cv-about-right,
   .cv-section-label, .cv-section-content { width: 100%; }
