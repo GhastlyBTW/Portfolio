@@ -4,18 +4,22 @@
 
 /* ---------- EDIT HERE ---------- */
 
-// Moodboard images. Drop yours in /assets/Mother/Moodboard/ and list them here.
-// The stand-ins below are borrowed from the photography section until then.
+// Moodboard images, in /assets/Mother/Moodboard/. Each line fills the matching
+// floating spot in SLOTS below (same order), so nearer spots get the strongest images.
+const MB = '/assets/Mother/Moodboard/Branden Chi Mother Moodboard ';
 const MOODBOARD = [
-  '/assets/Photography/thumbs/Digital/Peeduh/DSC01185-Edit.jpg',
-  '/assets/Photography/thumbs/Film/Roll 3/branden da neg roll 3 25-3-26-01.jpg',
-  '/assets/Photography/thumbs/Digital/Museum Research/DSC03147.jpg',
-  '/assets/Photography/thumbs/Digital/Sunset on the Concourse/01-1.jpg',
-  '/assets/Photography/thumbs/Film/Roll 2/branden da neg roll 2 25-3-26-02.jpg',
-  '/assets/Photography/thumbs/Digital/Javen 350Z/DSC03112-2.jpg',
-  '/assets/Photography/thumbs/Film/Roll 1/brandon da neg roll1 25-3-26-02.jpg',
-  '/assets/Photography/thumbs/Digital/Revzilla/DSC03556-2.jpg',
-  '/assets/Photography/thumbs/Digital/Dominican Republic/DSC00048.jpg',
+  MB + 'Prints Spread on Floor.webp',   // near, top left
+  MB + 'Studio Desk.webp',              // mid, top right
+  MB + 'Copier Room.webp',              // far, top
+  MB + 'Creative Dictator Cap.webp',    // nearest, upper right
+  MB + 'Contact Sheets.webp',           // far, left
+  MB + 'Stacked Lunch Bowls.webp',      // near, right
+  MB + 'Creative Director Jacket.webp', // nearest, bottom left
+  MB + 'Late Night Desk.webp',          // mid, bottom right
+  MB + 'Product Shoot.webp',            // far, bottom
+  MB + 'Smiling at Desk.webp',          // farthest, behind the text
+  MB + 'Window Desk.webp',              // farthest, behind the text
+  MB + 'Photocopier.webp',              // mid, bottom left corner
 ];
 
 // Earliest ad: if it lives on YouTube, put the video ID here (the part after "v=")
