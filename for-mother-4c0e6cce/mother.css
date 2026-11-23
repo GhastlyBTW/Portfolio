@@ -239,7 +239,7 @@ body::before {
 .copy-box {
   position: relative;
   z-index: 2;
-  width: min(620px, 100%);
+  width: min(820px, 100%);
   padding: clamp(28px, 4vw, 48px);
   background: rgba(0, 15, 26, 0.62);
   -webkit-backdrop-filter: blur(18px) saturate(1.2);
@@ -259,7 +259,7 @@ body::before {
 /* One centred text column, the same width as the Mother answer box,
    so every section's heading and text line up down the page */
 .col {
-  width: min(620px, 100%);
+  width: min(820px, 100%);
   margin: 0 auto;
   padding: 0 clamp(28px, 4vw, 48px);
   border: 1px solid transparent; /* matches the Mother box border so text lines up exactly */
@@ -277,7 +277,6 @@ body::before {
 }
 .copy-box p + p,
 .proud p + p { margin-top: 16px; }
-.proud .proud-next { margin-top: 64px; }
 
 /* ==================== 2b. HANDS DIRTY ==================== */
 
@@ -300,7 +299,10 @@ body::before {
   display: block;
   opacity: 1;
   visibility: visible;
+  max-width: 680px;
   margin-bottom: 48px;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 .rocket-video {
@@ -332,6 +334,9 @@ body::before {
 /* ==================== 4. PROUD ==================== */
 
 .proud {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 6vw, 96px);
   padding: 14vh var(--gutter);
   max-width: 1200px;
   margin: 0 auto;
@@ -416,6 +421,7 @@ body::before {
 /* ==================== MOBILE ==================== */
 
 @media (max-width: 768px) {
+  .proud { grid-template-columns: 1fr; }
   .hero-words { font-size: clamp(20px, 6.8vw, 38px); }
   .site-name { font-size: 26px; }
   .mood { min-height: 130vh; }
